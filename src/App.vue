@@ -1,8 +1,12 @@
 <script setup lang="ts">
-// AppLayout 将在 Phase C 实现，目前先用 RouterView 占位
+import AppHeader from '@/components/app/AppHeader.vue'
+import AppFooter from '@/components/app/AppFooter.vue'
 </script>
 
 <template>
-  <RouterView />
+  <AppHeader />
+  <main>
+    <RouterView />
+  </main>
+  <AppFooter />
 </template>
-

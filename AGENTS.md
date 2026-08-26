@@ -155,7 +155,7 @@ npm run format       # Prettier 格式化
 
 | 你要做什么 | 调哪个 |
 |-----------|--------|
-| 选配色 / 挑字体 / 定风格 | `python .claude/skills/ui-ux-pro-max/scripts/search.py "关键词" --design-system` |
+| 选配色 / 挑字体 / 定风格 | `python .Codex/skills/ui-ux-pro-max/scripts/search.py "关键词" --design-system` |
 | 新建页面，需要视觉方向 | `/frontend-design`（仅在现有设计系统不适用时） |
 | 加复杂入场/滚动动画 | `/gsap-timeline` 或 `/gsap-scrolltrigger` |
 | Vue 中集成 GSAP | `/gsap-frameworks` |

@@ -35,6 +35,12 @@ const routes: RouteRecordRaw[] = [
     meta: { title: '项目' },
   },
   {
+    path: '/anime',
+    name: 'anime',
+    component: () => import('@/pages/anime/AnimePage.vue'),
+    meta: { title: '追番' },
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
     component: () => import('@/pages/error/NotFoundPage.vue'),
