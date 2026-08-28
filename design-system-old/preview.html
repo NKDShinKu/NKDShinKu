@@ -1,873 +1,1491 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN" class="">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NKDShinKu — Design Preview</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/lucide@latest"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NKDShinKu — Design Preview</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;700&family=Quicksand:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
-<style>
-  /* ========================================
+    <style>
+      /* ========================================
      NKDShinKu Design System — CSS Variables
      ======================================== */
 
-  :root {
-    /* Colors — Light Mode */
-    --nk-bg: #F0F4F8;
-    --nk-surface: #FFFFFF;
-    --nk-glass: rgba(255,255,255,0.60);
-    --nk-glass-border: rgba(255,255,255,0.30);
-    --nk-accent: #5B8FD4;
-    --nk-accent-light: #8FB8E8;
-    --nk-accent-dark: #3A6FB0;
-    --nk-sakura: #F0A0B8;
-    --nk-sakura-light: #F4C0D0;
-    --nk-twilight: #9B8EC4;
-    --nk-text: #2D2B3A;
-    --nk-text-muted: #6B6880;
-    --nk-divider: #E2E8F0;
-    --nk-success: #7ECB9A;
-    --nk-warning: #F0C878;
+      :root {
+        /* Colors — Light Mode */
+        --nk-bg: #f0f4f8;
+        --nk-surface: #ffffff;
+        --nk-glass: rgba(255, 255, 255, 0.6);
+        --nk-glass-border: rgba(255, 255, 255, 0.3);
+        --nk-accent: #5b8fd4;
+        --nk-accent-light: #8fb8e8;
+        --nk-accent-dark: #3a6fb0;
+        --nk-sakura: #f0a0b8;
+        --nk-sakura-light: #f4c0d0;
+        --nk-twilight: #9b8ec4;
+        --nk-text: #2d2b3a;
+        --nk-text-muted: #6b6880;
+        --nk-divider: #e2e8f0;
+        --nk-success: #7ecb9a;
+        --nk-warning: #f0c878;
 
-    /* Shadows */
-    --nk-shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-    --nk-shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-    --nk-shadow-lg: 0 8px 24px rgba(0,0,0,0.10);
-    --nk-shadow-glow: 0 0 24px rgba(91,143,212,0.15);
+        /* Shadows */
+        --nk-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+        --nk-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+        --nk-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
+        --nk-shadow-glow: 0 0 24px rgba(91, 143, 212, 0.15);
 
-    /* Radius */
-    --nk-radius-sm: 8px;
-    --nk-radius-md: 12px;
-    --nk-radius-lg: 16px;
-    --nk-radius-full: 9999px;
+        /* Radius */
+        --nk-radius-sm: 8px;
+        --nk-radius-md: 12px;
+        --nk-radius-lg: 16px;
+        --nk-radius-full: 9999px;
 
-    /* Transitions */
-    --nk-fast: 150ms ease-out;
-    --nk-base: 200ms ease-out;
-    --nk-slow: 300ms ease-out;
+        /* Transitions */
+        --nk-fast: 150ms ease-out;
+        --nk-base: 200ms ease-out;
+        --nk-slow: 300ms ease-out;
 
-    /* Fonts */
-    --nk-heading: 'Quicksand', 'Noto Sans SC', sans-serif;
-    --nk-body: 'Inter', 'Noto Sans SC', sans-serif;
-    --nk-mono: 'JetBrains Mono', monospace;
-  }
+        /* Fonts */
+        --nk-heading: "Quicksand", "Noto Sans SC", sans-serif;
+        --nk-body: "Inter", "Noto Sans SC", sans-serif;
+        --nk-mono: "JetBrains Mono", monospace;
+      }
 
-  /* Dark Mode */
-  .dark {
-    --nk-bg: #1A1B2E;
-    --nk-surface: #242538;
-    --nk-glass: rgba(30,30,60,0.70);
-    --nk-glass-border: rgba(255,255,255,0.10);
-    --nk-accent: #7EB8F4;
-    --nk-accent-light: #A8D0F8;
-    --nk-accent-dark: #5B9BD5;
-    --nk-sakura: #F4B8C8;
-    --nk-sakura-light: #F8D0D8;
-    --nk-twilight: #B8A8E0;
-    --nk-text: #E8E6F0;
-    --nk-text-muted: #A09DB8;
-    --nk-divider: #2E2E4A;
-    --nk-shadow-sm: 0 1px 3px rgba(0,0,0,0.30);
-    --nk-shadow-md: 0 4px 12px rgba(0,0,0,0.40);
-    --nk-shadow-lg: 0 8px 24px rgba(0,0,0,0.50);
-    --nk-shadow-glow: 0 0 24px rgba(126,184,244,0.20);
-  }
+      /* Dark Mode */
+      .dark {
+        --nk-bg: #1a1b2e;
+        --nk-surface: #242538;
+        --nk-glass: rgba(30, 30, 60, 0.7);
+        --nk-glass-border: rgba(255, 255, 255, 0.1);
+        --nk-accent: #7eb8f4;
+        --nk-accent-light: #a8d0f8;
+        --nk-accent-dark: #5b9bd5;
+        --nk-sakura: #f4b8c8;
+        --nk-sakura-light: #f8d0d8;
+        --nk-twilight: #b8a8e0;
+        --nk-text: #e8e6f0;
+        --nk-text-muted: #a09db8;
+        --nk-divider: #2e2e4a;
+        --nk-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+        --nk-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+        --nk-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+        --nk-shadow-glow: 0 0 24px rgba(126, 184, 244, 0.2);
+      }
 
-  /* ========================================
+      /* ========================================
      Base
      ======================================== */
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
 
-  body {
-    font-family: var(--nk-body);
-    background: var(--nk-bg);
-    color: var(--nk-text);
-    line-height: 1.75;
-    overflow-x: hidden;
-    transition: background var(--nk-slow), color var(--nk-slow);
-    -webkit-font-smoothing: antialiased;
-  }
+      body {
+        font-family: var(--nk-body);
+        background: var(--nk-bg);
+        color: var(--nk-text);
+        line-height: 1.75;
+        overflow-x: hidden;
+        transition:
+          background var(--nk-slow),
+          color var(--nk-slow);
+        -webkit-font-smoothing: antialiased;
+      }
 
-  h1, h2, h3, h4 {
-    font-family: var(--nk-heading);
-    color: var(--nk-text);
-  }
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-family: var(--nk-heading);
+        color: var(--nk-text);
+      }
 
-  /* ========================================
+      /* ========================================
      Aurora Blob Background
      ======================================== */
-  .aurora-layer {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-  }
-  .aurora-blob {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(120px);
-    opacity: 0.25;
-    animation: blobMorph 12s ease-in-out infinite alternate;
-  }
-  .aurora-blob:nth-child(1) {
-    width: 600px; height: 600px;
-    background: var(--nk-accent);
-    top: -200px; left: -150px;
-    animation-delay: 0s;
-  }
-  .aurora-blob:nth-child(2) {
-    width: 500px; height: 500px;
-    background: var(--nk-sakura);
-    top: 40%; right: -200px;
-    animation-delay: -4s;
-    animation-duration: 14s;
-  }
-  .aurora-blob:nth-child(3) {
-    width: 400px; height: 400px;
-    background: var(--nk-twilight);
-    bottom: -150px; left: 30%;
-    animation-delay: -8s;
-    animation-duration: 10s;
-  }
+      .aurora-layer {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+      }
+      .aurora-blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(120px);
+        opacity: 0.25;
+        animation: blobMorph 12s ease-in-out infinite alternate;
+      }
+      .aurora-blob:nth-child(1) {
+        width: 600px;
+        height: 600px;
+        background: var(--nk-accent);
+        top: -200px;
+        left: -150px;
+        animation-delay: 0s;
+      }
+      .aurora-blob:nth-child(2) {
+        width: 500px;
+        height: 500px;
+        background: var(--nk-sakura);
+        top: 40%;
+        right: -200px;
+        animation-delay: -4s;
+        animation-duration: 14s;
+      }
+      .aurora-blob:nth-child(3) {
+        width: 400px;
+        height: 400px;
+        background: var(--nk-twilight);
+        bottom: -150px;
+        left: 30%;
+        animation-delay: -8s;
+        animation-duration: 10s;
+      }
 
-  @keyframes blobMorph {
-    0%   { border-radius: 40% 60% 60% 40% / 60% 30% 70% 40%; transform: translate(0,0) rotate(0deg); }
-    33%  { border-radius: 60% 40% 40% 60% / 40% 60% 40% 60%; transform: translate(40px,-30px) rotate(15deg); }
-    66%  { border-radius: 50% 50% 40% 60% / 60% 50% 50% 40%; transform: translate(-20px,20px) rotate(-10deg); }
-    100% { border-radius: 55% 45% 50% 50% / 50% 55% 45% 50%; transform: translate(10px,-10px) rotate(5deg); }
-  }
+      @keyframes blobMorph {
+        0% {
+          border-radius: 40% 60% 60% 40% / 60% 30% 70% 40%;
+          transform: translate(0, 0) rotate(0deg);
+        }
+        33% {
+          border-radius: 60% 40% 40% 60% / 40% 60% 40% 60%;
+          transform: translate(40px, -30px) rotate(15deg);
+        }
+        66% {
+          border-radius: 50% 50% 40% 60% / 60% 50% 50% 40%;
+          transform: translate(-20px, 20px) rotate(-10deg);
+        }
+        100% {
+          border-radius: 55% 45% 50% 50% / 50% 55% 45% 50%;
+          transform: translate(10px, -10px) rotate(5deg);
+        }
+      }
 
-  /* ========================================
+      /* ========================================
      Glass Card
      ======================================== */
-  .glass-card {
-    background: var(--nk-glass);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--nk-glass-border);
-    border-radius: var(--nk-radius-md);
-    box-shadow: var(--nk-shadow-md);
-  }
-  .glass-card.interactive {
-    cursor: pointer;
-    transition: transform var(--nk-base), box-shadow var(--nk-base);
-  }
-  .glass-card.interactive:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--nk-shadow-lg), var(--nk-shadow-glow);
-  }
+      .glass-card {
+        background: var(--nk-glass);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--nk-glass-border);
+        border-radius: var(--nk-radius-md);
+        box-shadow: var(--nk-shadow-md);
+      }
+      .glass-card.interactive {
+        cursor: pointer;
+        transition:
+          transform var(--nk-base),
+          box-shadow var(--nk-base);
+      }
+      .glass-card.interactive:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--nk-shadow-lg), var(--nk-shadow-glow);
+      }
 
-  /* ========================================
+      /* ========================================
      Buttons
      ======================================== */
-  .btn-primary {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: var(--nk-accent);
-    color: #fff;
-    padding: 10px 24px;
-    border-radius: var(--nk-radius-sm);
-    font-family: var(--nk-body);
-    font-weight: 600;
-    font-size: 0.95rem;
-    border: none;
-    cursor: pointer;
-    transition: background var(--nk-fast), transform var(--nk-fast);
-  }
-  .btn-primary:hover { background: var(--nk-accent-dark); transform: translateY(-1px); }
-  .btn-primary:active { transform: scale(0.97); }
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--nk-accent);
+        color: #fff;
+        padding: 10px 24px;
+        border-radius: var(--nk-radius-sm);
+        font-family: var(--nk-body);
+        font-weight: 600;
+        font-size: 0.95rem;
+        border: none;
+        cursor: pointer;
+        transition:
+          background var(--nk-fast),
+          transform var(--nk-fast);
+      }
+      .btn-primary:hover {
+        background: var(--nk-accent-dark);
+        transform: translateY(-1px);
+      }
+      .btn-primary:active {
+        transform: scale(0.97);
+      }
 
-  .btn-ghost {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: transparent;
-    color: var(--nk-text);
-    border: 1px solid var(--nk-divider);
-    padding: 10px 24px;
-    border-radius: var(--nk-radius-sm);
-    font-family: var(--nk-body);
-    font-weight: 500;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: border-color var(--nk-fast), color var(--nk-fast);
-  }
-  .btn-ghost:hover { border-color: var(--nk-accent); color: var(--nk-accent); }
+      .btn-ghost {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: transparent;
+        color: var(--nk-text);
+        border: 1px solid var(--nk-divider);
+        padding: 10px 24px;
+        border-radius: var(--nk-radius-sm);
+        font-family: var(--nk-body);
+        font-weight: 500;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition:
+          border-color var(--nk-fast),
+          color var(--nk-fast);
+      }
+      .btn-ghost:hover {
+        border-color: var(--nk-accent);
+        color: var(--nk-accent);
+      }
 
-  .btn-lg {
-    padding: 14px 32px;
-    font-size: 1.05rem;
-    border-radius: var(--nk-radius-md);
-  }
+      .btn-lg {
+        padding: 14px 32px;
+        font-size: 1.05rem;
+        border-radius: var(--nk-radius-md);
+      }
 
-  /* ========================================
+      /* ========================================
      Tags
      ======================================== */
-  .tag {
-    display: inline-flex; align-items: center;
-    padding: 4px 12px;
-    border-radius: var(--nk-radius-full);
-    font-size: 0.75rem; font-weight: 500;
-    background: rgba(91,143,212,0.1);
-    color: var(--nk-accent);
-    transition: background var(--nk-fast);
-    cursor: pointer;
-  }
-  .tag:hover { background: rgba(91,143,212,0.2); }
-  .tag.sakura { background: rgba(240,160,184,0.12); color: var(--nk-sakura); }
-  .tag.twilight { background: rgba(155,142,196,0.12); color: var(--nk-twilight); }
-  .tag.success { background: rgba(126,203,154,0.12); color: var(--nk-success); }
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 12px;
+        border-radius: var(--nk-radius-full);
+        font-size: 0.75rem;
+        font-weight: 500;
+        background: rgba(91, 143, 212, 0.1);
+        color: var(--nk-accent);
+        transition: background var(--nk-fast);
+        cursor: pointer;
+      }
+      .tag:hover {
+        background: rgba(91, 143, 212, 0.2);
+      }
+      .tag.sakura {
+        background: rgba(240, 160, 184, 0.12);
+        color: var(--nk-sakura);
+      }
+      .tag.twilight {
+        background: rgba(155, 142, 196, 0.12);
+        color: var(--nk-twilight);
+      }
+      .tag.success {
+        background: rgba(126, 203, 154, 0.12);
+        color: var(--nk-success);
+      }
 
-  /* ========================================
+      /* ========================================
      Navigation
      ======================================== */
-  .nav-glass {
-    position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
-    z-index: 100;
-    background: var(--nk-glass);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--nk-glass-border);
-    border-radius: var(--nk-radius-full);
-    padding: 10px 28px;
-    box-shadow: var(--nk-shadow-md);
-    display: flex; align-items: center; gap: 28px;
-    transition: all var(--nk-slow);
-  }
-  .nav-link {
-    text-decoration: none;
-    color: var(--nk-text-muted);
-    font-weight: 500;
-    font-size: 0.9rem;
-    transition: color var(--nk-fast);
-    cursor: pointer;
-  }
-  .nav-link:hover, .nav-link.active { color: var(--nk-accent); }
+      .nav-glass {
+        position: fixed;
+        top: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 100;
+        background: var(--nk-glass);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--nk-glass-border);
+        border-radius: var(--nk-radius-full);
+        padding: 10px 28px;
+        box-shadow: var(--nk-shadow-md);
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        transition: all var(--nk-slow);
+      }
+      .nav-link {
+        text-decoration: none;
+        color: var(--nk-text-muted);
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: color var(--nk-fast);
+        cursor: pointer;
+      }
+      .nav-link:hover,
+      .nav-link.active {
+        color: var(--nk-accent);
+      }
 
-  /* Theme Toggle */
-  .theme-toggle {
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    border: 1px solid var(--nk-divider);
-    background: transparent;
-    color: var(--nk-text);
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: border-color var(--nk-fast), background var(--nk-fast);
-  }
-  .theme-toggle:hover { border-color: var(--nk-accent); }
+      /* Theme Toggle */
+      .theme-toggle {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 1px solid var(--nk-divider);
+        background: transparent;
+        color: var(--nk-text);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          border-color var(--nk-fast),
+          background var(--nk-fast);
+      }
+      .theme-toggle:hover {
+        border-color: var(--nk-accent);
+      }
 
-  /* ========================================
+      /* ========================================
      Layout
      ======================================== */
-  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 24px;
+        position: relative;
+        z-index: 1;
+      }
 
-  .section { padding: 80px 0; }
+      .section {
+        padding: 80px 0;
+      }
 
-  .section-label {
-    display: inline-block;
-    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em;
-    color: var(--nk-accent);
-    text-transform: uppercase;
-    margin-bottom: 12px;
-    font-family: var(--nk-body);
-  }
+      .section-label {
+        display: inline-block;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        color: var(--nk-accent);
+        text-transform: uppercase;
+        margin-bottom: 12px;
+        font-family: var(--nk-body);
+      }
 
-  .section-title {
-    font-family: var(--nk-heading);
-    font-size: 2rem; font-weight: 700;
-    color: var(--nk-text);
-    margin-bottom: 8px;
-    letter-spacing: -0.02em;
-  }
-  .section-desc {
-    color: var(--nk-text-muted);
-    font-size: 1.05rem;
-    max-width: 480px;
-    margin-bottom: 40px;
-  }
+      .section-title {
+        font-family: var(--nk-heading);
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--nk-text);
+        margin-bottom: 8px;
+        letter-spacing: -0.02em;
+      }
+      .section-desc {
+        color: var(--nk-text-muted);
+        font-size: 1.05rem;
+        max-width: 480px;
+        margin-bottom: 40px;
+      }
 
-  /* ========================================
+      /* ========================================
      Hero
      ======================================== */
-  .hero {
-    min-height: 100vh;
-    display: flex; align-items: center; justify-content: center;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-    padding-top: 80px;
-  }
-  .hero-gradient-text {
-    background: linear-gradient(135deg, var(--nk-accent), var(--nk-twilight));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+        padding-top: 80px;
+      }
+      .hero-gradient-text {
+        background: linear-gradient(135deg, var(--nk-accent), var(--nk-twilight));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
 
-  /* ========================================
+      /* ========================================
      Card Grids
      ======================================== */
-  .card-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
-  .card-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+      .card-grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+      }
+      .card-grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
 
-  .blog-card {
-    background: var(--nk-surface);
-    border: 1px solid var(--nk-divider);
-    border-radius: var(--nk-radius-md);
-    padding: 24px;
-    cursor: pointer;
-    transition: transform var(--nk-base), box-shadow var(--nk-base);
-  }
-  .blog-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--nk-shadow-lg);
-  }
+      .blog-card {
+        background: var(--nk-surface);
+        border: 1px solid var(--nk-divider);
+        border-radius: var(--nk-radius-md);
+        padding: 24px;
+        cursor: pointer;
+        transition:
+          transform var(--nk-base),
+          box-shadow var(--nk-base);
+      }
+      .blog-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--nk-shadow-lg);
+      }
 
-  /* ========================================
+      /* ========================================
      Color Swatches
      ======================================== */
-  .swatch {
-    width: 64px; height: 64px;
-    border-radius: var(--nk-radius-md);
-    box-shadow: var(--nk-shadow-sm);
-    border: 1px solid var(--nk-divider);
-    flex-shrink: 0;
-  }
-  .swatch-label { font-size: 0.8rem; color: var(--nk-text-muted); margin-top: 6px; font-family: var(--nk-mono); }
+      .swatch {
+        width: 64px;
+        height: 64px;
+        border-radius: var(--nk-radius-md);
+        box-shadow: var(--nk-shadow-sm);
+        border: 1px solid var(--nk-divider);
+        flex-shrink: 0;
+      }
+      .swatch-label {
+        font-size: 0.8rem;
+        color: var(--nk-text-muted);
+        margin-top: 6px;
+        font-family: var(--nk-mono);
+      }
 
-  /* ========================================
+      /* ========================================
      Typography Showcase
      ======================================== */
-  .type-sample-h1 { font-family: var(--nk-heading); font-size: 3rem; font-weight: 700; line-height: 1.1; }
-  .type-sample-h2 { font-family: var(--nk-heading); font-size: 2rem; font-weight: 700; line-height: 1.2; }
-  .type-sample-h3 { font-family: var(--nk-heading); font-size: 1.5rem; font-weight: 600; line-height: 1.3; }
-  .type-sample-body { font-family: var(--nk-body); font-size: 1rem; color: var(--nk-text-muted); line-height: 1.75; max-width: 520px; }
-  .type-sample-mono { font-family: var(--nk-mono); font-size: 0.9rem; color: var(--nk-accent); background: rgba(91,143,212,0.08); padding: 2px 8px; border-radius: 4px; }
+      .type-sample-h1 {
+        font-family: var(--nk-heading);
+        font-size: 3rem;
+        font-weight: 700;
+        line-height: 1.1;
+      }
+      .type-sample-h2 {
+        font-family: var(--nk-heading);
+        font-size: 2rem;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+      .type-sample-h3 {
+        font-family: var(--nk-heading);
+        font-size: 1.5rem;
+        font-weight: 600;
+        line-height: 1.3;
+      }
+      .type-sample-body {
+        font-family: var(--nk-body);
+        font-size: 1rem;
+        color: var(--nk-text-muted);
+        line-height: 1.75;
+        max-width: 520px;
+      }
+      .type-sample-mono {
+        font-family: var(--nk-mono);
+        font-size: 0.9rem;
+        color: var(--nk-accent);
+        background: rgba(91, 143, 212, 0.08);
+        padding: 2px 8px;
+        border-radius: 4px;
+      }
 
-  /* ========================================
+      /* ========================================
      Footer
      ======================================== */
-  .footer {
-    padding: 48px 0;
-    text-align: center;
-    border-top: 1px solid var(--nk-divider);
-    color: var(--nk-text-muted);
-    font-size: 0.9rem;
-  }
+      .footer {
+        padding: 48px 0;
+        text-align: center;
+        border-top: 1px solid var(--nk-divider);
+        color: var(--nk-text-muted);
+        font-size: 0.9rem;
+      }
 
-  /* ========================================
+      /* ========================================
      Mobile Nav (bottom tab bar)
      ======================================== */
-  .bottom-bar {
-    display: none;
-    position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
-    z-index: 100;
-    background: var(--nk-glass);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--nk-glass-border);
-    border-radius: var(--nk-radius-full);
-    padding: 8px 24px;
-    box-shadow: var(--nk-shadow-md);
-    gap: 20px;
-  }
+      .bottom-bar {
+        display: none;
+        position: fixed;
+        bottom: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 100;
+        background: var(--nk-glass);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--nk-glass-border);
+        border-radius: var(--nk-radius-full);
+        padding: 8px 24px;
+        box-shadow: var(--nk-shadow-md);
+        gap: 20px;
+      }
 
-  /* ========================================
+      /* ========================================
      Responsive
      ======================================== */
-  @media (max-width: 768px) {
-    .nav-glass { display: none; }
-    .bottom-bar { display: flex; }
-    .hero { min-height: 90vh; padding-top: 40px; }
-    .card-grid-2, .card-grid-3 { grid-template-columns: 1fr; }
-    .type-sample-h1 { font-size: 2.2rem; }
-    .section { padding: 48px 0; }
-    .container { padding: 0 16px; }
-  }
-  @media (min-width: 769px) {
-    .bottom-bar { display: none !important; }
-  }
+      @media (max-width: 768px) {
+        .nav-glass {
+          display: none;
+        }
+        .bottom-bar {
+          display: flex;
+        }
+        .hero {
+          min-height: 90vh;
+          padding-top: 40px;
+        }
+        .card-grid-2,
+        .card-grid-3 {
+          grid-template-columns: 1fr;
+        }
+        .type-sample-h1 {
+          font-size: 2.2rem;
+        }
+        .section {
+          padding: 48px 0;
+        }
+        .container {
+          padding: 0 16px;
+        }
+      }
+      @media (min-width: 769px) {
+        .bottom-bar {
+          display: none !important;
+        }
+      }
 
-  /* ========================================
+      /* ========================================
      Particles Canvas
      ======================================== */
-  #particles-canvas {
-    position: fixed; inset: 0;
-    z-index: 0; pointer-events: none;
-    opacity: 0.6;
-  }
+      #particles-canvas {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        opacity: 0.6;
+      }
 
-  /* ========================================
+      /* ========================================
      Reduced Motion
      ======================================== */
-  @media (prefers-reduced-motion: reduce) {
-    .aurora-blob { animation: none !important; }
-    .glass-card.interactive { transition: none !important; }
-    .blog-card { transition: none !important; }
-    #particles-canvas { display: none; }
-  }
-</style>
-</head>
-<body>
+      @media (prefers-reduced-motion: reduce) {
+        .aurora-blob {
+          animation: none !important;
+        }
+        .glass-card.interactive {
+          transition: none !important;
+        }
+        .blog-card {
+          transition: none !important;
+        }
+        #particles-canvas {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Aurora Background -->
+    <div class="aurora-layer">
+      <div class="aurora-blob"></div>
+      <div class="aurora-blob"></div>
+      <div class="aurora-blob"></div>
+    </div>
 
-<!-- Aurora Background -->
-<div class="aurora-layer">
-  <div class="aurora-blob"></div>
-  <div class="aurora-blob"></div>
-  <div class="aurora-blob"></div>
-</div>
+    <!-- Particles -->
+    <canvas id="particles-canvas"></canvas>
 
-<!-- Particles -->
-<canvas id="particles-canvas"></canvas>
-
-<!-- ==================== NAVIGATION ==================== -->
-<nav class="nav-glass" id="desktopNav">
-  <a href="#hero" class="nav-link active">Home</a>
-  <a href="#colors" class="nav-link">Colors</a>
-  <a href="#typo" class="nav-link">Type</a>
-  <a href="#components" class="nav-link">Components</a>
-  <a href="#pages" class="nav-link">Pages</a>
-  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode" id="themeBtn">
-    <i data-lucide="moon" id="themeIconMoon"></i>
-    <i data-lucide="sun" id="themeIconSun" style="display:none;"></i>
-  </button>
-</nav>
-
-<!-- Mobile Bottom Bar -->
-<nav class="bottom-bar" id="mobileNav">
-  <a href="#hero" style="color:var(--nk-accent);"><i data-lucide="home"></i></a>
-  <a href="#colors" style="color:var(--nk-text-muted);"><i data-lucide="palette"></i></a>
-  <a href="#components" style="color:var(--nk-text-muted);"><i data-lucide="puzzle"></i></a>
-  <a href="#pages" style="color:var(--nk-text-muted);"><i data-lucide="layers"></i></a>
-  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-    <i data-lucide="sun-moon"></i>
-  </button>
-</nav>
-
-<!-- ==================== HERO ==================== -->
-<section class="hero" id="hero">
-  <div class="container">
-    <div class="tag sakura" style="margin-bottom:20px;">✦ Under Construction</div>
-    <h1 style="font-family:var(--nk-heading);font-size:clamp(2.4rem,6vw,3.5rem);font-weight:700;line-height:1.15;letter-spacing:-0.03em;margin-bottom:16px;">
-      你好，我是 <span class="hero-gradient-text">NKDShinKu</span>
-    </h1>
-    <p style="font-size:1.2rem;color:var(--nk-text-muted);max-width:520px;margin:0 auto 32px;">
-      前端开发者 · 二次元爱好者 · 探索技术与创作的边界<br>
-      这里记录我的文章、项目与追番足迹
-    </p>
-    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-      <button class="btn-primary btn-lg">
-        <i data-lucide="file-text"></i> 浏览博客
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="nav-glass" id="desktopNav">
+      <a href="#hero" class="nav-link active">Home</a>
+      <a href="#colors" class="nav-link">Colors</a>
+      <a href="#typo" class="nav-link">Type</a>
+      <a href="#components" class="nav-link">Components</a>
+      <a href="#pages" class="nav-link">Pages</a>
+      <button
+        class="theme-toggle"
+        onclick="toggleTheme()"
+        aria-label="Toggle dark mode"
+        id="themeBtn"
+      >
+        <i data-lucide="moon" id="themeIconMoon"></i>
+        <i data-lucide="sun" id="themeIconSun" style="display: none"></i>
       </button>
-      <button class="btn-ghost btn-lg">
-        <i data-lucide="flask-conical"></i> 查看项目
+    </nav>
+
+    <!-- Mobile Bottom Bar -->
+    <nav class="bottom-bar" id="mobileNav">
+      <a href="#hero" style="color: var(--nk-accent)"><i data-lucide="home"></i></a>
+      <a href="#colors" style="color: var(--nk-text-muted)"><i data-lucide="palette"></i></a>
+      <a href="#components" style="color: var(--nk-text-muted)"><i data-lucide="puzzle"></i></a>
+      <a href="#pages" style="color: var(--nk-text-muted)"><i data-lucide="layers"></i></a>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <i data-lucide="sun-moon"></i>
       </button>
-    </div>
+    </nav>
 
-    <!-- About Capsule -->
-    <div class="glass-card" style="max-width:520px;margin:48px auto 0;padding:28px 32px;display:flex;align-items:center;gap:20px;text-align:left;">
-      <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--nk-accent),var(--nk-twilight));flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1.4rem;">N</div>
-      <div>
-        <p style="font-weight:600;margin-bottom:4px;color:var(--nk-text);">关于我</p>
-        <p style="font-size:0.9rem;color:var(--nk-text-muted);line-height:1.5;">前端开发学习者，关注 Vue / TypeScript / GSAP 动画。<br>ACG 爱好者，追番用 Bangumi，闲暇写技术笔记。</p>
-      </div>
-    </div>
-
-    <!-- Scroll Hint -->
-    <div style="margin-top:48px;color:var(--nk-text-muted);font-size:0.85rem;animation:bounce 2s ease-in-out infinite;">
-      <i data-lucide="chevron-down" style="width:20px;height:20px;margin:0 auto;display:block;"></i>
-      <span style="display:block;margin-top:4px;">向下滚动探索</span>
-    </div>
-  </div>
-</section>
-
-<style>@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}</style>
-
-<!-- ==================== COLOR PALETTE ==================== -->
-<section class="section" id="colors">
-  <div class="container">
-    <span class="section-label">Design System</span>
-    <h2 class="section-title">配色方案</h2>
-    <p class="section-desc">天蓝 × 樱花粉 × 薄暮紫 — 通透、清新、轻 ACG</p>
-
-    <!-- Light Mode Colors -->
-    <div class="glass-card" style="padding:28px;margin-bottom:32px;">
-      <h3 style="font-size:1.1rem;font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:8px;">
-        <i data-lucide="sun" style="width:18px;"></i> 亮色模式
-      </h3>
-      <div style="display:flex;gap:20px;flex-wrap:wrap;">
-        <div style="text-align:center;"><div class="swatch" style="background:#F0F4F8;"></div><span class="swatch-label">bg #F0F4F8</span></div>
-        <div style="text-align:center;"><div class="swatch" style="background:rgba(255,255,255,0.6);position:relative;"><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:#666;">60%</div></div><span class="swatch-label">glass</span></div>
-        <div style="text-align:center;"><div class="swatch" style="background:#5B8FD4;"></div><span class="swatch-label">accent #5B8FD4</span></div>
-        <div style="text-align:center;"><div class="swatch" style="background:#F0A0B8;"></div><span class="swatch-label">sakura #F0A0B8</span></div>
-        <div style="text-align:center;"><div class="swatch" style="background:#9B8EC4;"></div><span class="swatch-label">twilight #9B8EC4</span></div>
-        <div style="text-align:center;"><div class="swatch" style="background:#2D2B3A;"></div><span class="swatch-label">text #2D2B3A</span></div>
-        <div style="text-align:center;"><div class="swatch" style="background:#6B6880;"></div><span class="swatch-label">muted #6B6880</span></div>
-        <div style="text-align:center;"><div class="swatch" style="background:#7ECB9A;"></div><span class="swatch-label">success</span></div>
-      </div>
-    </div>
-
-    <!-- Dark Mode Colors -->
-    <div class="glass-card" style="padding:28px;">
-      <h3 style="font-size:1.1rem;font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:8px;">
-        <i data-lucide="moon" style="width:18px;"></i> 暗色模式
-      </h3>
-      <div style="display:flex;gap:20px;flex-wrap:wrap;">
-        <div style="text-align:center;"><div class="swatch" style="background:#1A1B2E;"></div><span class="swatch-label">bg #1A1B2E</span></div>
-        <div style="text-align:center;"><div class="swatch" style="background:rgba(30,30,60,0.7);position:relative;"><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:#aaa;">70%</div></div><span class="swatch-label">glass</span></div>
-        <div style="text-align:center;"><div class="swatch" style="background:#7EB8F4;"></div><span class="swatch-label">accent #7EB8F4</span></div>
-        <div style="text-align:center;"><div class="swatch" style="background:#F4B8C8;"></div><span class="swatch-label">sakura #F4B8C8</span></div>
-        <div style="text-align:center;"><div class="swatch" style="background:#B8A8E0;"></div><span class="swatch-label">twilight #B8A8E0</span></div>
-        <div style="text-align:center;"><div class="swatch" style="background:#E8E6F0;"></div><span class="swatch-label">text #E8E6F0</span></div>
-        <div style="text-align:center;"><div class="swatch" style="background:#A09DB8;"></div><span class="swatch-label">muted #A09DB8</span></div>
-        <div style="text-align:center;"><div class="swatch" style="background:#242538;"></div><span class="swatch-label">surface</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ==================== TYPOGRAPHY ==================== -->
-<section class="section" id="typo" style="background:var(--nk-surface);border-top:1px solid var(--nk-divider);border-bottom:1px solid var(--nk-divider);">
-  <div class="container">
-    <span class="section-label">Design System</span>
-    <h2 class="section-title">字体系统</h2>
-    <p class="section-desc">Quicksand + Inter + Noto Sans SC + JetBrains Mono</p>
-
-    <div style="display:flex;flex-direction:column;gap:28px;">
-      <div>
-        <span class="tag">Heading · Quicksand 700</span>
-        <p class="type-sample-h1">NKDShinKu 个人博客</p>
-        <p style="font-size:0.85rem;color:var(--nk-text-muted);margin-top:4px;">3rem / 1.1 line-height / letter-spacing -0.03em</p>
-      </div>
-      <div>
-        <span class="tag twilight">Section · Quicksand 600</span>
-        <p class="type-sample-h2">最新文章 Latest Posts</p>
-        <p style="font-size:0.85rem;color:var(--nk-text-muted);margin-top:4px;">2rem / 1.2 line-height</p>
-      </div>
-      <div>
-        <span class="tag sakura">Card Title · Quicksand 600</span>
-        <p class="type-sample-h3">Vue 3 组合式 API 入门指南</p>
-        <p style="font-size:0.85rem;color:var(--nk-text-muted);margin-top:4px;">1.5rem / 1.3 line-height</p>
-      </div>
-      <div>
-        <span class="tag">Body · Inter 400</span>
-        <p class="type-sample-body">这是一段正文示例。NKDShinKu 是一个个人技术博客，用于记录前端开发、动画学习和项目实践。本站设计融合了玻璃态与柔和 ACG 美学，追求通透与克制的平衡。All your base are belong to us.</p>
-        <p style="font-size:0.85rem;color:var(--nk-text-muted);margin-top:4px;">1rem / 1.75 line-height / 65-75 chars per line</p>
-      </div>
-      <div>
-        <span class="tag success">Code · JetBrains Mono 400</span>
-        <p style="margin-top:8px;"><span class="type-sample-mono">const greeting: string = "Hello, NKDShinKu"</span></p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ==================== COMPONENTS ==================== -->
-<section class="section" id="components">
-  <div class="container">
-    <span class="section-label">Design System</span>
-    <h2 class="section-title">组件展示</h2>
-    <p class="section-desc">按钮 · 卡片 · 标签 · 玻璃态</p>
-
-    <!-- Buttons -->
-    <h3 style="font-size:1.1rem;font-weight:600;margin-bottom:16px;">Buttons</h3>
-    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:48px;align-items:center;">
-      <button class="btn-primary"><i data-lucide="send"></i> Primary</button>
-      <button class="btn-ghost">Ghost</button>
-      <button class="btn-primary btn-lg"><i data-lucide="star"></i> Large CTA</button>
-      <button class="btn-ghost btn-lg"><i data-lucide="github"></i> GitHub</button>
-    </div>
-
-    <!-- Tags -->
-    <h3 style="font-size:1.1rem;font-weight:600;margin-bottom:16px;">Tags</h3>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:48px;">
-      <span class="tag">Vue 3</span>
-      <span class="tag">TypeScript</span>
-      <span class="tag sakura">CSS</span>
-      <span class="tag twilight">GSAP</span>
-      <span class="tag success">Published</span>
-      <span class="tag">TailwindCSS</span>
-      <span class="tag sakura">动画</span>
-      <span class="tag twilight">前端</span>
-    </div>
-
-    <!-- Glass Cards -->
-    <h3 style="font-size:1.1rem;font-weight:600;margin-bottom:16px;">Glass Cards</h3>
-    <div class="card-grid-3" style="margin-bottom:48px;">
-      <div class="glass-card interactive" style="padding:28px;text-align:center;">
-        <div style="width:48px;height:48px;border-radius:var(--nk-radius-md);background:rgba(91,143,212,0.12);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--nk-accent);">
-          <i data-lucide="book-open"></i>
+    <!-- ==================== HERO ==================== -->
+    <section class="hero" id="hero">
+      <div class="container">
+        <div class="tag sakura" style="margin-bottom: 20px">✦ Under Construction</div>
+        <h1
+          style="
+            font-family: var(--nk-heading);
+            font-size: clamp(2.4rem, 6vw, 3.5rem);
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            margin-bottom: 16px;
+          "
+        >
+          你好，我是 <span class="hero-gradient-text">NKDShinKu</span>
+        </h1>
+        <p
+          style="
+            font-size: 1.2rem;
+            color: var(--nk-text-muted);
+            max-width: 520px;
+            margin: 0 auto 32px;
+          "
+        >
+          前端开发者 · 二次元爱好者 · 探索技术与创作的边界<br />
+          这里记录我的文章、项目与追番足迹
+        </p>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap">
+          <button class="btn-primary btn-lg"><i data-lucide="file-text"></i> 浏览博客</button>
+          <button class="btn-ghost btn-lg"><i data-lucide="flask-conical"></i> 查看项目</button>
         </div>
-        <h4 style="font-weight:600;margin-bottom:6px;">博客</h4>
-        <p style="font-size:0.9rem;color:var(--nk-text-muted);">技术文章与教程</p>
-      </div>
-      <div class="glass-card interactive" style="padding:28px;text-align:center;">
-        <div style="width:48px;height:48px;border-radius:var(--nk-radius-md);background:rgba(240,160,184,0.12);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--nk-sakura);">
-          <i data-lucide="flask-conical"></i>
-        </div>
-        <h4 style="font-weight:600;margin-bottom:6px;">项目</h4>
-        <p style="font-size:0.9rem;color:var(--nk-text-muted);">作品与实验室</p>
-      </div>
-      <div class="glass-card interactive" style="padding:28px;text-align:center;">
-        <div style="width:48px;height:48px;border-radius:var(--nk-radius-md);background:rgba(155,142,196,0.12);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--nk-twilight);">
-          <i data-lucide="tv"></i>
-        </div>
-        <h4 style="font-weight:600;margin-bottom:6px;">追番</h4>
-        <p style="font-size:0.9rem;color:var(--nk-text-muted);">Bangumi 动画记录</p>
-      </div>
-    </div>
 
-    <!-- Solid Blog Cards -->
-    <h3 style="font-size:1.1rem;font-weight:600;margin-bottom:16px;">Blog Cards (solid surface)</h3>
-    <div class="card-grid-3">
-      <div class="blog-card">
-        <div style="display:flex;gap:6px;margin-bottom:14px;">
-          <span class="tag">Vue 3</span><span class="tag sakura">前端</span>
+        <!-- About Capsule -->
+        <div
+          class="glass-card"
+          style="
+            max-width: 520px;
+            margin: 48px auto 0;
+            padding: 28px 32px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            text-align: left;
+          "
+        >
+          <div
+            style="
+              width: 56px;
+              height: 56px;
+              border-radius: 50%;
+              background: linear-gradient(135deg, var(--nk-accent), var(--nk-twilight));
+              flex-shrink: 0;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: #fff;
+              font-weight: 700;
+              font-size: 1.4rem;
+            "
+          >
+            N
+          </div>
+          <div>
+            <p style="font-weight: 600; margin-bottom: 4px; color: var(--nk-text)">关于我</p>
+            <p style="font-size: 0.9rem; color: var(--nk-text-muted); line-height: 1.5">
+              前端开发学习者，关注 Vue / TypeScript / GSAP 动画。<br />ACG 爱好者，追番用
+              Bangumi，闲暇写技术笔记。
+            </p>
+          </div>
         </div>
-        <h4 style="font-weight:600;margin-bottom:8px;font-size:1.05rem;">Vue 3 组合式 API 入门指南</h4>
-        <p style="font-size:0.88rem;color:var(--nk-text-muted);line-height:1.6;margin-bottom:14px;">从 Options API 到 Composition API，理解 Vue 3 的设计哲学与最佳实践。</p>
-        <span style="font-size:0.78rem;color:var(--nk-text-muted);">2026-06-15</span>
-      </div>
-      <div class="blog-card">
-        <div style="display:flex;gap:6px;margin-bottom:14px;">
-          <span class="tag twilight">动画</span><span class="tag">GSAP</span>
-        </div>
-        <h4 style="font-weight:600;margin-bottom:8px;font-size:1.05rem;">GSAP ScrollTrigger 实战笔记</h4>
-        <p style="font-size:0.88rem;color:var(--nk-text-muted);line-height:1.6;margin-bottom:14px;">用 ScrollTrigger 实现滚动驱动的叙事动画，以及移动端降级策略。</p>
-        <span style="font-size:0.78rem;color:var(--nk-text-muted);">2026-06-20</span>
-      </div>
-      <div class="blog-card">
-        <div style="display:flex;gap:6px;margin-bottom:14px;">
-          <span class="tag">TypeScript</span><span class="tag sakura">Tips</span>
-        </div>
-        <h4 style="font-weight:600;margin-bottom:8px;font-size:1.05rem;">TypeScript 泛型进阶技巧</h4>
-        <p style="font-size:0.88rem;color:var(--nk-text-muted);line-height:1.6;margin-bottom:14px;">条件类型、模板字面量类型与实际项目中的应用场景总结。</p>
-        <span style="font-size:0.78rem;color:var(--nk-text-muted);">2026-07-01</span>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ==================== PAGE PREVIEWS ==================== -->
-<section class="section" id="pages" style="background:var(--nk-surface);border-top:1px solid var(--nk-divider);">
-  <div class="container">
-    <span class="section-label">Pages</span>
-    <h2 class="section-title">页面布局速览</h2>
-    <p class="section-desc">首页 · 博客 · 项目 · 追番 — 各页面核心结构的简化预览</p>
-
-    <!-- Home Page Layout -->
-    <div class="glass-card" style="padding:28px;margin-bottom:24px;">
-      <h3 style="font-size:1rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px;">
-        <span class="tag">首页</span> / → Home
-      </h3>
-      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.85rem;color:var(--nk-text-muted);">
-        <div style="display:flex;align-items:center;gap:12px;">
-          <span style="background:var(--nk-accent);color:#fff;padding:2px 10px;border-radius:4px;font-size:0.75rem;">Hero</span>
-          <span>视频背景 + 标题 + CTA</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;">
-          <span style="background:var(--nk-sakura);color:#fff;padding:2px 10px;border-radius:4px;font-size:0.75rem;">About</span>
-          <span>玻璃态胶囊卡片 + 头像 + 简介</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;">
-          <span style="background:var(--nk-twilight);color:#fff;padding:2px 10px;border-radius:4px;font-size:0.75rem;">Hub</span>
-          <span>3 卡片 Bento 网格 → 博客 / 项目 / 追番</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;">
-          <span style="background:var(--nk-success);color:#fff;padding:2px 10px;border-radius:4px;font-size:0.75rem;">Latest</span>
-          <span>最近 3-4 篇文章卡片</span>
+        <!-- Scroll Hint -->
+        <div
+          style="
+            margin-top: 48px;
+            color: var(--nk-text-muted);
+            font-size: 0.85rem;
+            animation: bounce 2s ease-in-out infinite;
+          "
+        >
+          <i
+            data-lucide="chevron-down"
+            style="width: 20px; height: 20px; margin: 0 auto; display: block"
+          ></i>
+          <span style="display: block; margin-top: 4px">向下滚动探索</span>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- Blog List Layout -->
-    <div class="glass-card" style="padding:28px;margin-bottom:24px;">
-      <h3 style="font-size:1rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px;">
-        <span class="tag sakura">博客列表</span> /blog → BlogPage
-      </h3>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
-        <span class="tag">全部</span><span class="tag">Vue 3</span><span class="tag sakura">CSS</span><span class="tag twilight">动画</span><span class="tag">TypeScript</span>
-      </div>
-      <p style="font-size:0.85rem;color:var(--nk-text-muted);">TagFilter 横条 + PostCard 响应式网格（hover 上浮 + 柔光）</p>
-    </div>
+    <style>
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(8px);
+        }
+      }
+    </style>
 
-    <!-- Blog Post Layout -->
-    <div class="glass-card" style="padding:28px;margin-bottom:24px;">
-      <h3 style="font-size:1rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px;">
-        <span class="tag twilight">文章详情</span> /blog/:slug → BlogPostPage
-      </h3>
-      <div style="border-left:3px solid var(--nk-accent);padding-left:16px;margin:12px 0;">
-        <h4 style="font-weight:600;">文章标题</h4>
-        <div style="display:flex;gap:6px;margin:6px 0;"><span class="tag">Vue 3</span><span class="tag sakura">前端</span></div>
-        <span style="font-size:0.78rem;color:var(--nk-text-muted);">2026-06-15</span>
-      </div>
-      <p style="font-size:0.85rem;color:var(--nk-text-muted);margin-top:12px;">PostHeader + prose 正文区（`@tailwindcss/typography`）+ 滚动进度条</p>
-    </div>
+    <!-- ==================== COLOR PALETTE ==================== -->
+    <section class="section" id="colors">
+      <div class="container">
+        <span class="section-label">Design System</span>
+        <h2 class="section-title">配色方案</h2>
+        <p class="section-desc">天蓝 × 樱花粉 × 薄暮紫 — 通透、清新、轻 ACG</p>
 
-    <!-- Projects Layout -->
-    <div class="glass-card" style="padding:28px;margin-bottom:24px;">
-      <h3 style="font-size:1rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px;">
-        <span class="tag">项目</span> /projects → ProjectsPage
-      </h3>
-      <div style="display:flex;gap:6px;margin-bottom:12px;">
-        <span class="tag">全部</span><span class="tag sakura">进行中</span><span class="tag success">已完成</span>
-      </div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;">
-        <div class="glass-card" style="padding:16px;flex:1;min-width:160px;">
-          <h5 style="font-weight:600;font-size:0.9rem;">NKDShinKu 博客</h5>
-          <div style="display:flex;gap:4px;margin-top:6px;"><span class="tag">Vue 3</span><span class="tag sakura">TS</span></div>
+        <!-- Light Mode Colors -->
+        <div class="glass-card" style="padding: 28px; margin-bottom: 32px">
+          <h3
+            style="
+              font-size: 1.1rem;
+              font-weight: 600;
+              margin-bottom: 20px;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+            "
+          >
+            <i data-lucide="sun" style="width: 18px"></i> 亮色模式
+          </h3>
+          <div style="display: flex; gap: 20px; flex-wrap: wrap">
+            <div style="text-align: center">
+              <div class="swatch" style="background: #f0f4f8"></div>
+              <span class="swatch-label">bg #F0F4F8</span>
+            </div>
+            <div style="text-align: center">
+              <div class="swatch" style="background: rgba(255, 255, 255, 0.6); position: relative">
+                <div
+                  style="
+                    position: absolute;
+                    inset: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 0.6rem;
+                    color: #666;
+                  "
+                >
+                  60%
+                </div>
+              </div>
+              <span class="swatch-label">glass</span>
+            </div>
+            <div style="text-align: center">
+              <div class="swatch" style="background: #5b8fd4"></div>
+              <span class="swatch-label">accent #5B8FD4</span>
+            </div>
+            <div style="text-align: center">
+              <div class="swatch" style="background: #f0a0b8"></div>
+              <span class="swatch-label">sakura #F0A0B8</span>
+            </div>
+            <div style="text-align: center">
+              <div class="swatch" style="background: #9b8ec4"></div>
+              <span class="swatch-label">twilight #9B8EC4</span>
+            </div>
+            <div style="text-align: center">
+              <div class="swatch" style="background: #2d2b3a"></div>
+              <span class="swatch-label">text #2D2B3A</span>
+            </div>
+            <div style="text-align: center">
+              <div class="swatch" style="background: #6b6880"></div>
+              <span class="swatch-label">muted #6B6880</span>
+            </div>
+            <div style="text-align: center">
+              <div class="swatch" style="background: #7ecb9a"></div>
+              <span class="swatch-label">success</span>
+            </div>
+          </div>
         </div>
-        <div class="glass-card" style="padding:16px;flex:1;min-width:160px;">
-          <h5 style="font-weight:600;font-size:0.9rem;">Demo 项目</h5>
-          <div style="display:flex;gap:4px;margin-top:6px;"><span class="tag twilight">GSAP</span></div>
+
+        <!-- Dark Mode Colors -->
+        <div class="glass-card" style="padding: 28px">
+          <h3
+            style="
+              font-size: 1.1rem;
+              font-weight: 600;
+              margin-bottom: 20px;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+            "
+          >
+            <i data-lucide="moon" style="width: 18px"></i> 暗色模式
+          </h3>
+          <div style="display: flex; gap: 20px; flex-wrap: wrap">
+            <div style="text-align: center">
+              <div class="swatch" style="background: #1a1b2e"></div>
+              <span class="swatch-label">bg #1A1B2E</span>
+            </div>
+            <div style="text-align: center">
+              <div class="swatch" style="background: rgba(30, 30, 60, 0.7); position: relative">
+                <div
+                  style="
+                    position: absolute;
+                    inset: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 0.6rem;
+                    color: #aaa;
+                  "
+                >
+                  70%
+                </div>
+              </div>
+              <span class="swatch-label">glass</span>
+            </div>
+            <div style="text-align: center">
+              <div class="swatch" style="background: #7eb8f4"></div>
+              <span class="swatch-label">accent #7EB8F4</span>
+            </div>
+            <div style="text-align: center">
+              <div class="swatch" style="background: #f4b8c8"></div>
+              <span class="swatch-label">sakura #F4B8C8</span>
+            </div>
+            <div style="text-align: center">
+              <div class="swatch" style="background: #b8a8e0"></div>
+              <span class="swatch-label">twilight #B8A8E0</span>
+            </div>
+            <div style="text-align: center">
+              <div class="swatch" style="background: #e8e6f0"></div>
+              <span class="swatch-label">text #E8E6F0</span>
+            </div>
+            <div style="text-align: center">
+              <div class="swatch" style="background: #a09db8"></div>
+              <span class="swatch-label">muted #A09DB8</span>
+            </div>
+            <div style="text-align: center">
+              <div class="swatch" style="background: #242538"></div>
+              <span class="swatch-label">surface</span>
+            </div>
+          </div>
         </div>
       </div>
-      <p style="font-size:0.85rem;color:var(--nk-text-muted);margin-top:12px;">CategoryFilter + ProjectCard 网格</p>
-    </div>
+    </section>
 
-    <!-- Anime Layout -->
-    <div class="glass-card" style="padding:28px;">
-      <h3 style="font-size:1rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px;">
-        <span class="tag sakura">追番</span> /anime → AnimePage
-      </h3>
-      <div style="display:flex;gap:6px;margin-bottom:12px;">
-        <span class="tag">在看</span><span class="tag sakura">看过</span><span class="tag twilight">想看</span>
+    <!-- ==================== TYPOGRAPHY ==================== -->
+    <section
+      class="section"
+      id="typo"
+      style="
+        background: var(--nk-surface);
+        border-top: 1px solid var(--nk-divider);
+        border-bottom: 1px solid var(--nk-divider);
+      "
+    >
+      <div class="container">
+        <span class="section-label">Design System</span>
+        <h2 class="section-title">字体系统</h2>
+        <p class="section-desc">Quicksand + Inter + Noto Sans SC + JetBrains Mono</p>
+
+        <div style="display: flex; flex-direction: column; gap: 28px">
+          <div>
+            <span class="tag">Heading · Quicksand 700</span>
+            <p class="type-sample-h1">NKDShinKu 个人博客</p>
+            <p style="font-size: 0.85rem; color: var(--nk-text-muted); margin-top: 4px">
+              3rem / 1.1 line-height / letter-spacing -0.03em
+            </p>
+          </div>
+          <div>
+            <span class="tag twilight">Section · Quicksand 600</span>
+            <p class="type-sample-h2">最新文章 Latest Posts</p>
+            <p style="font-size: 0.85rem; color: var(--nk-text-muted); margin-top: 4px">
+              2rem / 1.2 line-height
+            </p>
+          </div>
+          <div>
+            <span class="tag sakura">Card Title · Quicksand 600</span>
+            <p class="type-sample-h3">Vue 3 组合式 API 入门指南</p>
+            <p style="font-size: 0.85rem; color: var(--nk-text-muted); margin-top: 4px">
+              1.5rem / 1.3 line-height
+            </p>
+          </div>
+          <div>
+            <span class="tag">Body · Inter 400</span>
+            <p class="type-sample-body">
+              这是一段正文示例。NKDShinKu
+              是一个个人技术博客，用于记录前端开发、动画学习和项目实践。本站设计融合了玻璃态与柔和
+              ACG 美学，追求通透与克制的平衡。All your base are belong to us.
+            </p>
+            <p style="font-size: 0.85rem; color: var(--nk-text-muted); margin-top: 4px">
+              1rem / 1.75 line-height / 65-75 chars per line
+            </p>
+          </div>
+          <div>
+            <span class="tag success">Code · JetBrains Mono 400</span>
+            <p style="margin-top: 8px">
+              <span class="type-sample-mono">const greeting: string = "Hello, NKDShinKu"</span>
+            </p>
+          </div>
+        </div>
       </div>
-      <div style="display:flex;gap:16px;overflow-x:auto;">
-        <div style="text-align:center;flex-shrink:0;">
-          <div style="width:100px;height:140px;background:var(--nk-divider);border-radius:var(--nk-radius-sm);display:flex;align-items:center;justify-content:center;color:var(--nk-text-muted);font-size:0.75rem;">Cover</div>
-          <span style="font-size:0.7rem;color:var(--nk-text-muted);display:block;margin-top:4px;">番剧标题</span>
+    </section>
+
+    <!-- ==================== COMPONENTS ==================== -->
+    <section class="section" id="components">
+      <div class="container">
+        <span class="section-label">Design System</span>
+        <h2 class="section-title">组件展示</h2>
+        <p class="section-desc">按钮 · 卡片 · 标签 · 玻璃态</p>
+
+        <!-- Buttons -->
+        <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 16px">Buttons</h3>
+        <div
+          style="
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 48px;
+            align-items: center;
+          "
+        >
+          <button class="btn-primary"><i data-lucide="send"></i> Primary</button>
+          <button class="btn-ghost">Ghost</button>
+          <button class="btn-primary btn-lg"><i data-lucide="star"></i> Large CTA</button>
+          <button class="btn-ghost btn-lg"><i data-lucide="github"></i> GitHub</button>
         </div>
-        <div style="text-align:center;flex-shrink:0;">
-          <div style="width:100px;height:140px;background:var(--nk-twilight);opacity:0.3;border-radius:var(--nk-radius-sm);display:flex;align-items:center;justify-content:center;color:var(--nk-text-muted);font-size:0.75rem;">Cover</div>
-          <span style="font-size:0.7rem;color:var(--nk-text-muted);display:block;margin-top:4px;">番剧标题</span>
+
+        <!-- Tags -->
+        <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 16px">Tags</h3>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 48px">
+          <span class="tag">Vue 3</span>
+          <span class="tag">TypeScript</span>
+          <span class="tag sakura">CSS</span>
+          <span class="tag twilight">GSAP</span>
+          <span class="tag success">Published</span>
+          <span class="tag">TailwindCSS</span>
+          <span class="tag sakura">动画</span>
+          <span class="tag twilight">前端</span>
         </div>
-        <div style="text-align:center;flex-shrink:0;">
-          <div style="width:100px;height:140px;background:var(--nk-sakura);opacity:0.3;border-radius:var(--nk-radius-sm);display:flex;align-items:center;justify-content:center;color:var(--nk-text-muted);font-size:0.75rem;">Cover</div>
-          <span style="font-size:0.7rem;color:var(--nk-text-muted);display:block;margin-top:4px;">番剧标题</span>
+
+        <!-- Glass Cards -->
+        <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 16px">Glass Cards</h3>
+        <div class="card-grid-3" style="margin-bottom: 48px">
+          <div class="glass-card interactive" style="padding: 28px; text-align: center">
+            <div
+              style="
+                width: 48px;
+                height: 48px;
+                border-radius: var(--nk-radius-md);
+                background: rgba(91, 143, 212, 0.12);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 16px;
+                color: var(--nk-accent);
+              "
+            >
+              <i data-lucide="book-open"></i>
+            </div>
+            <h4 style="font-weight: 600; margin-bottom: 6px">博客</h4>
+            <p style="font-size: 0.9rem; color: var(--nk-text-muted)">技术文章与教程</p>
+          </div>
+          <div class="glass-card interactive" style="padding: 28px; text-align: center">
+            <div
+              style="
+                width: 48px;
+                height: 48px;
+                border-radius: var(--nk-radius-md);
+                background: rgba(240, 160, 184, 0.12);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 16px;
+                color: var(--nk-sakura);
+              "
+            >
+              <i data-lucide="flask-conical"></i>
+            </div>
+            <h4 style="font-weight: 600; margin-bottom: 6px">项目</h4>
+            <p style="font-size: 0.9rem; color: var(--nk-text-muted)">作品与实验室</p>
+          </div>
+          <div class="glass-card interactive" style="padding: 28px; text-align: center">
+            <div
+              style="
+                width: 48px;
+                height: 48px;
+                border-radius: var(--nk-radius-md);
+                background: rgba(155, 142, 196, 0.12);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 16px;
+                color: var(--nk-twilight);
+              "
+            >
+              <i data-lucide="tv"></i>
+            </div>
+            <h4 style="font-weight: 600; margin-bottom: 6px">追番</h4>
+            <p style="font-size: 0.9rem; color: var(--nk-text-muted)">Bangumi 动画记录</p>
+          </div>
+        </div>
+
+        <!-- Solid Blog Cards -->
+        <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 16px">
+          Blog Cards (solid surface)
+        </h3>
+        <div class="card-grid-3">
+          <div class="blog-card">
+            <div style="display: flex; gap: 6px; margin-bottom: 14px">
+              <span class="tag">Vue 3</span><span class="tag sakura">前端</span>
+            </div>
+            <h4 style="font-weight: 600; margin-bottom: 8px; font-size: 1.05rem">
+              Vue 3 组合式 API 入门指南
+            </h4>
+            <p
+              style="
+                font-size: 0.88rem;
+                color: var(--nk-text-muted);
+                line-height: 1.6;
+                margin-bottom: 14px;
+              "
+            >
+              从 Options API 到 Composition API，理解 Vue 3 的设计哲学与最佳实践。
+            </p>
+            <span style="font-size: 0.78rem; color: var(--nk-text-muted)">2026-06-15</span>
+          </div>
+          <div class="blog-card">
+            <div style="display: flex; gap: 6px; margin-bottom: 14px">
+              <span class="tag twilight">动画</span><span class="tag">GSAP</span>
+            </div>
+            <h4 style="font-weight: 600; margin-bottom: 8px; font-size: 1.05rem">
+              GSAP ScrollTrigger 实战笔记
+            </h4>
+            <p
+              style="
+                font-size: 0.88rem;
+                color: var(--nk-text-muted);
+                line-height: 1.6;
+                margin-bottom: 14px;
+              "
+            >
+              用 ScrollTrigger 实现滚动驱动的叙事动画，以及移动端降级策略。
+            </p>
+            <span style="font-size: 0.78rem; color: var(--nk-text-muted)">2026-06-20</span>
+          </div>
+          <div class="blog-card">
+            <div style="display: flex; gap: 6px; margin-bottom: 14px">
+              <span class="tag">TypeScript</span><span class="tag sakura">Tips</span>
+            </div>
+            <h4 style="font-weight: 600; margin-bottom: 8px; font-size: 1.05rem">
+              TypeScript 泛型进阶技巧
+            </h4>
+            <p
+              style="
+                font-size: 0.88rem;
+                color: var(--nk-text-muted);
+                line-height: 1.6;
+                margin-bottom: 14px;
+              "
+            >
+              条件类型、模板字面量类型与实际项目中的应用场景总结。
+            </p>
+            <span style="font-size: 0.78rem; color: var(--nk-text-muted)">2026-07-01</span>
+          </div>
         </div>
       </div>
-      <p style="font-size:0.85rem;color:var(--nk-text-muted);margin-top:12px;">StatusTabs + Bangumi 封面网格（调用公开 API，客户端缓存）</p>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- ==================== FOOTER ==================== -->
-<footer class="footer">
-  <div class="container">
-    <p style="font-family:var(--nk-heading);font-weight:700;font-size:1.1rem;color:var(--nk-text);margin-bottom:8px;">NKDShinKu</p>
-    <p>个人技术博客 · 记录学习与创作的足迹</p>
-    <div style="display:flex;gap:16px;justify-content:center;margin-top:12px;">
-      <a href="#" style="color:var(--nk-text-muted);"><i data-lucide="github"></i></a>
-      <a href="#" style="color:var(--nk-text-muted);"><i data-lucide="twitter"></i></a>
-      <a href="#" style="color:var(--nk-text-muted);"><i data-lucide="mail"></i></a>
-    </div>
-    <p style="font-size:0.78rem;margin-top:16px;color:var(--nk-text-muted);">© 2026 NKDShinKu. Built with Vue 3 + TailwindCSS + GSAP.</p>
-  </div>
-</footer>
+    <!-- ==================== PAGE PREVIEWS ==================== -->
+    <section
+      class="section"
+      id="pages"
+      style="background: var(--nk-surface); border-top: 1px solid var(--nk-divider)"
+    >
+      <div class="container">
+        <span class="section-label">Pages</span>
+        <h2 class="section-title">页面布局速览</h2>
+        <p class="section-desc">首页 · 博客 · 项目 · 追番 — 各页面核心结构的简化预览</p>
 
-<!-- ==================== SCRIPTS ==================== -->
-<script>
-  // Initialize Lucide icons
-  lucide.createIcons()
+        <!-- Home Page Layout -->
+        <div class="glass-card" style="padding: 28px; margin-bottom: 24px">
+          <h3
+            style="
+              font-size: 1rem;
+              font-weight: 600;
+              margin-bottom: 16px;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+            "
+          >
+            <span class="tag">首页</span> / → Home
+          </h3>
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 8px;
+              font-size: 0.85rem;
+              color: var(--nk-text-muted);
+            "
+          >
+            <div style="display: flex; align-items: center; gap: 12px">
+              <span
+                style="
+                  background: var(--nk-accent);
+                  color: #fff;
+                  padding: 2px 10px;
+                  border-radius: 4px;
+                  font-size: 0.75rem;
+                "
+                >Hero</span
+              >
+              <span>视频背景 + 标题 + CTA</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px">
+              <span
+                style="
+                  background: var(--nk-sakura);
+                  color: #fff;
+                  padding: 2px 10px;
+                  border-radius: 4px;
+                  font-size: 0.75rem;
+                "
+                >About</span
+              >
+              <span>玻璃态胶囊卡片 + 头像 + 简介</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px">
+              <span
+                style="
+                  background: var(--nk-twilight);
+                  color: #fff;
+                  padding: 2px 10px;
+                  border-radius: 4px;
+                  font-size: 0.75rem;
+                "
+                >Hub</span
+              >
+              <span>3 卡片 Bento 网格 → 博客 / 项目 / 追番</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px">
+              <span
+                style="
+                  background: var(--nk-success);
+                  color: #fff;
+                  padding: 2px 10px;
+                  border-radius: 4px;
+                  font-size: 0.75rem;
+                "
+                >Latest</span
+              >
+              <span>最近 3-4 篇文章卡片</span>
+            </div>
+          </div>
+        </div>
 
-  // Dark/Light Mode Toggle
-  function toggleTheme() {
-    const html = document.documentElement
-    const isDark = html.classList.toggle('dark')
-    const moon = document.getElementById('themeIconMoon')
-    const sun = document.getElementById('themeIconSun')
+        <!-- Blog List Layout -->
+        <div class="glass-card" style="padding: 28px; margin-bottom: 24px">
+          <h3
+            style="
+              font-size: 1rem;
+              font-weight: 600;
+              margin-bottom: 16px;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+            "
+          >
+            <span class="tag sakura">博客列表</span> /blog → BlogPage
+          </h3>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px">
+            <span class="tag">全部</span><span class="tag">Vue 3</span
+            ><span class="tag sakura">CSS</span><span class="tag twilight">动画</span
+            ><span class="tag">TypeScript</span>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--nk-text-muted)">
+            TagFilter 横条 + PostCard 响应式网格（hover 上浮 + 柔光）
+          </p>
+        </div>
 
-    if (isDark) {
-      moon.style.display = 'none'
-      sun.style.display = 'block'
-      localStorage.setItem('nk-theme', 'dark')
-    } else {
-      moon.style.display = 'block'
-      sun.style.display = 'none'
-      localStorage.setItem('nk-theme', 'light')
-    }
-  }
+        <!-- Blog Post Layout -->
+        <div class="glass-card" style="padding: 28px; margin-bottom: 24px">
+          <h3
+            style="
+              font-size: 1rem;
+              font-weight: 600;
+              margin-bottom: 16px;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+            "
+          >
+            <span class="tag twilight">文章详情</span> /blog/:slug → BlogPostPage
+          </h3>
+          <div style="border-left: 3px solid var(--nk-accent); padding-left: 16px; margin: 12px 0">
+            <h4 style="font-weight: 600">文章标题</h4>
+            <div style="display: flex; gap: 6px; margin: 6px 0">
+              <span class="tag">Vue 3</span><span class="tag sakura">前端</span>
+            </div>
+            <span style="font-size: 0.78rem; color: var(--nk-text-muted)">2026-06-15</span>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--nk-text-muted); margin-top: 12px">
+            PostHeader + prose 正文区（`@tailwindcss/typography`）+ 滚动进度条
+          </p>
+        </div>
 
-  // Load saved theme
-  (function() {
-    if (localStorage.getItem('nk-theme') === 'dark') {
-      document.documentElement.classList.add('dark')
-      document.getElementById('themeIconMoon').style.display = 'none'
-      document.getElementById('themeIconSun').style.display = 'block'
-    }
-  })()
+        <!-- Projects Layout -->
+        <div class="glass-card" style="padding: 28px; margin-bottom: 24px">
+          <h3
+            style="
+              font-size: 1rem;
+              font-weight: 600;
+              margin-bottom: 16px;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+            "
+          >
+            <span class="tag">项目</span> /projects → ProjectsPage
+          </h3>
+          <div style="display: flex; gap: 6px; margin-bottom: 12px">
+            <span class="tag">全部</span><span class="tag sakura">进行中</span
+            ><span class="tag success">已完成</span>
+          </div>
+          <div style="display: flex; gap: 12px; flex-wrap: wrap">
+            <div class="glass-card" style="padding: 16px; flex: 1; min-width: 160px">
+              <h5 style="font-weight: 600; font-size: 0.9rem">NKDShinKu 博客</h5>
+              <div style="display: flex; gap: 4px; margin-top: 6px">
+                <span class="tag">Vue 3</span><span class="tag sakura">TS</span>
+              </div>
+            </div>
+            <div class="glass-card" style="padding: 16px; flex: 1; min-width: 160px">
+              <h5 style="font-weight: 600; font-size: 0.9rem">Demo 项目</h5>
+              <div style="display: flex; gap: 4px; margin-top: 6px">
+                <span class="tag twilight">GSAP</span>
+              </div>
+            </div>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--nk-text-muted); margin-top: 12px">
+            CategoryFilter + ProjectCard 网格
+          </p>
+        </div>
 
-  // Mobile bottom nav highlight on scroll
-  window.addEventListener('scroll', () => {
-    const sections = document.querySelectorAll('section[id]')
-    let current = 'hero'
-    sections.forEach(s => {
-      if (window.scrollY >= s.offsetTop - 200) current = s.id
-    })
-    const links = document.querySelectorAll('#mobileNav a, #desktopNav .nav-link')
-    links.forEach(l => {
-      l.classList.toggle('active', l.getAttribute('href') === '#' + current)
-      if (l.classList.contains('active')) l.style.color = 'var(--nk-accent)'
-      else l.style.color = 'var(--nk-text-muted)'
-    })
-  })
+        <!-- Anime Layout -->
+        <div class="glass-card" style="padding: 28px">
+          <h3
+            style="
+              font-size: 1rem;
+              font-weight: 600;
+              margin-bottom: 16px;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+            "
+          >
+            <span class="tag sakura">追番</span> /anime → AnimePage
+          </h3>
+          <div style="display: flex; gap: 6px; margin-bottom: 12px">
+            <span class="tag">在看</span><span class="tag sakura">看过</span
+            ><span class="tag twilight">想看</span>
+          </div>
+          <div style="display: flex; gap: 16px; overflow-x: auto">
+            <div style="text-align: center; flex-shrink: 0">
+              <div
+                style="
+                  width: 100px;
+                  height: 140px;
+                  background: var(--nk-divider);
+                  border-radius: var(--nk-radius-sm);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: var(--nk-text-muted);
+                  font-size: 0.75rem;
+                "
+              >
+                Cover
+              </div>
+              <span
+                style="
+                  font-size: 0.7rem;
+                  color: var(--nk-text-muted);
+                  display: block;
+                  margin-top: 4px;
+                "
+                >番剧标题</span
+              >
+            </div>
+            <div style="text-align: center; flex-shrink: 0">
+              <div
+                style="
+                  width: 100px;
+                  height: 140px;
+                  background: var(--nk-twilight);
+                  opacity: 0.3;
+                  border-radius: var(--nk-radius-sm);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: var(--nk-text-muted);
+                  font-size: 0.75rem;
+                "
+              >
+                Cover
+              </div>
+              <span
+                style="
+                  font-size: 0.7rem;
+                  color: var(--nk-text-muted);
+                  display: block;
+                  margin-top: 4px;
+                "
+                >番剧标题</span
+              >
+            </div>
+            <div style="text-align: center; flex-shrink: 0">
+              <div
+                style="
+                  width: 100px;
+                  height: 140px;
+                  background: var(--nk-sakura);
+                  opacity: 0.3;
+                  border-radius: var(--nk-radius-sm);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: var(--nk-text-muted);
+                  font-size: 0.75rem;
+                "
+              >
+                Cover
+              </div>
+              <span
+                style="
+                  font-size: 0.7rem;
+                  color: var(--nk-text-muted);
+                  display: block;
+                  margin-top: 4px;
+                "
+                >番剧标题</span
+              >
+            </div>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--nk-text-muted); margin-top: 12px">
+            StatusTabs + Bangumi 封面网格（调用公开 API，客户端缓存）
+          </p>
+        </div>
+      </div>
+    </section>
 
-  // Particles Canvas
-  const canvas = document.getElementById('particles-canvas')
-  const ctx = canvas.getContext('2d')
-  let particles = []
-  const PARTICLE_COUNT = 60
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+      <div class="container">
+        <p
+          style="
+            font-family: var(--nk-heading);
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--nk-text);
+            margin-bottom: 8px;
+          "
+        >
+          NKDShinKu
+        </p>
+        <p>个人技术博客 · 记录学习与创作的足迹</p>
+        <div style="display: flex; gap: 16px; justify-content: center; margin-top: 12px">
+          <a href="#" style="color: var(--nk-text-muted)"><i data-lucide="github"></i></a>
+          <a href="#" style="color: var(--nk-text-muted)"><i data-lucide="twitter"></i></a>
+          <a href="#" style="color: var(--nk-text-muted)"><i data-lucide="mail"></i></a>
+        </div>
+        <p style="font-size: 0.78rem; margin-top: 16px; color: var(--nk-text-muted)">
+          © 2026 NKDShinKu. Built with Vue 3 + TailwindCSS + GSAP.
+        </p>
+      </div>
+    </footer>
 
-  function resize() {
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
-  }
-  resize()
-  window.addEventListener('resize', resize)
+    <!-- ==================== SCRIPTS ==================== -->
+    <script>
+      // Initialize Lucide icons
+      lucide.createIcons();
 
-  function createParticles() {
-    particles = []
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        size: Math.random() * 2.5 + 1,
-        speedX: (Math.random() - 0.5) * 0.3,
-        speedY: (Math.random() - 0.5) * 0.3,
-        opacity: Math.random() * 0.4 + 0.1
-      })
-    }
-  }
-  createParticles()
+      // Dark/Light Mode Toggle
+      function toggleTheme() {
+        const html = document.documentElement;
+        const isDark = html.classList.toggle("dark");
+        const moon = document.getElementById("themeIconMoon");
+        const sun = document.getElementById("themeIconSun");
 
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-    const isDark = document.documentElement.classList.contains('dark')
-    const color = isDark ? '180, 200, 240' : '91, 143, 212'
+        if (isDark) {
+          moon.style.display = "none";
+          sun.style.display = "block";
+          localStorage.setItem("nk-theme", "dark");
+        } else {
+          moon.style.display = "block";
+          sun.style.display = "none";
+          localStorage.setItem("nk-theme", "light");
+        }
+      }
 
-    particles.forEach(p => {
-      p.x += p.speedX
-      p.y += p.speedY
-      if (p.x < 0) p.x = canvas.width
-      if (p.x > canvas.width) p.x = 0
-      if (p.y < 0) p.y = canvas.height
-      if (p.y > canvas.height) p.y = 0
+      // Load saved theme
+      (function () {
+        if (localStorage.getItem("nk-theme") === "dark") {
+          document.documentElement.classList.add("dark");
+          document.getElementById("themeIconMoon").style.display = "none";
+          document.getElementById("themeIconSun").style.display = "block";
+        }
+      })();
 
-      ctx.beginPath()
-      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
-      ctx.fillStyle = `rgba(${color}, ${p.opacity})`
-      ctx.fill()
-    })
-    requestAnimationFrame(animate)
-  }
+      // Mobile bottom nav highlight on scroll
+      window.addEventListener("scroll", () => {
+        const sections = document.querySelectorAll("section[id]");
+        let current = "hero";
+        sections.forEach((s) => {
+          if (window.scrollY >= s.offsetTop - 200) current = s.id;
+        });
+        const links = document.querySelectorAll("#mobileNav a, #desktopNav .nav-link");
+        links.forEach((l) => {
+          l.classList.toggle("active", l.getAttribute("href") === "#" + current);
+          if (l.classList.contains("active")) l.style.color = "var(--nk-accent)";
+          else l.style.color = "var(--nk-text-muted)";
+        });
+      });
 
-  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    animate()
-  }
-</script>
-</body>
+      // Particles Canvas
+      const canvas = document.getElementById("particles-canvas");
+      const ctx = canvas.getContext("2d");
+      let particles = [];
+      const PARTICLE_COUNT = 60;
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resize();
+      window.addEventListener("resize", resize);
+
+      function createParticles() {
+        particles = [];
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+          particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 2.5 + 1,
+            speedX: (Math.random() - 0.5) * 0.3,
+            speedY: (Math.random() - 0.5) * 0.3,
+            opacity: Math.random() * 0.4 + 0.1,
+          });
+        }
+      }
+      createParticles();
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const isDark = document.documentElement.classList.contains("dark");
+        const color = isDark ? "180, 200, 240" : "91, 143, 212";
+
+        particles.forEach((p) => {
+          p.x += p.speedX;
+          p.y += p.speedY;
+          if (p.x < 0) p.x = canvas.width;
+          if (p.x > canvas.width) p.x = 0;
+          if (p.y < 0) p.y = canvas.height;
+          if (p.y > canvas.height) p.y = 0;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${color}, ${p.opacity})`;
+          ctx.fill();
+        });
+        requestAnimationFrame(animate);
+      }
+
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        animate();
+      }
+    </script>
+  </body>
 </html>
