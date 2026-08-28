@@ -29,5 +29,5 @@ draft: false
 
 ## 图片约定
 
-- 文章配图统一上传 Cloudflare R2（自定义域 `static.nkdshinku.com`，见 docs/部署清单.md）
+- 文章配图统一上传 Cloudflare R2（自定义域 `static.nkdshinku.com`，M4 接入时按部署清单配置）
 - 静态导出下 next/image 为 unoptimized 模式，直接引用 R2 公网 URL 并显式声明宽高

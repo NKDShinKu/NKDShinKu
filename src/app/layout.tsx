@@ -50,7 +50,7 @@ export default function RootLayout({
       lang="zh-CN"
       className={`${inter.variable} ${quicksand.variable} ${jetbrainsMono.variable}`}
     >
-      <body className="bg-background text-foreground flex min-h-dvh flex-col font-sans antialiased">
+      <body className="flex min-h-dvh flex-col bg-bg font-sans text-text antialiased">
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <SiteFooter />

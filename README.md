@@ -5,8 +5,8 @@
 ## 技术栈
 
 - **框架**：Next.js 16（App Router，`output: "export"` 全静态导出 SSG）
-- **样式**：TailwindCSS 4 + shadcn/ui + @tailwindcss/typography
-- **图标**：Iconify（`@iconify/tailwind4`，类名方式使用）
+- **样式**：TailwindCSS 4 + @tailwindcss/typography；UI 组件全部自研（按需 Radix 原语）
+- **图标**：Iconify（`@iconify/tailwind4`）
 - **部署**：GitHub Actions → GitHub Pages（自定义域名 `nkdshinku.com`）
 - **搜索**：Pagefind（构建后生成索引）
 - **图床**：Cloudflare R2（后续接入）
@@ -29,24 +29,20 @@ pnpm format         # Prettier 格式化
 ## 目录结构
 
 ```
-├── .github/workflows/   # CI：构建 + Pagefind + 部署到 Pages
-├── content/             # 站点内容（M2 阶段启用，约定见 content/README.md）
-├── docs/                # 方案评估、部署清单、路线图、设计参考
-├── design-system-old/   # 旧设计系统（设计阶段参考）
+├── .github/workflows/   # CI：lint → typecheck → build → Pagefind → 部署
+├── content/             # 站点内容（M2 启用，约定见 content/README.md）
 ├── public/              # 静态资源（.nojekyll、robots 等）
 └── src/
-    ├── app/             # App Router（layout / 首页 / 404 / 全局样式）
-    ├── components/      # layout/ 通用布局；ui/ shadcn 组件
-    └── lib/             # 站点配置等纯函数工具
+    ├── app/             # App Router（layout / 首页 / 404 / 全局样式与 token）
+    ├── components/      # layout/ 全局布局；ui/ 自研原语；feature/ 业务组件
+    └── lib/             # 站点配置等纯逻辑
 ```
 
-## 文档索引
+## 开发文档
 
-- [博客方案评估](docs/博客方案评估.md) —— 技术方案逐项评估与风险
-- [部署清单](docs/部署清单.md) —— 上线前需要手工完成的平台配置
-- [路线图](docs/路线图.md) —— 里程碑规划（M0–M5）
-- [项目背景](docs/博客项目背景.md) —— 最初的需求文档
-- [开发约定](AGENTS.md) —— AI 协作 / vibe coding 约定
+- `AGENTS.md` —— AI 协作约定（事实来源），开始任何开发前先读
+- `content/README.md` —— 内容目录与 frontmatter 约定（M2 启用）
+- `docs/` —— 方案评估、部署清单、路线图、设计参考（其中 博客项目背景.md 为本地提示词，不入库）
 
 ## 许可
 

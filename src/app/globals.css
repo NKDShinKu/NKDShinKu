@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "tw-animate-css";
 @plugin "@tailwindcss/typography";
 @plugin "@iconify/tailwind4";
 
@@ -7,107 +6,12 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * 主题变量（shadcn 语义层 + NKDShinKu 品牌色）
- *
- * 语义层 token（background/foreground/primary/...）由 shadcn 组件消费，
- * 值暂用旧设计系统 design-system-old/nkdshinku/MASTER.md 的 Soft ACG Fusion 色板，
- * M1 设计定稿时统一替换。
+ * 设计 token（暂定，M1 设计定稿时统一替换）
+ * 基于旧设计系统 design-system-old 的 Soft ACG Fusion 色板：
+ * 天蓝品牌色 + 樱粉/暮紫点缀，蓝白基调。
  */
-:root {
-  --radius: 0.75rem;
-
-  /* 背景与表面 */
-  --background: #f0f4f8;
-  --foreground: #2d2b3a;
-  --card: #ffffff;
-  --card-foreground: #2d2b3a;
-  --popover: #ffffff;
-  --popover-foreground: #2d2b3a;
-
-  /* 品牌主色（天蓝） */
-  --primary: #5b8fd4;
-  --primary-foreground: #f8fafc;
-
-  /* 中性表面 */
-  --secondary: #e4ecf6;
-  --secondary-foreground: #2d2b3a;
-  --muted: #e8eef5;
-  --muted-foreground: #6b6880;
-  --accent: #e4ecf6;
-  --accent-foreground: #2d2b3a;
-
-  /* 状态 */
-  --destructive: #d46a6a;
-  --destructive-foreground: #f8fafc;
-
-  /* 描边与焦点环 */
-  --border: #dbe4ef;
-  --input: #dbe4ef;
-  --ring: #8fb8e8;
-
-  /* 图表 */
-  --chart-1: #5b8fd4;
-  --chart-2: #f0a0b8;
-  --chart-3: #9b8ec4;
-  --chart-4: #7ecb9a;
-  --chart-5: #f0c878;
-}
-
-.dark {
-  --background: #1a1b2e;
-  --foreground: #e8e6f0;
-  --card: #242538;
-  --card-foreground: #e8e6f0;
-  --popover: #242538;
-  --popover-foreground: #e8e6f0;
-  --primary: #7eb8f4;
-  --primary-foreground: #16233a;
-  --secondary: #2e2e4a;
-  --secondary-foreground: #e8e6f0;
-  --muted: #2e2e4a;
-  --muted-foreground: #a09db8;
-  --accent: #2e2e4a;
-  --accent-foreground: #e8e6f0;
-  --destructive: #e08a8a;
-  --destructive-foreground: #1a1b2e;
-  --border: #2e2e4a;
-  --input: #2e2e4a;
-  --ring: #5b9bd5;
-  --chart-1: #7eb8f4;
-  --chart-2: #f4b8c8;
-  --chart-3: #b8a8e0;
-  --chart-4: #8fd9a9;
-  --chart-5: #f0d08a;
-}
-
-@theme inline {
-  /* shadcn 语义 token 映射 */
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-
-  /* 字体（next/font 注入的 CSS 变量 + 中文回退栈） */
+@theme {
+  /* 字体（--font-* 由 next/font 在 layout 注入） */
   --font-sans:
     var(--font-inter), ui-sans-serif, system-ui, "PingFang SC", "Hiragino Sans GB",
     "Microsoft YaHei", sans-serif;
@@ -115,28 +19,41 @@
     var(--font-quicksand), var(--font-inter), "PingFang SC", "Microsoft YaHei", sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-  /* 圆角 */
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-}
-
-/* NKDShinKu 品牌色（与 shadcn 的 --color-accent 语义区分，勿混用） */
-@theme {
+  /* 品牌色 */
   --color-brand: #5b8fd4;
   --color-brand-light: #8fb8e8;
   --color-brand-dark: #3a6fb0;
   --color-sakura: #f0a0b8;
-  --color-sakura-light: #f4c0d0;
   --color-twilight: #9b8ec4;
+
+  /* 语义色（亮色） */
+  --color-bg: #f0f4f8;
+  --color-surface: #ffffff;
+  --color-card: #ffffff;
+  --color-text: #2d2b3a;
+  --color-text-muted: #6b6880;
+  --color-border: #dbe4ef;
+  --color-ring: #8fb8e8;
+}
+
+/* 语义色（暗色） */
+.dark {
+  --color-brand: #7eb8f4;
+  --color-brand-light: #a8d0f8;
+  --color-brand-dark: #5b9bd5;
+  --color-sakura: #f4b8c8;
+  --color-twilight: #b8a8e0;
+  --color-bg: #1a1b2e;
+  --color-surface: #242538;
+  --color-card: #242538;
+  --color-text: #e8e6f0;
+  --color-text-muted: #a09db8;
+  --color-border: #2e2e4a;
+  --color-ring: #5b9bd5;
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-bg text-text;
   }
 }
