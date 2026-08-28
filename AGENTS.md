@@ -78,14 +78,19 @@ src/
 - 流水线：`ui-ux-pro-max`(方向) → `frontend-design`(方案) → `tailwind-design-system`(规范落地)
   → 编码 → `web-design-guidelines`(审查) → `ui-animation`(润色)。
 
-推荐安装清单（按阶段按需）：
+已安装（15 个，全部 ✅）：
 
-| 阶段 | skill | 用途 |
-|------|-------|------|
-| M1 设计 | ui-ux-pro-max / frontend-design / tailwind-design-system / web-design-guidelines / ui-animation | 设计流水线五件套 |
-| 动画 | gsap-core / gsap-scrolltrigger / gsap-react | GSAP 用法与性能规范 |
-| M2 内容 | blog-write 或同类 SEO 写作 skill（可选） | 文章结构与 SEO |
-| 全阶段 | git-commit | 提交信息规范 |
+| 用途 | skill |
+|------|-------|
+| 设计流水线 | ui-ux-pro-max / frontend-design / tailwind-design-system / web-design-guidelines / ui-animation |
+| 动画（GSAP 官方） | gsap-core / gsap-frameworks / gsap-performance / gsap-plugins / gsap-react / gsap-scrolltrigger / gsap-timeline / gsap-utils |
+| 内容写作 | blog-write |
+| 提交 | git-commit |
+
+来源：gsap 系列 ← [greensock/gsap-skills](https://github.com/greensock/gsap-skills)；
+ui-ux-pro-max ← [Cat-tj/ui-ux-pro-max](https://github.com/Cat-tj/ui-ux-pro-max)；
+blog-write ← [AgriciDaniel/claude-blog](https://github.com/AgriciDaniel/claude-blog)；
+其余自历史提交 `bd3bb38` 恢复。Vue 相关 skill 不装（本项目为 Next.js）。
 
 ## 8. Git 约定（含用户规则）
 
