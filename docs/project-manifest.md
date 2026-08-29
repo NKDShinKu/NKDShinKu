@@ -16,47 +16,42 @@
 部署链路：Markdown/代码 → Next.js 16 静态导出（`out/`）→ GitHub Actions
 （lint → typecheck → build → Pagefind 索引 → 上传 artifact）→ GitHub Pages（自定义域名）。
 
-| 决策 | 选型 | 核心理由 | 备选 / 退路 |
-|------|------|----------|-------------|
-| 框架 | Next.js 16 App Router，`output: "export"` 全静态 SSG | 与 GH Pages 天然契合、生态成熟、参考仓库同栈 | Astro（更轻量） |
-| 部署 | GH Actions + GH Pages + 自定义域名 | 仓库 public 免费可用、零成本、全自动 | Cloudflare Pages（同生态、代码零改动可迁，作为国内访问质量差的退路） |
-| 图片 | Cloudflare R2 + 自定义域 `img.nkdshinku.com` | 免费 10GB、无出口费、同生态 CDN | — |
-| 搜索 | Pagefind | 纯静态索引、零服务端 | — |
-| 评论 | giscus（暂缓） | 数据存 GitHub Discussions、零成本 | Waline / Twikoo（需服务端） |
+| 决策 | 选型                                                 | 核心理由                                     | 备选 / 退路                                                          |
+| ---- | ---------------------------------------------------- | -------------------------------------------- | -------------------------------------------------------------------- |
+| 框架 | Next.js 16 App Router，`output: "export"` 全静态 SSG | 与 GH Pages 天然契合、生态成熟、参考仓库同栈 | Astro（更轻量）                                                      |
+| 部署 | GH Actions + GH Pages + 自定义域名                   | 仓库 public 免费可用、零成本、全自动         | Cloudflare Pages（同生态、代码零改动可迁，作为国内访问质量差的退路） |
+| 图片 | Cloudflare R2 + 自定义域 `img.nkdshinku.com`         | 免费 10GB、无出口费、同生态 CDN              | —                                                                    |
+| 搜索 | Pagefind                                             | 纯静态索引、零服务端                         | —                                                                    |
+| 评论 | giscus（暂缓）                                       | 数据存 GitHub Discussions、零成本            | Waline / Twikoo（需服务端）                                          |
 
 ## 3. 技术选型清单
 
-| 项 | 选型 | 说明 | 状态 |
-|----|------|------|------|
-| UI 组件 | **自研**（手写 React 组件 + Tailwind 工具类） | 个人博客不需要带样式组件库；确需无样式原语才引入 Radix | ✅（shadcn 已弃用） |
-| 样式 | TailwindCSS 4 | CSS-first `@theme`，token 集中在 `src/app/globals.css` | ✅ |
-| 图标 | Iconify（`@iconify/tailwind4` + mdi 图标集） | 按需生成 CSS、SSG 友好 | ✅ |
-| 排版 | @tailwindcss/typography | 文章正文 `prose` | ✅ |
-| 动画 | GSAP | 滚动/入场动画；只用 transform/opacity，尊重 prefers-reduced-motion | ⏳ M1 后按需安装 |
-| 语言 | TypeScript 5.9（strict） | 勿升 TS 7（生态兼容未验证） | ✅ |
-| 包管理 | pnpm | lockfile 锁定 | ✅ |
-| 动态数据 | 浏览器端 fetch（Bangumi 等） | 静态导出下唯一可行方式；需加载/失败态 | ⏳ M3 |
-| 图床 | Cloudflare R2（bucket `nkdshinku-assets`） | 自定义域 `img.nkdshinku.com` | ✅ 已建，文章接入待 M4 |
-| 评论 | giscus | 前置：开 Discussions + 安装 giscus App | ⏳ M3/M4 |
+| 项       | 选型                                          | 说明                                                               | 状态                   |
+| -------- | --------------------------------------------- | ------------------------------------------------------------------ | ---------------------- |
+| UI 组件  | **自研**（手写 React 组件 + Tailwind 工具类） | 个人博客不需要带样式组件库；确需无样式原语才引入 Radix             | ✅（shadcn 已弃用）    |
+| 样式     | TailwindCSS 4                                 | CSS-first `@theme`，token 集中在 `src/app/globals.css`             | ✅                     |
+| 图标     | Iconify（`@iconify/tailwind4` + mdi 图标集）  | 按需生成 CSS、SSG 友好                                             | ✅                     |
+| 排版     | @tailwindcss/typography                       | 文章正文 `prose`                                                   | ✅                     |
+| 动画     | GSAP                                          | 滚动/入场动画；只用 transform/opacity，尊重 prefers-reduced-motion | ⏳ M1 后按需安装       |
+| 语言     | TypeScript 5.9（strict）                      | 勿升 TS 7（生态兼容未验证）                                        | ✅                     |
+| 包管理   | pnpm                                          | lockfile 锁定                                                      | ✅                     |
+| 动态数据 | 浏览器端 fetch（Bangumi 等）                  | 静态导出下唯一可行方式；需加载/失败态                              | ⏳ M3                  |
+| 图床     | Cloudflare R2（bucket `nkdshinku-assets`）    | 自定义域 `img.nkdshinku.com`                                       | ✅ 已建，文章接入待 M4 |
+| 评论     | giscus                                        | 前置：开 Discussions + 安装 giscus App                             | ⏳ M3/M4               |
 
 ## 4. 设计方向
 
-- 基调：蓝白 ACG。品牌蓝 `#5B8FD4` + 樱粉 `#F0A0B8` + 暮紫 `#9B8EC4`；字体 Quicksand / Inter / JetBrains Mono（next/font）+ 中文系统回退。
-- 当前 token 定义于 `src/app/globals.css`；**M1 定稿前勿大改视觉**。
-- 待定项（M1 由 ui-ux-pro-max 流程裁决）：
-  - 黏土质感参考：`docs/design/claymorphism-reference.md`
-  - 滚动叙事参考：`docs/design/scrollytelling-reference.md`
-- 旧设计系统归档：`docs/design/design-system-old/`（Soft ACG Fusion，仅参考）。
+由 ui-ux-pro-max 裁决
 
 ## 5. 外部服务
 
-| 服务 | 资源 | 用途 | 状态 |
-|------|------|------|------|
-| GitHub | `NKDShinKu/NKDShinKu` | 代码 + Actions + Pages | ✅ |
-| Cloudflare | zone `nkdshinku.com` | DNS + R2 | ✅ |
-| Cloudflare R2 | bucket `nkdshinku-assets` → `img.nkdshinku.com` | 图床 | ✅ 已建 |
-| Bangumi | 待获取用户 ID | 追番数据（浏览器端 fetch，CORS 待测） | ⏳ M3 |
-| giscus | 待开 Discussions + 安装 App | 评论 | ⏳ M3/M4 |
+| 服务          | 资源                                            | 用途                                  | 状态     |
+| ------------- | ----------------------------------------------- | ------------------------------------- | -------- |
+| GitHub        | `NKDShinKu/NKDShinKu`                           | 代码 + Actions + Pages                | ✅       |
+| Cloudflare    | zone `nkdshinku.com`                            | DNS + R2                              | ✅       |
+| Cloudflare R2 | bucket `nkdshinku-assets` → `img.nkdshinku.com` | 图床                                  | ✅ 已建  |
+| Bangumi       | 待获取用户 ID                                   | 追番数据（浏览器端 fetch，CORS 待测） | ⏳ M3    |
+| giscus        | 待开 Discussions + 安装 App                     | 评论                                  | ⏳ M3/M4 |
 
 ## 6. 风险与待验证项
 
@@ -66,12 +61,14 @@
 
 ## 7. 变更记录
 
-| 日期 | 变更 |
-|------|------|
-| 2026-08 | 清理旧 Vue 尝试，改用 Next.js 静态导出方案 |
-| 2026-08 | 移除 shadcn/ui，UI 全部自研（仅按需 Radix 原语） |
-| 2026-08 | docs 入库（`docs/博客项目背景.md` 除外，本地提示词） |
-| 2026-08 | 确立"commit 前用户评审"规则 |
-| 2026-08 | 安装 15 个 skills（设计五件套 + GSAP×8 + blog-write + git-commit） |
-| 2026-08 | 域名 A 记录×4 生效，DNS 验证通过；HTTPS 证书签发中 |
-| 2026-08 | 文档重构：分层单一事实来源（本清单建立，替代旧方案评估文档） |
+| 日期    | 变更                                                                                             |
+| ------- | ------------------------------------------------------------------------------------------------ |
+| 2026-08 | 清理旧 Vue 尝试，改用 Next.js 静态导出方案                                                       |
+| 2026-08 | 移除 shadcn/ui，UI 全部自研（仅按需 Radix 原语）                                                 |
+| 2026-08 | docs 入库（`docs/博客项目背景.md` 除外，本地提示词）                                             |
+| 2026-08 | 确立"commit 前用户评审"规则                                                                      |
+| 2026-08 | 安装 16 个 skills（设计五件套 + GSAP×8 + blog-write + git-commit + vercel-react-best-practices） |
+| 2026-08 | 域名 A 记录×4 生效，DNS 验证通过；HTTPS 证书签发中                                               |
+| 2026-08 | 文档重构：分层单一事实来源（本清单建立，替代旧方案评估文档）                                     |
+| 2026-08 | 删除黏土质感与滚动叙事参考文档，视觉风格 M1 再定调                                               |
+| 2026-08 | roadmap 调整：已完成详录，未来里程碑只记方向                                                     |
