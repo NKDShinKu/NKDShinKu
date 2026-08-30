@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { siteConfig } from "@/lib/site.config";
 
 function isActive(pathname: string, href: string): boolean {
-  return pathname.startsWith(href);
+  return pathname === href || pathname.startsWith(`${href}/`);
 }
 
 /** 顶栏文字导航（hover/active 均 text-accent；移动端收纳进汉堡菜单，故 md 以下隐藏） */

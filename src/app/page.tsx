@@ -2,38 +2,7 @@ import Link from "next/link";
 import { HomeHero } from "@/components/home/home-hero";
 import { Reveal } from "@/components/motion/reveal";
 import { Card } from "@/components/ui/card";
-
-/** 板块入口（REQ-H4）：Bento 非对称网格（design-system.md §3.4），玻璃卡用于氛围区（§2.2） */
-const sections = [
-  {
-    href: "/posts",
-    title: "文章",
-    icon: "icon-[mdi--file-document-outline]",
-    description: "教程、技术笔记与日常，记录学习与思考。",
-    span: "md:col-span-2",
-  },
-  {
-    href: "/projects",
-    title: "项目",
-    icon: "icon-[mdi--flask-outline]",
-    description: "个人项目与实验记录，点击直达仓库与演示。",
-    span: "",
-  },
-  {
-    href: "/bangumi",
-    title: "追番",
-    icon: "icon-[mdi--television-classic]",
-    description: "Bangumi 追番记录、进度与评分。",
-    span: "",
-  },
-  {
-    href: "/about",
-    title: "关于",
-    icon: "icon-[mdi--information-outline]",
-    description: "关于我、技能栈与联系方式。",
-    span: "md:col-span-2",
-  },
-];
+import { siteConfig } from "@/lib/site.config";
 
 export default function HomePage() {
   return (
@@ -67,7 +36,7 @@ export default function HomePage() {
         </Reveal>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {sections.map((section, index) => (
+          {siteConfig.sections.map((section, index) => (
             <Reveal key={section.href} delay={index * 0.08} className={section.span}>
               <Link
                 href={section.href}
@@ -76,7 +45,7 @@ export default function HomePage() {
                 <Card variant="glass" interactive className="group h-full">
                   <div className="flex items-center gap-3">
                     <span className={`${section.icon} text-accent size-6 shrink-0`} aria-hidden />
-                    <h3 className="text-lg font-semibold">{section.title}</h3>
+                    <h3 className="text-lg font-semibold">{section.label}</h3>
                     <span
                       className="icon-[mdi--arrow-right] text-accent ease-base ml-auto size-4 transition-transform duration-200 group-hover:translate-x-1"
                       aria-hidden
