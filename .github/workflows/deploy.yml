@@ -46,7 +46,7 @@ jobs:
         run: pnpm build
 
       - name: Build search index (Pagefind)
-        run: pnpm dlx pagefind --site out
+        run: pnpm build:search
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
