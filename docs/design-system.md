@@ -69,6 +69,8 @@
 
 - 正文/标题一律用 `--color-text`（亮）或 `--color-text-muted`；**不要用粉/紫/浅蓝作小号正文**。
 - `accent` / `sakura` / `twilight` 仅用于：图标、大号标题渐变、装饰块、状态点、空状态氛围。需要**小号彩色文字**时（标签、链接），用 `--color-accent-dark`（≥ 4.5:1）。
+- **品牌色作彩底不作对比度限制**（按钮、选中态、徽章等）：视觉优先，`bg-accent text-white` 可用。
+  此为用户决策（project-manifest D10）；正文 / 长文本的对比度纪律不变。
 - 状态色（success/warning/danger）作文字时必须与图标/文案配对，不能只靠颜色传达含义（`color-only`）。
 - 纯 `#000` / `#FFF` 禁止，一律走 token。
 
@@ -132,6 +134,7 @@
 | `--shadow-md`  | `0 4px 12px rgba(0,0,0,0.08)` | `0 4px 12px rgba(0,0,0,0.40)`| 玻璃卡默认            |
 | `--shadow-lg`  | `0 8px 24px rgba(0,0,0,0.10)` | `0 8px 24px rgba(0,0,0,0.50)`| 卡片 hover、弹层      |
 | `--shadow-glow`| `0 0 24px rgba(91,143,212,0.15)`| `0 0 24px rgba(126,184,244,0.20)`| 主色柔光（hover）     |
+| `--shadow-lg-glow`| `0 8px 24px rgba(0,0,0,0.10)` + 柔光 | `0 8px 24px rgba(0,0,0,0.50)` + 柔光 | 卡片交互 hover（抬升+柔光复合） |
 
 ### 1.6 玻璃态（Glassmorphism）
 
@@ -176,7 +179,7 @@ box-shadow: var(--shadow-md);
 
 ### 2.2 玻璃卡片 / 实心卡片
 
-- **玻璃卡**（氛围区）：§1.6 玻璃态 + `p-6`；可交互时 hover `-translate-y-1` + `shadow-lg` + `shadow-glow`。
+- **玻璃卡**（氛围区）：§1.6 玻璃态 + `p-6`；可交互时 hover `-translate-y-1` + `shadow-lg-glow`（§1.5 复合阴影）。
 - **实心卡**（阅读区，博客卡）：`bg-surface border border-border rounded-md p-6`；hover `-translate-y-[3px] shadow-lg`。
 
 ### 2.3 标签 / 徽章
@@ -187,7 +190,7 @@ box-shadow: var(--shadow-md);
   - 樱粉：`bg-sakura/12 text-sakura`（仅装饰语境；作文字时改用更深变体或配对图标）
   - 暮紫：`bg-twilight/12 text-twilight`
   - 成功：`bg-success/12 text-[…]`（配对文案）
-- 选中态 `.active`：`bg-accent text-white`。
+- 选中态：`bg-accent text-white`（品牌色底不作对比度限制，见 §1.1 纪律与 manifest D10）。
 
 ### 2.4 章节标题
 
@@ -195,9 +198,11 @@ box-shadow: var(--shadow-md);
 
 ### 2.5 导航
 
-- 桌面：浮动玻璃药丸 `fixed top-4 left-1/2 -translate-x-1/2 rounded-full`（玻璃态 + `px-7 py-2.5`），导航项 `text-sm font-medium text-text-muted`（hover/active `text-accent`）。
-- 移动：底部浮动玻璃条 `fixed bottom-4`（图标导航 ≤5 项 + 主题切换）。
-- 固定导航必须留 `inset` 边距，**禁用 `top-0` 贴边**（`content-jumping`）。
+> 形态变更：初版为浮动玻璃药丸，用户决策改为**全宽 sticky 顶栏**（常规博客形态，manifest D11）。
+
+- 顶栏：`sticky top-0 z-50 border-b border-border/60 bg-bg/80 backdrop-blur-md`，容器 `max-w-[1100px]`、高 `h-16`；占据文档流，内容无需避让。
+- 桌面：左 logo（`font-display` 粗体），右侧文字导航（`text-sm font-medium text-text-muted`，hover/active `text-accent`）+ 主题切换。
+- 移动：logo + 主题切换 + 汉堡按钮，下拉玻璃面板列 5 项（图标 + 文字，行触控 ≥ 44px）。
 
 ---
 
@@ -282,13 +287,12 @@ box-shadow: var(--shadow-md);
 
 | 断点    | 宽度      | 列数   | 导航                         | Hero                 |
 | ------- | --------- | ------ | ---------------------------- | -------------------- |
-| 移动    | < 768px   | 1 列   | 底部玻璃条                   | 静态图，无视频       |
+| 移动    | < 768px   | 1 列   | 汉堡下拉菜单                 | 静态图，无视频       |
 | 平板    | 768–1023px| 2 列   | 内联紧凑导航                 | 视频降级视差         |
-| 桌面    | ≥ 1024px  | 2–3 列 | 完整内联/浮动导航            | 全量视觉 + 视差      |
+| 桌面    | ≥ 1024px  | 2–3 列 | 完整内联导航                 | 全量视觉 + 视差      |
 
 - 移动优先：320px 起可用；卡片 1→2→3 列；移动端字号整体降一级。
-- 桌面导航 `top-4 left-4 right-4` 浮动（非 `top-0`）；移动端底部固定。
-- 内容内边距需预留固定导航高度，防内容被遮挡（`content-jumping`）。
+- 顶栏 `sticky top-0` 占据文档流（§2.5），内容无需避让留白。
 
 ---
 
@@ -339,6 +343,7 @@ box-shadow: var(--shadow-md);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
   --shadow-glow: 0 0 24px rgba(91, 143, 212, 0.15);
+  --shadow-lg-glow: 0 8px 24px rgba(0, 0, 0, 0.1), 0 0 24px rgba(91, 143, 212, 0.15);
 
   /* 缓动（时长经 duration-150/200/300/400 表达，见 §1.7） */
   --ease-fast: ease-out;
@@ -369,6 +374,7 @@ box-shadow: var(--shadow-md);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
   --shadow-glow: 0 0 24px rgba(126, 184, 244, 0.2);
+  --shadow-lg-glow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 24px rgba(126, 184, 244, 0.2);
 }
 
 @layer base {
@@ -393,7 +399,7 @@ box-shadow: var(--shadow-md);
 - ❌ `transition: all`（逐属性声明）
 - ❌ 纯 `#000` / `#FFF`（走 token）
 - ❌ 大面积高饱和色块、花哨粒子堆砌背景
-- ❌ 缩放变换导致布局位移、`top: 0` 贴边固定导航
+- ❌ 缩放变换导致布局位移
 - ❌ 低对比文字（< 4.5:1）、不可见焦点、移动端横向滚动
 - ❌ 粉/紫/浅蓝作小号正文文字（见 §1.1 纪律）
 
@@ -408,7 +414,7 @@ box-shadow: var(--shadow-md);
 - [ ] 焦点可见（`focus-visible` ring）
 - [ ] `prefers-reduced-motion` 生效
 - [ ] 375 / 768 / 1024 / 1440 四档自测；无横向滚动
-- [ ] 浮动元素留边距、内容不被固定导航遮挡
+- [ ] 浮动元素留边距、不遮挡内容
 - [ ] 所有图片有 alt；表单输入有 label；纯图标按钮有 `aria-label`
 
 ---

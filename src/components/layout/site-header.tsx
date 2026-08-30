@@ -1,31 +1,28 @@
 import Link from "next/link";
 import { siteConfig } from "@/lib/site.config";
+import { MobileMenu } from "@/components/layout/mobile-menu";
+import { NavLinks } from "@/components/layout/nav-links";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 
 /**
- * 全站页头（占位实现）
- * 设计阶段定稿后按设计系统重做；现在仅保证布局骨架可用。
+ * 全站页头：全宽 sticky 顶栏（常规博客形态，用户决策 D11，取代浮动玻璃药丸）。
+ * 桌面：logo + 文字导航 + 主题切换；移动：logo + 主题切换 + 汉堡下拉菜单。
  */
 export function SiteHeader() {
   return (
     <header className="border-border/60 bg-bg/80 sticky top-0 z-50 border-b backdrop-blur-md">
-      <div className="container mx-auto flex h-16 items-center justify-between px-6">
+      <div className="mx-auto flex h-16 w-full max-w-[1100px] items-center justify-between px-4 md:px-6">
         <Link
           href="/"
-          className="font-display text-text hover:text-accent text-lg font-bold tracking-tight transition-colors"
+          className="font-display text-text hover:text-accent ease-fast focus-visible:outline-accent rounded-md text-lg font-bold tracking-tight transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2"
         >
           {siteConfig.name}
         </Link>
-        <nav aria-label="主导航" className="flex items-center gap-2">
-          <a
-            href={siteConfig.github}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="GitHub 仓库"
-            className="text-text-muted focus-visible:outline-accent hover:bg-accent/10 hover:text-accent rounded-md p-3 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
-          >
-            <span className="icon-[mdi--github] size-5" aria-hidden />
-          </a>
-        </nav>
+        <div className="flex items-center gap-1 md:gap-2">
+          <NavLinks />
+          <ThemeToggle />
+          <MobileMenu />
+        </div>
       </div>
     </header>
   );

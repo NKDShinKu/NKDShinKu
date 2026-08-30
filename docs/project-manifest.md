@@ -32,7 +32,7 @@
 | 样式     | TailwindCSS 4                                 | CSS-first `@theme`，token 集中在 `src/app/globals.css`             | ✅                     |
 | 图标     | Iconify（`@iconify/tailwind4` + mdi 图标集）  | 按需生成 CSS、SSG 友好                                             | ✅                     |
 | 排版     | @tailwindcss/typography                       | 文章正文 `prose`                                                   | ✅                     |
-| 动画     | GSAP                                          | 滚动/入场/过渡动画；尊重 prefers-reduced-motion | ⏳ M1 后按需安装       |
+| 动画     | GSAP（+ @gsap/react）                         | 滚动/入场/过渡动画；尊重 prefers-reduced-motion | ✅（M1 已安装）        |
 | 语言     | TypeScript 5.9（strict）                      | 勿升 TS 7（生态兼容未验证）                                        | ✅                     |
 | 包管理   | pnpm                                          | lockfile 锁定                                                      | ✅                     |
 | 动态数据 | 浏览器端 fetch（Bangumi 等）                  | 静态导出下唯一可行方式；需加载/失败态                              | ⏳ M3                  |
@@ -84,6 +84,8 @@
 | D7  | 首页追番小部件     | 放；REQ-H5 由 P2 提升为 P1                                                                                                        | 2026-08 |
 | D8  | 文章分类           | 「教程/笔记/日常」够用，维持现状                                                                                                   | 2026-08 |
 | D9  | 借鉴项评审         | 采纳：Mermaid、llms.txt、项目分组+多链接、FAB、复制整页、图标集、站长验证、RSS prebuild 脚本、抽屉式评论形态；互动教程列 P3 灵感；不采纳：教程独立板块、年份编号 slug、外链守卫、error.tsx | 2026-08 |
+| D10 | 品牌色彩底对比度   | 按钮／选中态等品牌色彩底**不作 4.5:1 对比度限制**，视觉优先；正文/长文本对比度纪律不变                                           | 2026-08 |
+| D11 | 导航形态           | 全宽 sticky 顶栏（常规博客形态，用户决策），弃用浮动玻璃药丸／底部条                                                             | 2026-08 |
 
 ## 8. 变更记录
 
@@ -98,3 +100,7 @@
 | 2026-08 | 需求分析完成：建立 `docs/requirements.md`，关键决策经用户确认（D1–D9）                           |
 | 2026-08 | roadmap 调整：已完成详录，未来里程碑只记方向                                                     |
 | 2026-08 | 文档职责再拆分：requirements 只留需求，决策/风险/外部集成并入本清单；旧设计归档移入 archive       |
+| 2026-08 | 决策 D10：品牌色彩底（按钮/选中态）视觉优先，不做对比度限制                                      |
+| 2026-08 | 安装 GSAP + @gsap/react；全局背景对齐预览稿（blob morph + 萤火粒子）                             |
+| 2026-08 | 决策 D11：导航改全宽 sticky 顶栏；首页精简（去 CTA 按钮与关于卡）                                |
+| 2026-08 | 页头导航去「首页」（logo 返回）；页脚板块链接改社交入口（GitHub/邮箱/Bangumi/QQ）；首页加最新文章占位 |
