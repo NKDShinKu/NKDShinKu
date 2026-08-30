@@ -156,12 +156,14 @@
 
 ## 7. 设计风格诉求
 
-> 视觉方向与设计 token 由 M1 设计定稿产出（skills 工作流见 `AGENTS.md` §5），本节省略具体视觉规范。
+> 视觉方向与设计 token 已由 M1 设计定稿产出，落于 `docs/design-system.md`（本节省略具体视觉规范）。
+> 设计工作流见 `AGENTS.md` §5。
 
 **用户原话**：现代个人技术博客，浅色风格、蓝白配色、柔和阴影、圆润、轻微 ACG 背景与轻科技氛围，整体清新、专业、轻量且具有二次元气质；白天/夜间双主题，关键词：**天空、夜空**。
 
+- 定稿风格：**Soft ACG Fusion**（玻璃态 × 极光背景 × 动效），配色「天蓝 × 樱粉 × 暮紫」，详见 `docs/design-system.md`。
 - 二次元素材克制使用，排版 / 配色 / 微透视 / 交互优先。
-- 旧设计归档（`docs/archive/design-system-old/`）仅参考，不约束新方案。
+- 旧设计归档（`docs/archive/design-system-old/`）已被 `docs/design-system.md` 取代，仅作历史参考。
 
 ## 8. 开放问题
 

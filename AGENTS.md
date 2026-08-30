@@ -69,7 +69,8 @@ src/
 
 ## 4. 设计约定
 
-待补充（M1 定稿后填入设计 token、断点、动效参数等硬性规则）。
+设计 token、组件规范、动效参数、无障碍与响应式硬性规则见 `docs/design-system.md`（M1 定稿）。
+日常编码以该文档为准；改 token / 组件时先查该文档，再按 §5 走 `tailwind-design-system` 落地。
 
 ## 5. skills 工作流
 

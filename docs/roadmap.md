@@ -17,10 +17,12 @@
 - [x] 推送 main、GitHub Pages 部署上线（http 已通）
 - [x] 文档两轮规整：project-manifest 单一事实清单、未来计划方向化
 
-## M1 设计定稿 ⏳
+## M1 设计定稿 🔨
 
 方向：确定视觉方向（蓝白 ACG 基底），定稿设计 token 并落地，重做首页与全局布局，
 接入暗色模式与动画规范（GSAP）。
+
+- [x] 设计系统定稿 `docs/design-system.md`（Soft ACG Fusion：玻璃态 × 极光 × 动效）
 
 ## M2 内容层 ⏳
 
