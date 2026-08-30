@@ -13,8 +13,7 @@
 .DS_Store
 *.pem
 
-# 本地提示词与 Agent 目录（不入库）
-/docs/博客项目背景.md
+# Agent 目录（不入库）
 /.claude/
 /.agents/
 

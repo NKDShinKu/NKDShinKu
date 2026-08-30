@@ -1,20 +1,19 @@
 # 项目清单（Project Manifest）
 
-> 本项目"事实"的唯一记录点：方案、技术选型、设计方向、外部服务、风险与变更记录。
-> 规则类内容见 `AGENTS.md`，进度见 `docs/roadmap.md`，部署步骤见 `docs/ops/deploy-checklist.md`。
-> 任何事实发生变化时，就地修改本文件并在文末"变更记录"追加一行。
+> 本项目「事实」的唯一记录点：方案、技术选型、外部服务、决策、风险与变更记录。
+> 规则类见 `AGENTS.md`；需求见 `docs/requirements.md`；进度见 `docs/roadmap.md`；部署步骤见 `docs/ops/deploy-checklist.md`。
+> 任何事实变化时，就地修改本文件并在文末「变更记录」追加一行。
 
 ## 1. 项目概况
 
 - 定位：二次元风格的现代个人技术博客；蓝白基调，排版/配色/微透视/交互优先，二次元素材克制使用。
-- 内容板块：文章/教程、实验室/项目、日常、二次元/追番（Bangumi）。
+- 内容板块：文章（含教程/笔记/日常分类）、项目（卡片跳转外部）、追番（Bangumi）、关于；详见 `docs/requirements.md`。
 - 域名：`https://nkdshinku.com`（DNS 托管于 Cloudflare）
 - 仓库：`https://github.com/NKDShinKu/NKDShinKu`（public）
 
 ## 2. 总体方案
 
-部署链路：Markdown/代码 → Next.js 16 静态导出（`out/`）→ GitHub Actions
-（lint → typecheck → build → Pagefind 索引 → 上传 artifact）→ GitHub Pages（自定义域名）。
+部署链路：Markdown/代码 → Next.js 16 静态导出（`out/`）→ GitHub Actions（lint → typecheck → build → Pagefind 索引 → 上传 artifact）→ GitHub Pages（自定义域名）。
 
 | 决策 | 选型                                                 | 核心理由                                     | 备选 / 退路                                                          |
 | ---- | ---------------------------------------------------- | -------------------------------------------- | -------------------------------------------------------------------- |
@@ -22,7 +21,8 @@
 | 部署 | GH Actions + GH Pages + 自定义域名                   | 仓库 public 免费可用、零成本、全自动         | Cloudflare Pages（同生态、代码零改动可迁，作为国内访问质量差的退路） |
 | 图片 | Cloudflare R2 + 自定义域 `img.nkdshinku.com`         | 免费 10GB、无出口费、同生态 CDN              | —                                                                    |
 | 搜索 | Pagefind                                             | 纯静态索引、零服务端                         | —                                                                    |
-| 评论 | giscus（暂缓）                                       | 数据存 GitHub Discussions、零成本            | Waline / Twikoo（需服务端）                                          |
+| 评论 | giscus（暂缓，P3 默认不上线）                        | 数据存 GitHub Discussions、零成本            | Waline / Twikoo（需服务端）                                          |
+| 订阅 | RSS/Atom + sitemap + robots（构建期生成）            | 静态导出兼容、零服务端                       | —                                                                    |
 
 ## 3. 技术选型清单
 
@@ -32,7 +32,7 @@
 | 样式     | TailwindCSS 4                                 | CSS-first `@theme`，token 集中在 `src/app/globals.css`             | ✅                     |
 | 图标     | Iconify（`@iconify/tailwind4` + mdi 图标集）  | 按需生成 CSS、SSG 友好                                             | ✅                     |
 | 排版     | @tailwindcss/typography                       | 文章正文 `prose`                                                   | ✅                     |
-| 动画     | GSAP                                          | 滚动/入场动画；只用 transform/opacity，尊重 prefers-reduced-motion | ⏳ M1 后按需安装       |
+| 动画     | GSAP                                          | 滚动/入场/过渡动画；尊重 prefers-reduced-motion | ⏳ M1 后按需安装       |
 | 语言     | TypeScript 5.9（strict）                      | 勿升 TS 7（生态兼容未验证）                                        | ✅                     |
 | 包管理   | pnpm                                          | lockfile 锁定                                                      | ✅                     |
 | 动态数据 | 浏览器端 fetch（Bangumi 等）                  | 静态导出下唯一可行方式；需加载/失败态                              | ⏳ M3                  |
@@ -41,34 +41,60 @@
 
 ## 4. 设计方向
 
-由 ui-ux-pro-max 裁决
+由 ui-ux-pro-max 裁决（M1 定稿，视觉诉求见 `docs/requirements.md` §7）。
 
 ## 5. 外部服务
 
-| 服务          | 资源                                            | 用途                                  | 状态     |
-| ------------- | ----------------------------------------------- | ------------------------------------- | -------- |
-| GitHub        | `NKDShinKu/NKDShinKu`                           | 代码 + Actions + Pages                | ✅       |
-| Cloudflare    | zone `nkdshinku.com`                            | DNS + R2                              | ✅       |
-| Cloudflare R2 | bucket `nkdshinku-assets` → `img.nkdshinku.com` | 图床                                  | ✅ 已建  |
-| Bangumi       | 待获取用户 ID                                   | 追番数据（浏览器端 fetch，CORS 待测） | ⏳ M3    |
-| giscus        | 待开 Discussions + 安装 App                     | 评论                                  | ⏳ M3/M4 |
+| 服务          | 资源                                            | 用途                        | 状态     |
+| ------------- | ----------------------------------------------- | --------------------------- | -------- |
+| GitHub        | `NKDShinKu/NKDShinKu`                           | 代码 + Actions + Pages      | ✅       |
+| Cloudflare    | zone `nkdshinku.com`                            | DNS + R2                    | ✅       |
+| Cloudflare R2 | bucket `nkdshinku-assets` → `img.nkdshinku.com` | 图床                        | ✅ 已建  |
+| Bangumi       | 用户 ID `796189`                                | 追番数据（浏览器端 fetch）  | ⏳ M3    |
+| giscus        | 待开 Discussions + 安装 App                     | 评论                        | ⏳ M3/M4 |
 
-## 6. 风险与待验证项
+## 6. 风险与决策树
 
-1. Bangumi API 浏览器端跨域（CORS）需实测；受限则改构建期抓取或 Cloudflare Worker 代理。
+### 6.1 风险清单
+
+1. Bangumi API 浏览器端直连的 CORS / User-Agent / 限流需实测（浏览器 fetch 无法自定义 UA）。
 2. GitHub Pages 国内访问质量一般；不可接受则迁移 Cloudflare Pages（代码零改动）。
 3. 图床素材版权：插图使用自绘 / AI 生成 / 明确授权素材。
 
-## 7. 变更记录
+### 6.2 Bangumi 接入决策树（决策 D3）
+
+```
+浏览器实测 api.bgm.tv CORS
+ ├─ 可用 → 浏览器直连 + 本地缓存（REQ-B1/B6）✅
+ └─ 受限 → 方案 B：Cloudflare Worker 代理（补 CORS 头 + 缓存 + 限流保护）
+           ├─ Worker 部署在 nkdshinku.com 同 zone（api.nkdshinku.com）
+           └─ 失败 → 方案 C：GitHub Actions 定时抓取 → 静态 JSON 随站构建（数据有延迟）
+```
+
+## 7. 决策记录
+
+| #   | 决策               | 结论                                                                                                                             | 日期    |
+| --- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| D1  | 文章与教程组织方式 | 合并为「文章」板块，用分类/标签区分；日常并入文章分类                                                                             | 2026-08 |
+| D2  | 项目/日常内容管理  | 项目 = 结构化配置 + 卡片跳转外部（无站内详情页）；日常 = 文章分类                                                                 | 2026-08 |
+| D3  | Bangumi 接入       | 浏览器直连 API，CORS 受限时 Cloudflare Worker 代理兜底（§6.2）                                                                    | 2026-08 |
+| D4  | 内容语言           | 仅中文                                                                                                                           | 2026-08 |
+| D5  | 互动功能           | 不设友链页面、不设访问统计；RSS 默认提供；giscus 保留 P3 暂缓                                                                     | 2026-08 |
+| D6  | Bangumi 用户 ID    | `796189` 已确认（M3 接入时写入 `site.config`）                                                                                    | 2026-08 |
+| D7  | 首页追番小部件     | 放；REQ-H5 由 P2 提升为 P1                                                                                                        | 2026-08 |
+| D8  | 文章分类           | 「教程/笔记/日常」够用，维持现状                                                                                                   | 2026-08 |
+| D9  | 借鉴项评审         | 采纳：Mermaid、llms.txt、项目分组+多链接、FAB、复制整页、图标集、站长验证、RSS prebuild 脚本、抽屉式评论形态；互动教程列 P3 灵感；不采纳：教程独立板块、年份编号 slug、外链守卫、error.tsx | 2026-08 |
+
+## 8. 变更记录
 
 | 日期    | 变更                                                                                             |
 | ------- | ------------------------------------------------------------------------------------------------ |
 | 2026-08 | 清理旧 Vue 尝试，改用 Next.js 静态导出方案                                                       |
 | 2026-08 | 移除 shadcn/ui，UI 全部自研（仅按需 Radix 原语）                                                 |
-| 2026-08 | docs 入库（`docs/博客项目背景.md` 除外，本地提示词）                                             |
-| 2026-08 | 确立"commit 前用户评审"规则                                                                      |
+| 2026-08 | 确立「commit 前用户评审」规则                                                                    |
 | 2026-08 | 安装 16 个 skills（设计五件套 + GSAP×8 + blog-write + git-commit + vercel-react-best-practices） |
 | 2026-08 | 域名 A 记录×4 生效，DNS 验证通过；HTTPS 证书签发中                                               |
 | 2026-08 | 文档重构：分层单一事实来源（本清单建立，替代旧方案评估文档）                                     |
-| 2026-08 | 删除黏土质感与滚动叙事参考文档，视觉风格 M1 再定调                                               |
+| 2026-08 | 需求分析完成：建立 `docs/requirements.md`，关键决策经用户确认（D1–D9）                           |
 | 2026-08 | roadmap 调整：已完成详录，未来里程碑只记方向                                                     |
+| 2026-08 | 文档职责再拆分：requirements 只留需求，决策/风险/外部集成并入本清单；旧设计归档移入 archive       |

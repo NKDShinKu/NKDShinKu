@@ -35,11 +35,12 @@ pnpm format         # Prettier 格式化
 | 文档 | 内容 |
 |------|------|
 | [AGENTS.md](AGENTS.md) | AI 协作规则（红线/约定/git 规则/skills） |
-| [docs/project-manifest.md](docs/project-manifest.md) | 项目事实：方案/选型/设计/外部服务/变更记录 |
+| [docs/project-manifest.md](docs/project-manifest.md) | 项目事实：方案/选型/外部服务/决策/风险/变更记录 |
+| [docs/requirements.md](docs/requirements.md) | 需求清单：功能 / 信息架构 / 优先级 / 设计诉求 |
 | [docs/roadmap.md](docs/roadmap.md) | 里程碑进度 |
 | [docs/ops/deploy-checklist.md](docs/ops/deploy-checklist.md) | 部署运维步骤 |
-| [docs/design/](docs/design/) | 设计参考与定稿（M1） |
-| [content/README.md](content/README.md) | 内容与 frontmatter 约定（M2 启用） |
+| [docs/archive/design-system-old/](docs/archive/design-system-old/) | 旧设计系统归档（Soft ACG Fusion，仅参考） |
+| [content/README.md](content/README.md) | 内容编写约定：目录结构 / frontmatter / 项目数据模型 |
 
 ## 许可
 

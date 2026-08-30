@@ -1,7 +1,8 @@
 # AGENTS.md — NKDShinKu 博客项目约定
 
-> AI 协作时的项目**规则**文件。项目事实（方案/选型/设计/外部服务）见
-> `docs/project-manifest.md`；进度见 `docs/roadmap.md`；部署步骤见 `docs/ops/deploy-checklist.md`。
+> AI 协作时的项目**规则**文件。项目事实（方案/选型/外部服务/决策/风险）见
+> `docs/project-manifest.md`；需求见 `docs/requirements.md`；进度见 `docs/roadmap.md`；
+> 部署步骤见 `docs/ops/deploy-checklist.md`。
 > 每次会话开始先读本文件与 project-manifest.md。
 > **每次 commit 前把变更清单交用户评审，确认后才能提交**（用户规则）。
 
@@ -68,35 +69,37 @@ src/
 
 ## 4. 设计约定
 
-待补充
+待补充（M1 定稿后填入设计 token、断点、动效参数等硬性规则）。
 
 ## 5. skills 工作流
 
-- 安装目录：`.claude/skills` / `.agents/skills`（不入库，新环境按本清单重装）。
-- 已装 16 个：设计五件套 + GSAP×8 + `blog-write` + `git-commit` + `vercel-react-best-practices`
-  （来源见 `docs/project-manifest.md` 变更记录；Vue 相关 skill 不装）。
+安装目录：`.claude/skills` / `.agents/skills`（不入库，新环境按此清单重装）。已装 16 个，按用途分五类：
 
-按任务规模选用：
+| 用途 | skill | 什么时候用 |
+| ---- | ----- | ---------- |
+| 设计 | `ui-ux-pro-max` | 需要设计新页面 / 设计系统时；`--design-system` 模式会**产出一份设计文档** |
+| 设计 | `frontend-design` | 定审美方向、避免模板化 |
+| 设计 | `tailwind-design-system` | 把设计落地成 Tailwind v4 token / 组件 |
+| 审查 | `web-design-guidelines` | 审查 UI 的无障碍 / 规范合规 |
+| 动效 | `ui-animation` | 设计 / 实现 / 调试动效 |
+| 动效 | `gsap-*` ×8（core / scrolltrigger / timeline / react / frameworks / plugins / performance / utils） | 用 GSAP 实现动画时的 API 参考 |
+| 内容 | `blog-write` | 写博客文章 |
+| 工程 | `vercel-react-best-practices` | React / Next 编码规范（server-* 规则与 §2 冲突时以 §2 为准） |
+| 工程 | `git-commit` | 提交（可选 `code-review` 自查） |
 
-| 任务              | 流程                                                                                                                                           |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| 大改版 / 新页面   | `ui-ux-pro-max`(方向) → `frontend-design`(方案) → `tailwind-design-system`(规范) → 编码 → `web-design-guidelines`(审查) → `ui-animation`(润色) |
-| 小改动 / 修 bug   | 直接编码；样式改动后按需用 `web-design-guidelines` 自查                                                                                        |
-| 写文章            | `blog-write`                                                                                                                                   |
-| 动画              | 按用途选 `gsap-*` + `ui-animation`                                                                                                             |
-| React / Next 代码 | 编码时遵循 `vercel-react-best-practices`                                                                                                       |
-| 提交              | `git-commit`                                                                                                                                   |
+典型场景：
 
-- `vercel-react-best-practices` 面向通用 Next.js（含服务端渲染/数据获取建议），其 server-* 规则
-  与本项目静态导出红线冲突时，以 §2 为准。
+- **设计定稿（M1 或新增页面）**：`ui-ux-pro-max` 产出设计文档 → `frontend-design` 定审美 → `tailwind-design-system` 落地 token。设计完成后，后续编码以这份文档为准，不重复跑。
+- **日常编码**：参考设计文档，遵循 §2 红线 + §3 约定 + `vercel-react-best-practices`；改 token/组件时查 `tailwind-design-system`。
+- **做动效**：`ui-animation` 定动效方案 + `gsap-*` 查 API。
+- **改完 / 上线前**：`web-design-guidelines` 审查一遍（无障碍 / 规范）。
 
 ## 6. Git 约定
 
 - **commit 前必须将变更清单交用户评审，确认后才提交**（用户规则，勿擅自 commit）。
 - Conventional Commits + 中文描述；一次提交只做一件事。
-- 不入库：`docs/博客项目背景.md`（本地提示词）、`.claude/`、`.agents/`、构建产物（`out/`、`.next/`）。
+- 不入库：`.claude/`、`.agents/`、构建产物（`out/`、`.next/`）。
 - 提交前 `lint + typecheck + build` 全绿。
-- **推送**：本环境 AI 无法完成 GitHub 认证，`git push` 由用户在终端执行；`main` 推送触发部署。
 
 ## 7. 已知坑（会再次遇到的）
 
