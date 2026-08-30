@@ -7,11 +7,11 @@ import { siteConfig } from "@/lib/site.config";
  */
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-border/60 bg-bg/80 backdrop-blur-md">
+    <header className="border-border/60 bg-bg/80 sticky top-0 z-50 border-b backdrop-blur-md">
       <div className="container mx-auto flex h-16 items-center justify-between px-6">
         <Link
           href="/"
-          className="font-display text-lg font-bold tracking-tight text-text transition-colors hover:text-brand"
+          className="font-display text-text hover:text-accent text-lg font-bold tracking-tight transition-colors"
         >
           {siteConfig.name}
         </Link>
@@ -21,7 +21,7 @@ export function SiteHeader() {
             target="_blank"
             rel="noreferrer"
             aria-label="GitHub 仓库"
-            className="rounded-md p-2 text-text-muted transition-colors hover:bg-brand/10 hover:text-brand"
+            className="text-text-muted focus-visible:outline-accent hover:bg-accent/10 hover:text-accent rounded-md p-3 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
           >
             <span className="icon-[mdi--github] size-5" aria-hidden />
           </a>

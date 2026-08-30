@@ -157,6 +157,8 @@ box-shadow: var(--shadow-md);
 | `--ease-spring`     | `400ms cubic-bezier(0.34,1.56,0.64,1)`| 入场 stagger                |
 
 - 只动 `transform` + `opacity`（GPU 合成，`transform-performance`）；**禁 `transition: all`**（逐属性声明）。
+- 落地映射：`--ease-*` token 只存缓动函数（CSS `transition-timing-function` 不能内嵌时长），
+  时长经 `duration-150 / 200 / 300 / 400` 工具类表达。
 
 ---
 
@@ -338,11 +340,11 @@ box-shadow: var(--shadow-md);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
   --shadow-glow: 0 0 24px rgba(91, 143, 212, 0.15);
 
-  /* 缓动 */
-  --ease-fast: 150ms ease-out;
-  --ease-base: 200ms ease-out;
-  --ease-slow: 300ms ease-out;
-  --ease-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* 缓动（时长经 duration-150/200/300/400 表达，见 §1.7） */
+  --ease-fast: ease-out;
+  --ease-base: ease-out;
+  --ease-slow: ease-out;
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* 语义色 / 阴影（暗） */

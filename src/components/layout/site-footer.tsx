@@ -6,14 +6,15 @@ import { siteConfig } from "@/lib/site.config";
  */
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border/60">
-      <div className="container mx-auto flex flex-col items-center justify-between gap-2 px-6 py-8 text-sm text-text-muted sm:flex-row">
+    <footer className="border-border/60 border-t">
+      <div className="text-text-muted container mx-auto flex flex-col items-center justify-between gap-2 px-6 py-8 text-sm sm:flex-row">
+        {/* 年份在构建期固化为构建当年；静态导出无运行时，靠持续重建保持新鲜 */}
         <p>
           © {new Date().getFullYear()} {siteConfig.author} · {siteConfig.name}
         </p>
         <p>
-          由 <span className="font-medium text-text">Next.js</span> 构建 · 部署于{" "}
-          <span className="font-medium text-text">GitHub Pages</span>
+          由 <span className="text-text font-medium">Next.js</span> 构建 · 部署于{" "}
+          <span className="text-text font-medium">GitHub Pages</span>
         </p>
       </div>
     </footer>

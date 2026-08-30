@@ -9,6 +9,7 @@ export const siteConfig = {
   url: "https://nkdshinku.com",
   description: "NKDShinKu 的个人博客 —— 记录文章、教程、实验室项目、日常与追番。",
   github: "https://github.com/NKDShinKu/NKDShinKu",
+  email: "2010182879@qq.com",
   author: "NKDShinKu",
   locale: "zh-CN",
 } as const;
