@@ -255,7 +255,7 @@ box-shadow: var(--shadow-md);
 | Hero 入场      | GSAP Timeline     | 800ms 总计   | power3.out  |
 | 卡片 stagger   | GSAP ScrollTrigger| 80–100ms/卡  | power2.out  |
 | 页面过渡       | GSAP + Router     | 200ms        | power2.inOut |
-| 极光光斑 morph | CSS animation     | 12s          | ease-in-out（循环）|
+| 极光光斑漂移 | CSS animation     | 12s          | ease-in-out（alternate）|
 
 - `@media (prefers-reduced-motion: reduce)` 禁用一切非必要动效（GSAP 全部包裹、粒子关闭）。
 - 移动端降级：粒子减半、关闭视差层、视频改静态图。
@@ -350,6 +350,34 @@ box-shadow: var(--shadow-md);
   --ease-base: ease-out;
   --ease-slow: ease-out;
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* 动画（形状静态化，仅 transform，见 §3.2/§3.3） */
+  --animate-blob: blob-drift 12s ease-in-out infinite alternate;
+  --animate-bounce-soft: bounce-soft 2s ease-in-out infinite;
+
+  @keyframes blob-drift {
+    0% {
+      transform: translate(0, 0) rotate(0deg);
+    }
+    33% {
+      transform: translate(40px, -30px) rotate(15deg);
+    }
+    66% {
+      transform: translate(-20px, 20px) rotate(-10deg);
+    }
+    100% {
+      transform: translate(10px, -10px) rotate(5deg);
+    }
+  }
+  @keyframes bounce-soft {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(8px);
+    }
+  }
 }
 
 /* 语义色 / 阴影（暗） */

@@ -108,6 +108,7 @@ src/
 - Pagefind 只索引构建产物：新增页面后本地验证 `pnpm build && pnpm build:search`。
 - Iconify 新图标集需先安装对应 `@iconify-json/<set>`。
 - pnpm 11 的项目配置在 `pnpm-workspace.yaml`（不在 package.json 的 `pnpm` 字段）。
+- pnpm 报 `ERR_PNPM_UNEXPECTED_STORE`：node_modules 与 store 链接位置漂移（本项目经历过本地 `.pnpm-store` ↔ 全局 store），跑一次 `pnpm install` 重链即可。
 
 ## 8. 维护约定
 

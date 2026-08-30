@@ -17,12 +17,17 @@
 - [x] 推送 main、GitHub Pages 部署上线（http 已通）
 - [x] 文档两轮规整：project-manifest 单一事实清单、未来计划方向化
 
-## M1 设计定稿 🔨
-
-方向：确定视觉方向（蓝白 ACG 基底），定稿设计 token 并落地，重做首页与全局布局，
-接入暗色模式与动画规范（GSAP）。
+## M1 设计定稿 ✅
 
 - [x] 设计系统定稿 `docs/design-system.md`（Soft ACG Fusion：玻璃态 × 极光 × 动效）
+- [x] 设计 token 落地 `globals.css`（色彩/字号阶梯/圆角/阴影/缓动/动画），UI 原语 Button / Card / Tag
+- [x] 全局布局重做：全宽 sticky 顶栏（D11）+ 移动端汉堡菜单 + 页脚社交入口 + skip link
+- [x] 暗色模式（REQ-G2）：无闪烁内联脚本（`<head>` + 绘制保底）+ 跟随系统/亮/暗三态切换器
+- [x] 全局背景：极光光斑（形状静态化，仅 transform 漂移）+ 萤火粒子（DPR 适配、后台暂停）
+- [x] 新首页：hero + 最新文章占位 + Bento 板块入口（sections 收敛 site.config 单一来源）
+- [x] GSAP 动效层：动态加载不阻塞首屏可交互；prefers-reduced-motion 全守卫
+- [x] 移动端修复：webview 闪屏（渐进渲染时序）与首屏 JS 减重
+- [x] 设计走查（web-design-guidelines + 设计文档 §8 清单）与文档同步
 
 ## M2 内容层 ⏳
 
