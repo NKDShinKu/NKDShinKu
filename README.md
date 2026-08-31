@@ -1,47 +1,29 @@
-# NKDShinKu Blog
+<div align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&height=160&section=header&color=0:5B8FD4,60:9B8EC4,100:F0A0B8&text=NKDShinKu&fontSize=40&fontColor=ffffff&desc=%E4%BB%8E%E5%89%8D%E7%AB%AF%E5%87%BA%E5%8F%91%EF%BC%8C%E5%8E%BB%E6%9B%B4%E8%BF%9C%E7%9A%84%E5%9C%B0%E6%96%B9&descSize=16&descAlignY=72" alt="NKDShinKu" width="100%" />
+</div>
 
-二次元风格的现代个人技术博客。记录文章、教程、实验室/个人项目、日常与追番。
+<div align="center">
 
-技术栈与选型理由见 [docs/project-manifest.md](docs/project-manifest.md)；协作规则见 [AGENTS.md](AGENTS.md)。
+计算机生涯始于前端开发，但我不想止步于此——
+后端、系统开发、设计，都想走得更深更远。
+以 AI 与工具作伴，持续深耕。
 
-## 快速开始
+业余时间在 ACG 的世界里广泛涉猎：
+游戏、漫画、小说、动漫……（这个列表仍在续更）
 
-```bash
-pnpm install        # 安装依赖
-pnpm dev            # 本地开发（Turbopack）
-pnpm build          # 静态导出构建 → out/
-pnpm preview        # 本地预览构建产物
-pnpm build:search   # 生成 Pagefind 索引
-pnpm lint           # ESLint 检查
-pnpm typecheck      # TypeScript 检查
-pnpm format         # Prettier 格式化
-```
+![状态](https://img.shields.io/badge/%E7%8A%B6%E6%80%81-%E5%8D%9A%E5%AE%A2%E9%80%A0%E4%B8%AD-5B8FD4?style=flat-square)
+![兴趣](https://img.shields.io/badge/%E5%85%B4%E8%B6%A3-ACG%20%E6%9D%82%E9%A3%9F-9B8EC4?style=flat-square)
 
-## 目录结构
+🔭 [nkdshinku.com](https://nkdshinku.com)（建造中） · 📺 [Bangumi](https://bgm.tv/user/796189) · 📮 [邮箱](mailto:2010182879@qq.com)
 
-```
-├── .github/workflows/   # CI：lint → typecheck → build → Pagefind → 部署
-├── content/             # 站点内容（M2 启用，约定见 content/README.md）
-├── docs/                # 项目文档（见下方索引）
-├── public/              # 静态资源（.nojekyll、robots 等）
-└── src/
-    ├── app/             # App Router（layout / 首页 / 404 / 全局样式与 token）
-    ├── components/      # layout/ 全局布局；ui/ 自研原语；feature/ 业务组件
-    └── lib/             # 站点配置等纯逻辑
-```
+</div>
 
-## 文档索引
+<div align="center">
 
-| 文档 | 内容 |
-|------|------|
-| [AGENTS.md](AGENTS.md) | AI 协作规则（红线/约定/git 规则/skills） |
-| [docs/project-manifest.md](docs/project-manifest.md) | 项目事实：方案/选型/外部服务/决策/风险/变更记录 |
-| [docs/requirements.md](docs/requirements.md) | 需求清单：功能 / 信息架构 / 优先级 / 设计诉求 |
-| [docs/roadmap.md](docs/roadmap.md) | 里程碑进度 |
-| [docs/ops/deploy-checklist.md](docs/ops/deploy-checklist.md) | 部署运维步骤 |
-| [docs/archive/design-system-old/](docs/archive/design-system-old/) | 旧设计系统归档（Soft ACG Fusion，仅参考） |
-| [content/README.md](content/README.md) | 内容编写约定：目录结构 / frontmatter / 项目数据模型 |
+✦ 代码与爱好，都要认真对待。
 
-## 许可
+</div>
 
-个人项目，内容版权归作者所有。
+<div align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&height=100&section=footer&color=0:F0A0B8,40:9B8EC4,100:5B8FD4" alt="" width="100%" />
+</div>
