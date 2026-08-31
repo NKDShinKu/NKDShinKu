@@ -1,7 +1,7 @@
 <div align="center">
 
   <a href="https://nkdshinku.com">
-    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=20&duration=3600&pause=2500&color=d97757&center=true&vCenter=true&multiline=false&width=780&lines=祈 祷 明 天 对 于 你 来 说 又 是 美 好 的 一 天 ！" alt="NKDShinKu" />
+    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=20&duration=3600&pause=2500&color=d97757&center=true&vCenter=true&multiline=false&width=780&lines=%E7%A5%88%E7%A5%B7%E6%98%8E%E5%A4%A9%E5%AF%B9%E4%BD%A0%E6%9D%A5%E8%AF%B4,%E4%B9%9F%E6%98%AF%E7%BE%8E%E5%A5%BD%E7%9A%84%E4%B8%80%E5%A4%A9!" alt="NKDShinKu" />
   </a>
 
   <br/>
