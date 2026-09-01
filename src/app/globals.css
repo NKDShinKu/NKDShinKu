@@ -145,4 +145,208 @@
   h4 {
     font-family: var(--font-display);
   }
+  /* 文章标题锚点平滑滚动 + 避让 sticky 顶栏（design-system/posts.md P-8） */
+  html {
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+  :target {
+    scroll-margin-top: 6rem;
+  }
+}
+
+/* ============ 文章正文（design-system/posts.md §4；token 仍走语义色） ============ */
+.post-body {
+  color: var(--color-text);
+  font-size: 1rem;
+  line-height: 1.875;
+  word-break: break-word;
+
+  > * + * {
+    margin-top: 1.25em;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    scroll-margin-top: 6rem;
+  }
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    scroll-margin-top: 6rem;
+  }
+  h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    scroll-margin-top: 6rem;
+  }
+
+  a {
+    color: var(--color-accent-dark);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
+    text-underline-offset: 4px;
+    transition: color 150ms ease-out;
+    &:hover {
+      color: var(--color-accent);
+    }
+  }
+
+  strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  blockquote {
+    border-left: 4px solid color-mix(in srgb, var(--color-accent) 40%, transparent);
+    padding-left: 1rem;
+    color: var(--color-text-muted);
+    /* 中文排版纪律：引用不用斜体 */
+    font-style: normal;
+    > * + * {
+      margin-top: 0.75em;
+    }
+  }
+
+  ul,
+  ol {
+    padding-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    li::marker {
+      color: var(--color-accent);
+    }
+    ul,
+    ol {
+      margin-top: 0.5rem;
+    }
+  }
+
+  /* 行内代码（代码块见下方 .post-code） */
+  :not(pre) > code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+    color: var(--color-accent-dark);
+    padding: 0.125rem 0.375rem;
+    border-radius: 6px;
+  }
+
+  table {
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    th {
+      background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+      font-weight: 600;
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+    td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
+    }
+    tbody tr:nth-child(even) {
+      background: color-mix(in srgb, var(--color-bg) 50%, transparent);
+    }
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+    margin-inline: auto;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+  }
+  figcaption {
+    margin-top: 0.5rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--color-border);
+    margin-block: 2.5rem;
+  }
+}
+
+/* 标题锚点「#」：默认透明，hover / focus-visible 时浮现（不依赖图标库，纯文本装饰） */
+.post-body .heading-anchor {
+  margin-left: 0.5rem;
+  font-weight: 400;
+  text-decoration: none;
+  color: transparent;
+  transition: color 150ms ease-out;
+  &:hover,
+  &:focus-visible {
+    color: var(--color-accent);
+    outline: none;
+  }
+}
+
+/* ============ 代码块（design-system/posts.md §2.6） ============
+ * rehype-pretty-code 输出结构：figure[data-rehype-pretty-code-figure] > pre[data-language] > code
+ * keepBackground: false → 背景由容器（surface token）承担，两主题自动跟随
+ */
+.post-body figure[data-rehype-pretty-code-figure] {
+  position: relative;
+  margin: 1.5rem 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  overflow: hidden;
+  font-size: 0.875rem;
+  /* 头栏空间：语言标签（左）+ 复制按钮（右，客户端注入） */
+  padding-top: 2.75rem;
+
+  pre {
+    margin: 0;
+    padding: 1rem;
+    overflow-x: auto;
+    line-height: 1.7;
+    font-family: var(--font-mono);
+  }
+
+  /* 语言标签（纯 CSS，无 JS 依赖） */
+  pre[data-language]::before {
+    content: attr(data-language);
+    position: absolute;
+    top: 0.875rem;
+    left: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    text-transform: lowercase;
+  }
+
+  code {
+    font-family: inherit;
+  }
+}
+
+/* Shiki 双主题：亮色为行内色（defaultColor），暗色经 --shiki-dark 变量切换。
+   行内样式只能用 !important 压过（Shiki 官方推荐写法） */
+.dark .post-body figure[data-rehype-pretty-code-figure] span,
+.dark .post-body figure[data-rehype-pretty-code-figure] {
+  color: var(--shiki-dark) !important;
 }
