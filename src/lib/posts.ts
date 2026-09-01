@@ -91,6 +91,32 @@ function optionalStringArray(
   return value as readonly string[];
 }
 
+/**
+ * 日期字段归一化：YAML 会把 `2026-08-30` 解析成 Date 对象（js-yaml timestamp 类型），
+ * 字符串写法（含带时间的 ISO）同样接受；统一输出 `YYYY-MM-DD`。
+ */
+function normalizeDate(value: unknown, key: string, file: string): string {
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value.toISOString().slice(0, 10);
+  }
+  if (typeof value === "string" && !Number.isNaN(Date.parse(value))) {
+    return value.slice(0, 10);
+  }
+  throw new Error(`[posts] ${file}: frontmatter 字段「${key}」不是合法日期（${String(value)}）`);
+}
+
+function requireDate(data: Record<string, unknown>, key: string, file: string): string {
+  if (data[key] === undefined) {
+    throw new Error(`[posts] ${file}: frontmatter 缺少必填日期字段「${key}」`);
+  }
+  return normalizeDate(data[key], key, file);
+}
+
+function optionalDate(data: Record<string, unknown>, key: string, file: string): string | undefined {
+  if (data[key] === undefined) return undefined;
+  return normalizeDate(data[key], key, file);
+}
+
 function parsePost(slug: string, raw: string): RawPost {
   const { data, content } = matter(raw);
   const file = `${slug}.md`;
@@ -101,14 +127,8 @@ function parsePost(slug: string, raw: string): RawPost {
       `[posts] ${file}: category「${category}」不在 POST_CATEGORIES（${POST_CATEGORIES.join(" / ")}）内`,
     );
   }
-  const date = requireString(data, "date", file);
-  if (Number.isNaN(Date.parse(date))) {
-    throw new Error(`[posts] ${file}: date「${date}」不是合法的 ISO 日期`);
-  }
-  const updated = optionalString(data, "updated", file);
-  if (updated && Number.isNaN(Date.parse(updated))) {
-    throw new Error(`[posts] ${file}: updated「${updated}」不是合法的 ISO 日期`);
-  }
+  const date = requireDate(data, "date", file);
+  const updated = optionalDate(data, "updated", file);
 
   return {
     slug,
