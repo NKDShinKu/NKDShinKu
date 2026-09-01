@@ -19,6 +19,12 @@ import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
 
+export interface Heading {
+  id: string;
+  text: string;
+  level: 2 | 3;
+}
+
 const processor = unified()
   .use(remarkParse)
   .use(remarkGfm)
@@ -39,7 +45,25 @@ const processor = unified()
   })
   .use(rehypeStringify);
 
-/** 构建期渲染（React cache：同 slug 多次调用只跑一遍管线） */
-export const renderMarkdown = cache(async (markdown: string): Promise<string> => {
-  return processor.process(markdown).then((file) => String(file));
-});
+/** HTML 与 h2/h3 标题列表一次产出（TOC 数据源；h4 不进目录，design-system/posts.md §2.7） */
+export const renderMarkdown = cache(
+  async (markdown: string): Promise<{ html: string; headings: Heading[] }> => {
+    const file = await processor.process(markdown);
+    const html = String(file);
+    return { html, headings: extractHeadings(html) };
+  },
+);
+
+/** 从渲染后的 HTML 提取 h2/h3（锚点由 rehype-slug 保证存在；内层可能含锚点 <a> 或行内代码） */
+function extractHeadings(html: string): Heading[] {
+  const headings: Heading[] = [];
+  const re = /<h([23]) id="([^"]+)"[^>]*>([\s\S]*?)<\/h\1>/g;
+  for (const match of html.matchAll(re)) {
+    headings.push({
+      level: Number(match[1]) as 2 | 3,
+      id: match[2],
+      text: match[3].replace(/<[^>]+>/g, "").trim(),
+    });
+  }
+  return headings;
+}

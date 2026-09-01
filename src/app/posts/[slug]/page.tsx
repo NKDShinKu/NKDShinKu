@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CodeCopyButtons } from "@/components/posts/code-copy-buttons";
+import { TableOfContents } from "@/components/posts/table-of-contents";
 import { Tag } from "@/components/ui/tag";
 import { renderMarkdown } from "@/lib/markdown";
 import { getAllPosts, getPostBySlug } from "@/lib/posts";
@@ -56,7 +57,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const post = getPostBySlug((await params).slug);
   if (!post) notFound();
 
-  const html = await renderMarkdown(post.content);
+  const { html, headings } = await renderMarkdown(post.content);
   const all = getAllPosts();
   const index = all.findIndex((p) => p.slug === post.slug);
   const prev = index > 0 ? all[index - 1] : null; // 时间线上更晚的一篇
@@ -64,7 +65,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
   return (
     <div className="mx-auto w-full max-w-[1100px] px-5 pt-14 pb-16 sm:px-6 md:pt-20 md:pb-24">
-      <div className="mx-auto max-w-[720px]">
+      {/* 双列：正文 720px 居中 + TOC 侧栏（xl 起，design-system/posts.md §3.2） */}
+      <div className="mx-auto flex max-w-[720px] justify-center gap-10 xl:max-w-none xl:justify-between">
+        <div className="w-full max-w-[720px]">
         <Link
           href="/posts/"
           className="focus-visible:outline-accent text-text-muted inline-flex items-center gap-1 text-sm transition-colors duration-150 ease-fast hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-4"
@@ -133,6 +136,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd(post)) }}
         />
+        </div>
+
+        {headings.length > 0 ? <TableOfContents headings={headings} /> : null}
       </div>
 
       {/* 复制按钮（纯增强，见组件注释）；随文章页挂载 */}
