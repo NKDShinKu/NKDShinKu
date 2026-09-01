@@ -1,10 +1,14 @@
 import Link from "next/link";
 import { HomeHero } from "@/components/home/home-hero";
 import { Reveal } from "@/components/motion/reveal";
+import { PostCard } from "@/components/posts/post-card";
 import { Card } from "@/components/ui/card";
+import { getAllPosts } from "@/lib/posts";
 import { siteConfig } from "@/lib/site.config";
 
 export default function HomePage() {
+  const latestPosts = getAllPosts().slice(0, 3);
+
   return (
     <div className="mx-auto w-full max-w-[1100px] px-5 sm:px-6">
       <HomeHero />
@@ -13,16 +17,23 @@ export default function HomePage() {
         <Reveal className="mb-10 text-center">
           <p className="text-accent-dark text-xs font-bold tracking-widest uppercase">Blog</p>
           <h2 className="mt-2 text-2xl font-bold">最新文章</h2>
-          <p className="text-text-muted mx-auto mt-2 max-w-[480px]">文章、教程与笔记，即将发布。</p>
+          <p className="text-text-muted mx-auto mt-2 max-w-[480px]">文章、教程与笔记，记录学习与思考。</p>
         </Reveal>
-        <Reveal delay={0.08}>
-          <Card
-            variant="surface"
-            className="text-text-muted flex flex-col items-center gap-2 py-12 text-center text-sm"
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          {latestPosts.map((post, index) => (
+            <Reveal key={post.slug} delay={index * 0.08}>
+              <PostCard post={post} />
+            </Reveal>
+          ))}
+        </div>
+        <Reveal delay={0.1} className="mt-8 text-center">
+          <Link
+            href="/posts/"
+            className="focus-visible:outline-accent inline-flex items-center gap-1.5 rounded-md text-sm font-medium transition-colors duration-150 ease-fast hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-4"
           >
-            <span className="icon-[mdi--post-outline] text-accent size-8" aria-hidden />
-            文章系统建设中，敬请期待。
-          </Card>
+            查看全部文章
+            <span className="icon-[mdi--arrow-right] size-4" aria-hidden />
+          </Link>
         </Reveal>
       </section>
 
