@@ -76,17 +76,17 @@ src/
 
 安装目录：`.claude/skills` / `.agents/skills`（不入库，新环境按此清单重装）。已装 16 个，按用途分五类：
 
-| 用途 | skill | 什么时候用 |
-| ---- | ----- | ---------- |
-| 设计 | `ui-ux-pro-max` | 需要设计新页面 / 设计系统时；`--design-system` 模式会**产出一份设计文档** |
-| 设计 | `frontend-design` | 定审美方向、避免模板化 |
-| 设计 | `tailwind-design-system` | 把设计落地成 Tailwind v4 token / 组件 |
-| 审查 | `web-design-guidelines` | 审查 UI 的无障碍 / 规范合规 |
-| 动效 | `ui-animation` | 设计 / 实现 / 调试动效 |
-| 动效 | `gsap-*` ×8（core / scrolltrigger / timeline / react / frameworks / plugins / performance / utils） | 用 GSAP 实现动画时的 API 参考 |
-| 内容 | `blog-write` | 写博客文章 |
-| 工程 | `vercel-react-best-practices` | React / Next 编码规范（server-* 规则与 §2 冲突时以 §2 为准） |
-| 工程 | `git-commit` | 提交（可选 `code-review` 自查） |
+| 用途 | skill                                                                                               | 什么时候用                                                                |
+| ---- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| 设计 | `ui-ux-pro-max`                                                                                     | 需要设计新页面 / 设计系统时；`--design-system` 模式会**产出一份设计文档** |
+| 设计 | `frontend-design`                                                                                   | 定审美方向、避免模板化                                                    |
+| 设计 | `tailwind-design-system`                                                                            | 把设计落地成 Tailwind v4 token / 组件                                     |
+| 审查 | `web-design-guidelines`                                                                             | 审查 UI 的无障碍 / 规范合规                                               |
+| 动效 | `ui-animation`                                                                                      | 设计 / 实现 / 调试动效                                                    |
+| 动效 | `gsap-*` ×8（core / scrolltrigger / timeline / react / frameworks / plugins / performance / utils） | 用 GSAP 实现动画时的 API 参考                                             |
+| 内容 | `blog-write`                                                                                        | 写博客文章                                                                |
+| 工程 | `vercel-react-best-practices`                                                                       | React / Next 编码规范（server-* 规则与 §2 冲突时以 §2 为准）              |
+| 工程 | `git-commit`                                                                                        | 提交（可选 `code-review` 自查）                                           |
 
 典型场景：
 
@@ -109,6 +109,8 @@ src/
 - Iconify 新图标集需先安装对应 `@iconify-json/<set>`。
 - pnpm 11 的项目配置在 `pnpm-workspace.yaml`（不在 package.json 的 `pnpm` 字段）。
 - pnpm 报 `ERR_PNPM_UNEXPECTED_STORE`：node_modules 与 store 链接位置漂移（本项目经历过本地 `.pnpm-store` ↔ 全局 store），跑一次 `pnpm install` 重链即可。
+- 删除/重命名 `app/` 路由文件后 `pnpm typecheck` 可能报 `.next/types/validator.ts` 引用已删模块：`.next` 陈旧生成类型所致，`rm -rf .next` 后重跑即绿。
+- Next 16 静态导出下 `sitemap.ts` / `robots.ts` / route handler 必须显式 `export const dynamic = "force-static"`，否则构建直接报错（官方文档未明说，实测所得）。
 
 ## 8. 维护约定
 
