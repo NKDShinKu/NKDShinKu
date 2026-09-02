@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CodeCopyButtons } from "@/components/posts/code-copy-buttons";
+import { MermaidRenderer } from "@/components/posts/mermaid-chart";
 import { TableOfContents } from "@/components/posts/table-of-contents";
 import { Tag } from "@/components/ui/tag";
 import { renderMarkdown } from "@/lib/markdown";
@@ -141,8 +142,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         {headings.length > 0 ? <TableOfContents headings={headings} /> : null}
       </div>
 
-      {/* 复制按钮（纯增强，见组件注释）；随文章页挂载 */}
+      {/* 复制按钮 / Mermaid 渲染（纯增强，见组件注释）；随文章页挂载 */}
       <CodeCopyButtons />
+      <MermaidRenderer />
     </div>
   );
 }

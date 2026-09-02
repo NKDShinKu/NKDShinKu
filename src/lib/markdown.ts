@@ -48,11 +48,37 @@ const processor = unified()
 /** HTML 与 h2/h3 标题列表一次产出（TOC 数据源；h4 不进目录，design-system/posts.md §2.7） */
 export const renderMarkdown = cache(
   async (markdown: string): Promise<{ html: string; headings: Heading[] }> => {
-    const file = await processor.process(markdown);
-    const html = String(file);
+    // ```mermaid 块在渲染前提取（否则会被当代码高亮），以占位段落站位于原文
+    const mermaidBlocks: string[] = [];
+    const replaced = markdown.replace(/^```mermaid[^\S\n]*\n([\s\S]*?)^```/gm, (_, code) => {
+      mermaidBlocks.push(code);
+      return `\n\nMERMAIDPLACEHOLDER${mermaidBlocks.length - 1}END\n\n`;
+    });
+
+    const file = await processor.process(replaced);
+    let html = String(file);
+
+    // 占位段落 → slot div（源码进 data 属性，MermaidRenderer 客户端渲染）
+    html = html.replace(/<p>MERMAIDPLACEHOLDER(\d+)END<\/p>/g, (_, index) =>
+      mermaidSlotHtml(mermaidBlocks[Number(index)] ?? ""),
+    );
+
     return { html, headings: extractHeadings(html) };
   },
 );
+
+function escapeHtml(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+/** Mermaid 占位卡样式见 globals.css .mermaid-slot（管线产出原始 HTML，不走 Tailwind 扫描） */
+function mermaidSlotHtml(code: string): string {
+  return `<div class="mermaid-slot" aria-busy="true" aria-label="图表" data-mermaid="${escapeHtml(code.trim())}"></div>`;
+}
 
 /** 从渲染后的 HTML 提取 h2/h3（锚点由 rehype-slug 保证存在；内层可能含锚点 <a> 或行内代码） */
 function extractHeadings(html: string): Heading[] {

@@ -290,6 +290,24 @@
   }
 }
 
+/* Mermaid 占位卡（design-system/posts.md「Mermaid」：居中实心卡；样式在管线产出的原始 HTML 上） */
+.post-body .mermaid-slot {
+  display: flex;
+  justify-content: center;
+  margin-block: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  overflow-x: auto;
+}
+.post-body .mermaid-slot svg {
+  max-width: 100%;
+  height: auto;
+}
+
 /* 标题锚点「#」：默认透明，hover / focus-visible 时浮现（不依赖图标库，纯文本装饰） */
 .post-body .heading-anchor {
   margin-left: 0.5rem;
