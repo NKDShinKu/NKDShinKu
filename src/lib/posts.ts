@@ -10,9 +10,63 @@
 import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
+import { pinyin } from "pinyin-pro";
 
 export const POST_CATEGORIES = ["教程", "笔记", "日常"] as const;
 export type PostCategory = (typeof POST_CATEGORIES)[number];
+
+/**
+ * 分类英文 slug 映射 —— URL 全 ASCII（D12 补充决策）
+ *
+ * 背景：Next 16 dev 在静态导出模式下对非 ASCII 动态参数存在形态匹配缺陷
+ * （编码/解码链路不一致，中文分类/标签 dev 下 500/404，见 AGENTS §7），
+ * 且 GH Pages 对字面编码目录 404。路由参数一律走 ASCII slug，中文只做展示。
+ */
+const CATEGORY_SLUGS: Record<PostCategory, string> = {
+  教程: "tutorial",
+  笔记: "notes",
+  日常: "daily",
+};
+
+/** 分类中文名 → 英文 slug（gSP 与链接生成共用；非法输入原样返回交由 404 兜底） */
+export function categorySlug(category: PostCategory): string {
+  return CATEGORY_SLUGS[category];
+}
+
+/** 英文 slug → 分类中文名；未知 slug 返回 null（页面 404） */
+export function categoryFromSlug(slug: string): PostCategory | null {
+  const entry = (Object.entries(CATEGORY_SLUGS) as [PostCategory, string][]).find(
+    ([, value]) => value === slug,
+  );
+  return entry ? entry[0] : null;
+}
+
+/**
+ * 标签 slug 覆盖表：希望用更可读英文 slug 的标签在此登记；未登记的自动转拼音。
+ * 标签展示一律用 frontmatter 原文（中文为主），slug 仅用于路由。
+ */
+const TAG_SLUG_OVERRIDES: Record<string, string> = {
+  随笔: "essay",
+  建站: "site-building",
+  踩坑: "pitfalls",
+  设计系统: "design-system",
+  静态导出: "static-export",
+};
+
+function toSlug(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+/** 标签 → 路由 slug：覆盖表优先，否则无声调拼音（非中文字符保留）；结果恒为 ASCII */
+export function tagSlug(tag: string): string {
+  const override = TAG_SLUG_OVERRIDES[tag];
+  if (override) return override;
+  return toSlug(pinyin(tag, { toneType: "none", nonZh: "consecutive" }));
+}
 
 export interface PostMeta {
   slug: string;
@@ -121,6 +175,14 @@ function parsePost(slug: string, raw: string): RawPost {
   const { data, content } = matter(raw);
   const file = `${slug}.md`;
 
+  const tags = optionalStringArray(data, "tags", file) ?? [];
+  // 标签自由填写（中文为主）；slug 由 tagSlug 自动生成（覆盖表/拼音），转换后为空说明标签写法异常
+  for (const tag of tags) {
+    if (tagSlug(tag).length === 0) {
+      throw new Error(`[posts] ${file}: 标签「${tag}」无法生成有效路由 slug（转换后为空），请调整写法`);
+    }
+  }
+
   const category = requireString(data, "category", file);
   if (!POST_CATEGORIES.includes(category as PostCategory)) {
     throw new Error(
@@ -137,7 +199,7 @@ function parsePost(slug: string, raw: string): RawPost {
     date,
     updated,
     category: category as PostCategory,
-    tags: optionalStringArray(data, "tags", file) ?? [],
+    tags,
     keywords: optionalStringArray(data, "keywords", file),
     cover: optionalString(data, "cover", file),
     pinned: data.pinned === true,
@@ -186,26 +248,31 @@ export function getPostsByCategory(category: PostCategory): PostMeta[] {
 }
 
 export function getPostsByTag(tag: string): PostMeta[] {
-  return getAllPosts().filter((post) => post.tags.includes(tag));
+  // tag 传入 slug 形态（URL），与 frontmatter 标签的 slug 化结果比对
+  return getAllPosts().filter((post) => post.tags.some((t) => tagSlug(t) === tag));
 }
 
-/** 标签云数据：按篇数倒序、同篇数按名称排序（列表页头部） */
-export function getAllTags(): { name: string; count: number }[] {
-  const counts = new Map<string, number>();
+/** 标签云数据：name 为原始标签（展示），slug 为路由形态；按篇数倒序、同篇数按名称排序 */
+export function getAllTags(): { name: string; slug: string; count: number }[] {
+  const counts = new Map<string, { name: string; count: number }>();
   for (const post of allPosts()) {
     for (const tag of post.tags) {
-      counts.set(tag, (counts.get(tag) ?? 0) + 1);
+      const slug = tagSlug(tag);
+      const existing = counts.get(slug);
+      if (existing) existing.count += 1;
+      else counts.set(slug, { name: tag, count: 1 });
     }
   }
-  return [...counts.entries()]
-    .map(([name, count]) => ({ name, count }))
+  return [...counts.values()]
+    .map(({ name, count }) => ({ name, slug: tagSlug(name), count }))
     .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
 }
 
-/** 分类计数（chips 徽标用）：三个固定分类恒返回，无文章的为 0 */
-export function getCategoryCounts(): { name: PostCategory; count: number }[] {
+/** 分类计数（chips 徽标用）：三个固定分类恒返回，无文章的为 0；name 中文展示、slug 路由形态 */
+export function getCategoryCounts(): { name: PostCategory; slug: string; count: number }[] {
   return POST_CATEGORIES.map((name) => ({
     name,
+    slug: categorySlug(name),
     count: allPosts().filter((post) => post.category === name).length,
   }));
 }

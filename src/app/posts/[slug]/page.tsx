@@ -5,7 +5,7 @@ import { CodeCopyButtons } from "@/components/posts/code-copy-buttons";
 import { TableOfContents } from "@/components/posts/table-of-contents";
 import { Tag } from "@/components/ui/tag";
 import { renderMarkdown } from "@/lib/markdown";
-import { getAllPosts, getPostBySlug } from "@/lib/posts";
+import { getAllPosts, getPostBySlug, tagSlug } from "@/lib/posts";
 import { siteConfig } from "@/lib/site.config";
 
 export const dynamicParams = false;
@@ -115,7 +115,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         {post.tags.length > 0 ? (
           <div className="mt-10 flex flex-wrap items-center gap-2">
             {post.tags.map((tag) => (
-              <Link key={tag} href={`/posts/tag/${tag}/`}>
+              <Link key={tag} href={`/posts/tag/${tagSlug(tag)}/`}>
                 <Tag className="transition-colors duration-150 ease-fast hover:bg-accent/15">
                   {tag}
                 </Tag>

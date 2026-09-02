@@ -24,7 +24,7 @@ content/
 | `date`        | ✅   | 发布日期（ISO）                                             |
 | `updated`     | 可选 | 最后更新日期                                                |
 | `category`    | ✅   | 教程 / 笔记 / 日常                                          |
-| `tags`        | 可选 | 标签数组                                                    |
+| `tags`        | 可选 | 标签数组，自由填写（中文为主）；路由 slug 自动生成——登记标签用 `src/lib/posts.ts` 覆盖表，其余转无声调拼音 |
 | `keywords`    | 可选 | SEO 关键词（meta keywords）                                 |
 | `cover`       | 可选 | 封面图（R2 绝对 URL，`img.nkdshinku.com/images/posts/...`） |
 | `pinned`      | 可选 | 置顶（首页优先展示）                                        |
