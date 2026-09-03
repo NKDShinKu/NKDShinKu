@@ -80,7 +80,7 @@ function mermaidSlotHtml(code: string): string {
   return `<div class="mermaid-slot" aria-busy="true" aria-label="图表" data-mermaid="${escapeHtml(code.trim())}"></div>`;
 }
 
-/** 从渲染后的 HTML 提取 h2/h3（锚点由 rehype-slug 保证存在；内层可能含锚点 <a> 或行内代码） */
+/** 从渲染后的 HTML 提取 h2/h3（锚点由 rehype-slug 保证存在；先剔除锚点 <a> 整体，再剥剩余标签） */
 function extractHeadings(html: string): Heading[] {
   const headings: Heading[] = [];
   const re = /<h([23]) id="([^"]+)"[^>]*>([\s\S]*?)<\/h\1>/g;
@@ -88,7 +88,10 @@ function extractHeadings(html: string): Heading[] {
     headings.push({
       level: Number(match[1]) as 2 | 3,
       id: match[2],
-      text: match[3].replace(/<[^>]+>/g, "").trim(),
+      text: match[3]
+        .replace(/<a\b[\s\S]*?<\/a>/gi, "")
+        .replace(/<[^>]+>/g, "")
+        .trim(),
     });
   }
   return headings;

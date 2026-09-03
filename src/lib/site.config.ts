@@ -44,6 +44,14 @@ export const siteConfig = {
   email: "2010182879@qq.com",
   author: "NKDShinKu",
   locale: "zh-CN",
+  /**
+   * 首页全屏 Hero 文案。背景图方案经多版尝试效果不达预期已移除，
+   * 首屏透出全局极光/萤火背景；`向下滚动探索` 锚点跳转 #home-content。
+   */
+  hero: {
+    title: "NKDShinKu",
+    subtitle: "前端开发者 · 二次元爱好者，探索技术与创作的边界。\n这里记录我的文章、项目与追番足迹。",
+  },
   /** 主导航（REQ-G1；首页由 logo 承担，用户决策）；从 sections 派生，只取导航所需字段 */
   nav: sections.map(({ href, label, icon }) => ({ href, label, icon })),
   /** 首页板块入口（REQ-H4）：Bento 非对称网格，玻璃卡用于氛围区 */

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { AnchorScroll } from "@/components/posts/anchor-scroll";
 import { CodeCopyButtons } from "@/components/posts/code-copy-buttons";
+import { BackButton } from "@/components/posts/back-button";
 import { MermaidRenderer } from "@/components/posts/mermaid-chart";
 import { TableOfContents } from "@/components/posts/table-of-contents";
 import { Tag } from "@/components/ui/tag";
@@ -65,17 +67,11 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const next = index < all.length - 1 ? all[index + 1] : null; // 时间线上更早的一篇
 
   return (
-    <div className="mx-auto w-full max-w-[1100px] px-5 pt-14 pb-16 sm:px-6 md:pt-20 md:pb-24">
+    <div className="mx-auto w-full max-w-[1100px] px-5 pt-24 pb-16 sm:px-6 md:pt-28 md:pb-24">
       {/* 双列：正文 720px 居中 + TOC 侧栏（xl 起，design-system/posts.md §3.2） */}
       <div className="mx-auto flex max-w-[720px] justify-center gap-10 xl:max-w-none xl:justify-between">
         <div className="w-full max-w-[720px]">
-        <Link
-          href="/posts/"
-          className="focus-visible:outline-accent text-text-muted inline-flex items-center gap-1 text-sm transition-colors duration-150 ease-fast hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-4"
-        >
-          <span className="icon-[mdi--arrow-left] size-4" aria-hidden />
-          返回全部文章
-        </Link>
+        <BackButton fallbackHref="/posts/" />
 
         <header className="mt-8">
           <div className="text-text-muted flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
@@ -142,9 +138,10 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         {headings.length > 0 ? <TableOfContents headings={headings} /> : null}
       </div>
 
-      {/* 复制按钮 / Mermaid 渲染（纯增强，见组件注释）；随文章页挂载 */}
+      {/* 复制按钮 / Mermaid 渲染 / 锚点滚动（纯增强，见组件注释）；随文章页挂载 */}
       <CodeCopyButtons />
       <MermaidRenderer />
+      <AnchorScroll />
     </div>
   );
 }

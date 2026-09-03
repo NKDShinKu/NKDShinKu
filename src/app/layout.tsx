@@ -66,6 +66,7 @@ export default function RootLayout({
         {/* 全局背景：极光光斑 + 萤火粒子（与 design-system-preview 同源，装饰层 aria-hidden） */}
         <AuroraBackground />
         <ParticlesBackground />
+        {/* 顶栏 fixed 悬浮（首页首屏透明态，见 site-header）：非首页页面各自以 pt-24/28 补偿高度 */}
         <SiteHeader />
         <main id="main" tabIndex={-1} className="flex-1 focus:outline-none">
           {children}

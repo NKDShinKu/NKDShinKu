@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { Reveal } from "@/components/motion/reveal";
-import { PostCard } from "@/components/posts/post-card";
 import { EmptyState, Pagination } from "@/components/posts/pagination";
+import { PostCard } from "@/components/posts/post-card";
 import { Tag } from "@/components/ui/tag";
-import type { PostMeta } from "@/lib/posts";
-import { tagSlug } from "@/lib/posts";
-import { getCategoryChips, getTagCloud } from "@/lib/posts-pagination";
+import type { PostCategory, PostMeta } from "@/lib/posts";
+import { getCategoryChips } from "@/lib/posts-pagination";
 
 type PostsIndexProps = {
   page: number;
@@ -13,107 +12,109 @@ type PostsIndexProps = {
   posts: PostMeta[];
 };
 
-/** 列表页上下文：无（/posts）/ 分类（category 页）/ 标签（tag 页）——决定 chips 高亮与头部 */
+/** 列表页上下文：无（/posts）/ 分类（category 页）/ 标签（tag 页）——决定头部与 chips 显示 */
 export type PostsContext =
   | { kind: "all" }
   | { kind: "category"; name: string; description?: string }
   | { kind: "tag"; name: string };
 
+/** 页头板块入口小链接（分类/标签/归档） */
+function EntranceLink({ href, icon, children }: { href: string; icon: string; children: React.ReactNode }) {
+  return (
+    <Link
+      href={href}
+      className="text-text-muted hover:text-accent hover:bg-accent/10 focus-visible:outline-accent inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium transition-[color,background-color] duration-150 ease-fast focus-visible:outline-2 focus-visible:outline-offset-2"
+    >
+      <span className={`${icon} size-4`} aria-hidden />
+      {children}
+    </Link>
+  );
+}
+
+/** 分类徽章图标（徽章 = 前往该分类页的链接，无选中态——用户决策） */
+const CATEGORY_ICONS: Record<PostCategory, string> = {
+  教程: "icon-[mdi--school-outline]",
+  笔记: "icon-[mdi--notebook-outline]",
+  日常: "icon-[mdi--coffee-outline]",
+};
+
+const chipBase =
+  "group focus-visible:outline-accent inline-flex min-h-11 items-center gap-2 rounded-full border border-border bg-surface/70 px-4 text-sm font-medium text-text-muted backdrop-blur-sm transition-[border-color,color,background-color] duration-150 ease-fast hover:border-accent/50 hover:bg-accent/10 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2";
+
+const chipArrow =
+  "icon-[mdi--chevron-right] text-accent size-4 -translate-x-0.5 opacity-0 transition-[opacity,transform] duration-150 ease-fast group-hover:translate-x-0 group-hover:opacity-100";
+
 /**
- * 文章列表渲染体（/posts、/posts/page/[n]、分类页、标签页共用）—— design-system/posts.md §3.1/§3.3
- * 分类 chips 与标签云按上下文高亮：走链接而非客户端筛选（静态导出）
+ * 文章列表渲染体（/posts、/posts/page/[n]、分类页、标签页共用）
+ *
+ * - 紧凑页头：左标题 + 右「分类/标签/归档」入口（入口页承载全量列表，本页不放标签云）
+ * - 分类 chips 保留本页（选中高亮）；横向卡片单列纵排，容器收窄至 880px
+ * - 无滚动叙事（文章板块不做入场动画，用户决策）
  */
 export function PostsIndex({ page, totalPages, posts, context = { kind: "all" } }: PostsIndexProps & { context?: PostsContext }) {
   const chips = getCategoryChips();
-  const tagCloud = getTagCloud();
-  const title =
-    context.kind === "category" ? `分类：${context.name}` : context.kind === "tag" ? `标签：${context.name}` : "文章";
-  const countLabel = context.kind === "all" ? undefined : `共 ${posts.length} 篇`;
 
   return (
-    <div className="mx-auto w-full max-w-[1100px] px-5 pt-14 pb-16 sm:px-6 md:pt-20 md:pb-24">
+    <div className="mx-auto w-full max-w-[880px] px-5 pt-24 pb-16 sm:px-6 md:pt-28 md:pb-24">
       {context.kind === "all" ? (
-        <Reveal className="mb-10 text-center">
-          <p className="text-accent-dark text-xs font-bold tracking-widest uppercase">Blog</p>
-          <h1 className="mt-2 text-2xl font-bold">文章</h1>
-          <p className="text-text-muted mx-auto mt-2 max-w-[480px]">
-            教程、笔记与日常，记录学习与思考。
-          </p>
-          {/* 归档入口（REQ-P3）：归档页无导航直达，从文章页进入 */}
-          <Link
-            href="/archive/"
-            className="text-accent-dark focus-visible:outline-accent mt-4 inline-flex items-center gap-1.5 rounded-md text-sm transition-colors duration-150 ease-fast hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2"
-          >
-            <span className="icon-[mdi--history] size-4" aria-hidden />
-            按时间线浏览归档
-          </Link>
-        </Reveal>
+        <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
+          <h1 className="font-display text-2xl font-bold">文章</h1>
+          <nav aria-label="文章板块入口" className="flex items-center gap-1">
+            <EntranceLink href="/posts/categories/" icon="icon-[mdi--folder-multiple-outline]">
+              分类
+            </EntranceLink>
+            <EntranceLink href="/posts/tags/" icon="icon-[mdi--tag-multiple-outline]">
+              标签
+            </EntranceLink>
+            <EntranceLink href="/archive/" icon="icon-[mdi--history]">
+              归档
+            </EntranceLink>
+          </nav>
+        </header>
       ) : (
-        <Reveal className="mb-10">
+        <header className="mb-6">
           <Link
             href="/posts/"
-            className="focus-visible:outline-accent text-text-muted inline-flex items-center gap-1 text-sm transition-colors duration-150 ease-fast hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-4"
+            className="text-text-muted focus-visible:outline-accent inline-flex items-center gap-1 text-sm transition-colors duration-150 ease-fast hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-4"
           >
             <span className="icon-[mdi--arrow-left] size-4" aria-hidden />
             返回全部文章
           </Link>
-          <div className="mt-4 flex flex-wrap items-center gap-3">
-            <h1 className="font-display text-2xl font-bold">{title}</h1>
-            {countLabel ? <Tag>{countLabel}</Tag> : null}
+          <div className="mt-3 flex flex-wrap items-center gap-3">
+            <h1 className="font-display text-2xl font-bold">
+              {context.kind === "category" ? `分类：${context.name}` : `标签：${context.name}`}
+            </h1>
+            <Tag>共 {posts.length} 篇</Tag>
           </div>
           {context.kind === "category" && context.description ? (
-            <p className="text-text-muted mt-2 text-sm">{context.description}</p>
+            <p className="text-text-muted mt-1.5 text-sm">{context.description}</p>
           ) : null}
-        </Reveal>
+        </header>
       )}
 
-      <Reveal delay={0.05}>
-        {/* 分类 chips：药丸、min-h 44px 触控、flex-wrap（§2.2）；仅全部文章页显示（当前即上下文时隐藏，§3.3） */}
-        {context.kind === "all" ? (
-          <nav aria-label="按分类筛选" className="mb-6 flex flex-wrap items-center gap-2">
-            <Link
-              href="/posts/"
-              aria-current="page"
-              className="bg-accent focus-visible:outline-accent flex min-h-11 items-center rounded-full border border-transparent px-5 text-sm font-medium text-white transition-colors duration-150 ease-fast focus-visible:outline-2 focus-visible:outline-offset-2"
-            >
-              全部
-            </Link>
-            {chips.map((chip) => (
-              <Link
-                key={chip.name}
-                href={`/posts/category/${chip.slug}/`}
-                className="focus-visible:outline-accent flex min-h-11 items-center gap-1.5 rounded-full border border-border bg-surface px-5 text-sm font-medium transition-[border-color,color] duration-150 ease-fast focus-visible:outline-2 focus-visible:outline-offset-2 hover:border-accent hover:text-accent"
-              >
-                {chip.name}
-                <span className="text-text-muted text-xs">{chip.count}</span>
-              </Link>
-            ))}
-          </nav>
-        ) : null}
-
-        {/* 标签云（§2.3）：紧凑 tag + 篇数；链接走 ASCII slug */}
-        <nav aria-label="按标签筛选" className="mb-10 flex flex-wrap items-center gap-2">
-          {tagCloud.map((tag) => {
-            const active = context.kind === "tag" && tagSlug(context.name) === tag.slug;
-            return (
-              <Link
-                key={tag.slug}
-                href={`/posts/tag/${tag.slug}/`}
-                aria-current={active ? "page" : undefined}
-                className={`${active ? "bg-accent text-white" : "bg-accent/10 text-accent-dark hover:bg-accent/15"} rounded-full px-2.5 py-1 text-xs transition-colors duration-150 ease-fast focus-visible:outline-accent focus-visible:outline-2 focus-visible:outline-offset-2`}
-              >
-                {tag.name}
-                <span className={active ? "text-white/80" : "text-text-muted ml-1"}>{tag.count}</span>
-              </Link>
-            );
-          })}
-        </nav>
-      </Reveal>
+      {/* 分类徽章：前往链接（图标 + 计数 + hover 箭头），无选中态（用户决策） */}
+      <nav aria-label="前往分类" className="mb-8 flex flex-wrap items-center gap-2.5">
+        <Link href="/posts/" className={chipBase}>
+          <span className="icon-[mdi--home-outline] text-accent size-4" aria-hidden />
+          全部文章
+          <span className={chipArrow} aria-hidden />
+        </Link>
+        {chips.map((chip) => (
+          <Link key={chip.slug} href={`/posts/category/${chip.slug}/`} className={chipBase}>
+            <span className={`${CATEGORY_ICONS[chip.name]} text-accent size-4`} aria-hidden />
+            {chip.name}
+            <span className="bg-accent/10 text-accent-dark rounded-full px-2 py-0.5 text-xs">
+              {chip.count}
+            </span>
+            <span className={chipArrow} aria-hidden />
+          </Link>
+        ))}
+      </nav>
 
       {posts.length > 0 ? (
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="flex flex-col gap-5">
           {posts.map((post, index) => (
-            <Reveal key={post.slug} delay={index * 0.08}>
+            <Reveal key={post.slug} delay={index * 0.05} subtle>
               <PostCard post={post} />
             </Reveal>
           ))}

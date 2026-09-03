@@ -12,11 +12,23 @@ type TocProps = {
  *
  * - scrollspy：IntersectionObserver 检测视口内当前 h2/h3（取最后一个进入的标题，
  *   顶部补偿 sticky 顶栏高度），命中项左边线高亮 + aria-current
+ * - 点击目录项：平滑滚动 + replaceState 更新 URL hash——位置跳转不进历史栈，
+ *   「返回」始终回到上一页面（用户决策）；复制的锚点链接不受影响
  * - 纯增强：标题来自构建期数据，无 JS 时侧栏仍可点击跳转（仅无高亮）
- * - reduced-motion 无需特判：目录不参与动画，只切换边框/颜色
+ * - reduced-motion 无需特判：scrollIntoView() 缺省行为跟随 CSS scroll-behavior
  */
 export function TableOfContents({ headings }: TocProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
+
+  const scrollToHeading = (id: string) => {
+    const heading = document.getElementById(id);
+    if (!heading) return;
+    heading.scrollIntoView();
+    window.history.replaceState(null, "", `#${id}`);
+    // 键盘可达：焦点移至目标标题（不触发二次滚动）
+    heading.setAttribute("tabindex", "-1");
+    heading.focus({ preventScroll: true });
+  };
 
   useEffect(() => {
     const headingEls = headings
@@ -53,6 +65,10 @@ export function TableOfContents({ headings }: TocProps) {
                 <a
                   href={`#${heading.id}`}
                   aria-current={active ? "true" : undefined}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    scrollToHeading(heading.id);
+                  }}
                   className={`focus-visible:outline-accent -ml-px block border-l-2 py-1.5 pr-2 text-sm leading-snug transition-[border-color,color] duration-200 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 ${
                     heading.level === 3 ? "pl-7" : "pl-4"
                   } ${

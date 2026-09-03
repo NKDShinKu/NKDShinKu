@@ -17,74 +17,79 @@ type PostCardProps = {
 };
 
 /**
- * 文章卡（列表页 / 首页最新文章共用）—— design-system/posts.md §2.1
+ * 文章横卡（列表 / 首页最新文章共用）—— 横向列表式：左文字区 + 右封面
  *
  * - 整卡可点：外层 Link 承担焦点态，卡内无次级可点元素（触控纪律）
- * - 封面可选：有封面走 21:9 顶部图形态，无封面走紧凑形态（REQ-G8 显式宽高 + 懒加载）
- * - 标签最多 2 个 +「+n」；摘录取 frontmatter description，line-clamp-2
+ * - 主题细节：左侧品牌竖线，hover 时点亮（scaleY 过渡，GPU 合成）
+ * - 封面可选：右侧 16:10（桌面 240px / 移动 112px），无封面文字区占满（REQ-G8 显式宽高）
  */
 export function PostCard({ post, className }: PostCardProps) {
   return (
     <Link
       href={`/posts/${post.slug}/`}
-      className="focus-visible:outline-accent block h-full rounded-md focus-visible:outline-2 focus-visible:outline-offset-2"
+      className="focus-visible:outline-accent block rounded-md focus-visible:outline-2 focus-visible:outline-offset-2"
     >
-      <Card variant="surface" interactive className={`group h-full ${className ?? ""}`}>
-        {post.cover ? (
-          // 21:9 固定比例预留空间（CLS=0）；显式宽高满足 unoptimized next 语义下的 alt/尺寸纪律
-          <span className="mb-5 block overflow-hidden rounded-[calc(var(--radius-md)-4px)] border border-border/60">
-            <img
-              src={post.cover}
-              alt=""
-              width={840}
-              height={360}
-              loading="lazy"
-              className="aspect-[21/9] w-full object-cover"
-            />
-          </span>
-        ) : null}
+      <Card
+        variant="surface"
+        interactive
+        className={`group relative h-full overflow-hidden bg-gradient-to-br from-surface via-surface to-accent/[0.07] ${className ?? ""}`}
+      >
+        {/* 左侧品牌竖线：hover 点亮 */}
+        <span
+          className="bg-accent absolute inset-y-0 left-0 w-[3px] origin-center scale-y-25 opacity-0 transition-[transform,opacity] duration-200 ease-base group-hover:scale-y-100 group-hover:opacity-100"
+          aria-hidden
+        />
 
-        <div className="flex items-center gap-2">
-          <Tag>{post.category}</Tag>
-          {post.pinned ? (
-            <span className="inline-flex items-center gap-1 rounded-full bg-accent px-3 py-1 text-xs font-medium text-white">
-              <span className="icon-[mdi--pin] size-3.5" aria-hidden />
-              置顶
+        <div className="flex h-full gap-3.5 p-3.5 md:gap-4 md:p-4">
+          <div className="flex min-w-0 flex-1 flex-col">
+            <div className="flex flex-wrap items-center gap-2">
+              <Tag>{post.category}</Tag>
+              {post.pinned ? (
+                <span className="inline-flex items-center gap-1 rounded-full bg-accent px-3 py-1 text-xs font-medium text-white">
+                  <span className="icon-[mdi--pin] size-3.5" aria-hidden />
+                  置顶
+                </span>
+              ) : null}
+            </div>
+
+            <h3 className="mt-2 text-lg font-semibold transition-colors duration-200 ease-base group-hover:text-accent">
+              {post.title}
+            </h3>
+
+            <p className="text-text-muted mt-1 line-clamp-2 text-sm leading-relaxed">
+              {post.description}
+            </p>
+
+            <div className="text-text-muted mt-auto flex flex-wrap items-center gap-x-4 gap-y-1.5 pt-3 text-xs">
+              <span className="inline-flex items-center gap-1">
+                <span className="icon-[mdi--calendar-outline] size-4" aria-hidden />
+                <time dateTime={post.date}>{formatDate(post.date)}</time>
+              </span>
+              <span className="inline-flex items-center gap-1">
+                <span className="icon-[mdi--clock-outline] size-4" aria-hidden />
+                {post.readingMinutes} 分钟
+              </span>
+              <span
+                className="text-accent ml-auto -translate-x-1 opacity-0 transition-[transform,opacity] duration-200 ease-base group-hover:translate-x-0 group-hover:opacity-100"
+                aria-hidden
+              >
+                <span className="icon-[mdi--arrow-right] size-4" />
+              </span>
+            </div>
+          </div>
+
+          {post.cover ? (
+            <span className="border-border/60 w-28 shrink-0 self-center overflow-hidden rounded-[calc(var(--radius-md)-4px)] border md:w-56">
+              <img
+                src={post.cover}
+                alt=""
+                width={840}
+                height={525}
+                loading="lazy"
+                className="aspect-[16/10] h-full w-full object-cover transition-transform duration-300 ease-base group-hover:scale-[1.04]"
+              />
             </span>
           ) : null}
-        </div>
-
-        <h3 className="mt-3 text-lg font-semibold transition-colors duration-200 ease-base group-hover:text-accent">
-          {post.title}
-        </h3>
-
-        <p className="text-text-muted mt-2 line-clamp-2 text-sm leading-relaxed">
-          {post.description}
-        </p>
-
-        <div className="border-border/60 mt-4 border-t pt-4">
-          <div className="text-text-muted flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs">
-            <span className="inline-flex items-center gap-1">
-              <span className="icon-[mdi--calendar-outline] size-4" aria-hidden />
-              <time dateTime={post.date}>{formatDate(post.date)}</time>
-            </span>
-            <span className="inline-flex items-center gap-1">
-              <span className="icon-[mdi--clock-outline] size-4" aria-hidden />
-              {post.readingMinutes} 分钟
-            </span>
-            {post.tags.length > 0 ? (
-              <span className="text-accent-dark ml-auto inline-flex flex-wrap items-center gap-1.5">
-                {post.tags.slice(0, 2).map((tag) => (
-                  <span key={tag} className="bg-accent/10 rounded-full px-2.5 py-1 font-medium">
-                    {tag}
-                  </span>
-                ))}
-                {post.tags.length > 2 ? (
-                  <span className="text-text-muted">+{post.tags.length - 2}</span>
-                ) : null}
-              </span>
-            ) : null}
-          </div>
         </div>
       </Card>
     </Link>
