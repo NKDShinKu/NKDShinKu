@@ -40,9 +40,11 @@ export function CodeCopyButtons() {
           '<span class="icon-[mdi--check] size-4" aria-hidden="true"></span><span class="sr-only">已复制</span>';
         button.setAttribute("aria-label", "已复制");
         window.setTimeout(() => {
-          button.innerHTML =
-            '<span class="icon-[mdi--content-copy] size-4" aria-hidden="true"></span>';
-          button.setAttribute("aria-label", "复制代码");
+      button.innerHTML =
+        '<span class="icon-[mdi--content-copy] size-4" aria-hidden="true"></span>';
+      button.setAttribute("aria-label", "复制代码");
+      // 复制结果经 aria-label 变化对外播报（guidelines：异步状态更新需 aria-live）
+      button.setAttribute("aria-live", "polite");
         }, 800);
       };
 

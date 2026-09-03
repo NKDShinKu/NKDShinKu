@@ -52,9 +52,9 @@ export function PostCard({ post, className }: PostCardProps) {
               ) : null}
             </div>
 
-            <h3 className="mt-2 text-lg font-semibold transition-colors duration-200 ease-base group-hover:text-accent">
+            <h2 className="mt-2 text-lg font-semibold transition-colors duration-200 ease-base group-hover:text-accent">
               {post.title}
-            </h3>
+            </h2>
 
             <p className="text-text-muted mt-1 line-clamp-2 text-sm leading-relaxed">
               {post.description}

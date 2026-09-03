@@ -25,45 +25,45 @@
 
 #### 亮色模式（默认）
 
-| Token                  | 角色               | 值                          | 对比度（白底） | 用途                           |
-| ---------------------- | ------------------ | --------------------------- | -------------- | ------------------------------ |
-| `--color-bg`           | 页面背景           | `#F0F4F8`                   | —              | 天空蓝灰底                     |
-| `--color-surface`      | 实心卡片           | `#FFFFFF`                   | —              | 文章/博客卡（阅读区）          |
-| `--color-glass`        | 玻璃卡片           | `rgba(255,255,255,0.60)`    | —              | 导航/hero/入口卡               |
-| `--color-glass-border` | 玻璃卡描边         | `rgba(255,255,255,0.30)`    | —              | 玻璃卡 1px 边框                |
-| `--color-accent`       | 品牌主色（天蓝）   | `#5B8FD4`                   | ~3.4:1         | 图标 / 大标题 / 非文本强调     |
-| `--color-accent-light` | 主色浅变体         | `#8FB8E8`                   | < 3:1          | 渐变 / 装饰                    |
-| `--color-accent-dark`  | 主色深变体         | `#3A6FB0`                   | ~5.5:1         | 小号强调文字（标签/链接）      |
-| `--color-sakura`       | 次强调（樱粉）     | `#F0A0B8`                   | < 3:1          | 装饰 / 渐变 / 空状态点缀       |
-| `--color-sakura-light` | 樱粉浅变体         | `#F4C0D0`                   | < 3:1          | 渐变 / 背景                    |
-| `--color-twilight`     | 三次强调（暮紫）   | `#9B8EC4`                   | < 3:1          | 装饰 / 渐变 / 夜空元素         |
-| `--color-text`         | 正文               | `#2D2B3A`                   | ~13:1          | 所有正文/标题                  |
-| `--color-text-muted`   | 次要文字           | `#6B6880`                   | ~5.5:1         | 说明 / 日期 / 辅助             |
-| `--color-border`       | 分隔线 / 边框      | `#E2E8F0`                   | —              | 卡片描边 / 分隔               |
-| `--color-success`      | 成功               | `#7ECB9A`                   | < 3:1          | 状态点 + 文字配对              |
-| `--color-warning`      | 警示               | `#F0C878`                   | < 3:1          | 状态点 + 文字配对              |
-| `--color-danger`       | 错误               | `#E06679`                   | ~4.0:1         | 错误提示（正文配对文字）       |
+| Token                  | 角色             | 值                       | 对比度（白底） | 用途                       |
+| ---------------------- | ---------------- | ------------------------ | -------------- | -------------------------- |
+| `--color-bg`           | 页面背景         | `#F0F4F8`                | —              | 天空蓝灰底                 |
+| `--color-surface`      | 实心卡片         | `#FFFFFF`                | —              | 文章/博客卡（阅读区）      |
+| `--color-glass`        | 玻璃卡片         | `rgba(255,255,255,0.60)` | —              | 导航/hero/入口卡           |
+| `--color-glass-border` | 玻璃卡描边       | `rgba(255,255,255,0.30)` | —              | 玻璃卡 1px 边框            |
+| `--color-accent`       | 品牌主色（天蓝） | `#5B8FD4`                | ~3.4:1         | 图标 / 大标题 / 非文本强调 |
+| `--color-accent-light` | 主色浅变体       | `#8FB8E8`                | < 3:1          | 渐变 / 装饰                |
+| `--color-accent-dark`  | 主色深变体       | `#3A6FB0`                | ~5.5:1         | 小号强调文字（标签/链接）  |
+| `--color-sakura`       | 次强调（樱粉）   | `#F0A0B8`                | < 3:1          | 装饰 / 渐变 / 空状态点缀   |
+| `--color-sakura-light` | 樱粉浅变体       | `#F4C0D0`                | < 3:1          | 渐变 / 背景                |
+| `--color-twilight`     | 三次强调（暮紫） | `#9B8EC4`                | < 3:1          | 装饰 / 渐变 / 夜空元素     |
+| `--color-text`         | 正文             | `#2D2B3A`                | ~13:1          | 所有正文/标题              |
+| `--color-text-muted`   | 次要文字         | `#6B6880`                | ~5.5:1         | 说明 / 日期 / 辅助         |
+| `--color-border`       | 分隔线 / 边框    | `#E2E8F0`                | —              | 卡片描边 / 分隔            |
+| `--color-success`      | 成功             | `#7ECB9A`                | < 3:1          | 状态点 + 文字配对          |
+| `--color-warning`      | 警示             | `#F0C878`                | < 3:1          | 状态点 + 文字配对          |
+| `--color-danger`       | 错误             | `#E06679`                | ~4.0:1         | 错误提示（正文配对文字）   |
 
 #### 暗色模式（`<html class="dark">`）
 
-| Token                  | 角色               | 值                          |
-| ---------------------- | ------------------ | --------------------------- |
-| `--color-bg`           | 页面背景           | `#1A1B2E`                   |
-| `--color-surface`      | 实心卡片           | `#242538`                   |
-| `--color-glass`        | 玻璃卡片           | `rgba(30,30,60,0.70)`       |
-| `--color-glass-border` | 玻璃卡描边         | `rgba(255,255,255,0.10)`    |
-| `--color-accent`       | 品牌主色           | `#7EB8F4`                   |
-| `--color-accent-light` | 主色浅变体         | `#A8D0F8`                   |
-| `--color-accent-dark`  | 主色深变体         | `#5B9BD5`                   |
-| `--color-sakura`       | 次强调             | `#F4B8C8`                   |
-| `--color-sakura-light` | 樱粉浅变体         | `#F8D0D8`                   |
-| `--color-twilight`     | 三次强调           | `#B8A8E0`                   |
-| `--color-text`         | 正文               | `#E8E6F0`                   |
-| `--color-text-muted`   | 次要文字           | `#A09DB8`                   |
-| `--color-border`       | 分隔线 / 边框      | `#2E2E4A`                   |
-| `--color-success`      | 成功               | `#86D6A8`                   |
-| `--color-warning`      | 警示               | `#F0D08A`                   |
-| `--color-danger`       | 错误               | `#F08A9B`                   |
+| Token                  | 角色          | 值                       |
+| ---------------------- | ------------- | ------------------------ |
+| `--color-bg`           | 页面背景      | `#1A1B2E`                |
+| `--color-surface`      | 实心卡片      | `#242538`                |
+| `--color-glass`        | 玻璃卡片      | `rgba(30,30,60,0.70)`    |
+| `--color-glass-border` | 玻璃卡描边    | `rgba(255,255,255,0.10)` |
+| `--color-accent`       | 品牌主色      | `#7EB8F4`                |
+| `--color-accent-light` | 主色浅变体    | `#A8D0F8`                |
+| `--color-accent-dark`  | 主色深变体    | `#5B9BD5`                |
+| `--color-sakura`       | 次强调        | `#F4B8C8`                |
+| `--color-sakura-light` | 樱粉浅变体    | `#F8D0D8`                |
+| `--color-twilight`     | 三次强调      | `#B8A8E0`                |
+| `--color-text`         | 正文          | `#E8E6F0`                |
+| `--color-text-muted`   | 次要文字      | `#A09DB8`                |
+| `--color-border`       | 分隔线 / 边框 | `#2E2E4A`                |
+| `--color-success`      | 成功          | `#86D6A8`                |
+| `--color-warning`      | 警示          | `#F0D08A`                |
+| `--color-danger`       | 错误          | `#F08A9B`                |
 
 **对比度纪律（ACG 粉彩色的关键约束）：**
 
@@ -76,11 +76,11 @@
 
 ### 1.2 字体
 
-| 角色    | 拉丁字体    | 中文回退（系统字体，不自托管）                         | 字重           |
-| ------- | ----------- | ------------------------------------------------------ | -------------- |
-| 展示/标题 | Quicksand   | PingFang SC / Hiragino Sans GB / Microsoft YaHei       | 400–700        |
-| 正文    | Inter       | PingFang SC / Hiragino Sans GB / Microsoft YaHei       | 300–600        |
-| 代码    | JetBrains Mono | —                                                      | 400, 500       |
+| 角色      | 拉丁字体       | 中文回退（系统字体，不自托管）                   | 字重     |
+| --------- | -------------- | ------------------------------------------------ | -------- |
+| 展示/标题 | Quicksand      | PingFang SC / Hiragino Sans GB / Microsoft YaHei | 400–700  |
+| 正文      | Inter          | PingFang SC / Hiragino Sans GB / Microsoft YaHei | 300–600  |
+| 代码      | JetBrains Mono | —                                                | 400, 500 |
 
 - **自托管**：拉丁字体经 `next/font/google` 在构建期下载并注入 `--font-*` 变量（见 §7），
   不打运行时 Google CDN（符合 REQ-G7 + 静态导出 + 国内访问）。
@@ -89,16 +89,16 @@
 
 **字号阶梯（1.25 模数）：**
 
-| Token            | 值       | 行高 | 用途                      |
-| ---------------- | -------- | ---- | ------------------------- |
-| `--text-xs`      | `0.75rem` | 1.5  | 标注、徽章                |
-| `--text-sm`      | `0.875rem`| 1.5  | 小号正文、标签            |
-| `--text-base`    | `1rem`    | 1.75 | 正文（移动端 ≥16px）      |
-| `--text-lg`      | `1.25rem` | 1.6  | 导语、卡片标题            |
-| `--text-xl`      | `1.5rem`  | 1.4  | 小节标题                  |
-| `--text-2xl`     | `2rem`    | 1.3  | 页面标题                  |
-| `--text-3xl`     | `2.5rem`  | 1.2  | Hero 副标题               |
-| `--text-4xl`     | `3rem`    | 1.1  | Hero 主标题               |
+| Token         | 值         | 行高 | 用途                 |
+| ------------- | ---------- | ---- | -------------------- |
+| `--text-xs`   | `0.75rem`  | 1.5  | 标注、徽章           |
+| `--text-sm`   | `0.875rem` | 1.5  | 小号正文、标签       |
+| `--text-base` | `1rem`     | 1.75 | 正文（移动端 ≥16px） |
+| `--text-lg`   | `1.25rem`  | 1.6  | 导语、卡片标题       |
+| `--text-xl`   | `1.5rem`   | 1.4  | 小节标题             |
+| `--text-2xl`  | `2rem`     | 1.3  | 页面标题             |
+| `--text-3xl`  | `2.5rem`   | 1.2  | Hero 副标题          |
+| `--text-4xl`  | `3rem`     | 1.1  | Hero 主标题          |
 
 - 正文行高 1.5–1.75；行长 ≤ 65–75 字符（`line-length`）；正文移动端最小 16px（`readable-font-size`）。
 - Hero 标题可用 `clamp()` 流式缩放（参考旧预览 `clamp(2.4rem, 6vw, 3.5rem)`）。
@@ -108,40 +108,40 @@
 沿用 Tailwind 默认 4px 间距尺度（`space-1`=4px …），不自定义 `--space-*`。
 页面级节奏固定：
 
-| 场景               | 值                          |
-| ------------------ | --------------------------- |
-| 容器最大宽         | `1100px`（`max-w-[1100px]`）|
-| 容器内边距         | 桌面 `px-6`(24px) / 移动 `px-4`(16px) |
-| 区块上下内边距     | 桌面 `py-20`(80px) / 移动 `py-12`(48px) |
-| 卡片内边距         | `p-6`(24px) / 大卡 `p-7`(28px) |
-| 卡片栅格间距       | `gap-6`(24px)               |
+| 场景           | 值                                      |
+| -------------- | --------------------------------------- |
+| 容器最大宽     | `1100px`（`max-w-[1100px]`）            |
+| 容器内边距     | 桌面 `px-6`(24px) / 移动 `px-4`(16px)   |
+| 区块上下内边距 | 桌面 `py-20`(80px) / 移动 `py-12`(48px) |
+| 卡片内边距     | `p-6`(24px) / 大卡 `p-7`(28px)          |
+| 卡片栅格间距   | `gap-6`(24px)                           |
 
 ### 1.4 圆角
 
-| Token          | 值     | 用途                  |
-| -------------- | ------ | --------------------- |
-| `--radius-sm`  | `8px`  | 按钮、输入框、标签    |
-| `--radius-md`  | `12px` | 卡片（默认）          |
-| `--radius-lg`  | `16px` | 大卡、弹层            |
-| `--radius-xl`  | `20px` | Hero 面板、大容器     |
-| `--radius-full`| `9999px`| 药丸、头像、浮动导航  |
+| Token           | 值       | 用途                 |
+| --------------- | -------- | -------------------- |
+| `--radius-sm`   | `8px`    | 按钮、输入框、标签   |
+| `--radius-md`   | `12px`   | 卡片（默认）         |
+| `--radius-lg`   | `16px`   | 大卡、弹层           |
+| `--radius-xl`   | `20px`   | Hero 面板、大容器    |
+| `--radius-full` | `9999px` | 药丸、头像、浮动导航 |
 
 ### 1.5 阴影（玻璃态适配）
 
-| Token          | 亮色                          | 暗色                        | 用途                  |
-| -------------- | ----------------------------- | --------------------------- | --------------------- |
-| `--shadow-sm`  | `0 1px 3px rgba(0,0,0,0.06)`  | `0 1px 3px rgba(0,0,0,0.30)`| 轻微抬升              |
-| `--shadow-md`  | `0 4px 12px rgba(0,0,0,0.08)` | `0 4px 12px rgba(0,0,0,0.40)`| 玻璃卡默认            |
-| `--shadow-lg`  | `0 8px 24px rgba(0,0,0,0.10)` | `0 8px 24px rgba(0,0,0,0.50)`| 卡片 hover、弹层      |
-| `--shadow-glow`| `0 0 24px rgba(91,143,212,0.15)`| `0 0 24px rgba(126,184,244,0.20)`| 主色柔光（hover）     |
-| `--shadow-lg-glow`| `0 8px 24px rgba(0,0,0,0.10)` + 柔光 | `0 8px 24px rgba(0,0,0,0.50)` + 柔光 | 卡片交互 hover（抬升+柔光复合） |
+| Token              | 亮色                                 | 暗色                                 | 用途                            |
+| ------------------ | ------------------------------------ | ------------------------------------ | ------------------------------- |
+| `--shadow-sm`      | `0 1px 3px rgba(0,0,0,0.06)`         | `0 1px 3px rgba(0,0,0,0.30)`         | 轻微抬升                        |
+| `--shadow-md`      | `0 4px 12px rgba(0,0,0,0.08)`        | `0 4px 12px rgba(0,0,0,0.40)`        | 玻璃卡默认                      |
+| `--shadow-lg`      | `0 8px 24px rgba(0,0,0,0.10)`        | `0 8px 24px rgba(0,0,0,0.50)`        | 卡片 hover、弹层                |
+| `--shadow-glow`    | `0 0 24px rgba(91,143,212,0.15)`     | `0 0 24px rgba(126,184,244,0.20)`    | 主色柔光（hover）               |
+| `--shadow-lg-glow` | `0 8px 24px rgba(0,0,0,0.10)` + 柔光 | `0 8px 24px rgba(0,0,0,0.50)` + 柔光 | 卡片交互 hover（抬升+柔光复合） |
 
 ### 1.6 玻璃态（Glassmorphism）
 
 ```css
 /* 规范值 */
-backdrop-filter: blur(16px);          /* 范围 12–20px */
-background: var(--color-glass);       /* 亮 60–80% / 暗 70% 白/深 */
+backdrop-filter: blur(16px); /* 范围 12–20px */
+background: var(--color-glass); /* 亮 60–80% / 暗 70% 白/深 */
 border: 1px solid var(--color-glass-border);
 border-radius: var(--radius-md);
 box-shadow: var(--shadow-md);
@@ -152,12 +152,12 @@ box-shadow: var(--shadow-md);
 
 ### 1.7 动效时长 / 缓动
 
-| Token               | 值                                    | 用途                        |
-| ------------------- | ------------------------------------- | --------------------------- |
-| `--ease-fast`       | `150ms ease-out`                      | 按钮 hover、focus ring      |
-| `--ease-base`       | `200ms ease-out`                      | 卡片 hover、标签切换        |
-| `--ease-slow`       | `300ms ease-out`                      | 弹层、主题切换              |
-| `--ease-spring`     | `400ms cubic-bezier(0.34,1.56,0.64,1)`| 入场 stagger                |
+| Token           | 值                                     | 用途                   |
+| --------------- | -------------------------------------- | ---------------------- |
+| `--ease-fast`   | `150ms ease-out`                       | 按钮 hover、focus ring |
+| `--ease-base`   | `200ms ease-out`                       | 卡片 hover、标签切换   |
+| `--ease-slow`   | `300ms ease-out`                       | 弹层、主题切换         |
+| `--ease-spring` | `400ms cubic-bezier(0.34,1.56,0.64,1)` | 入场 stagger           |
 
 - 只动 `transform` + `opacity`（GPU 合成，`transform-performance`）；**禁 `transition: all`**（逐属性声明）。
 - 落地映射：`--ease-*` token 只存缓动函数（CSS `transition-timing-function` 不能内嵌时长），
@@ -198,11 +198,12 @@ box-shadow: var(--shadow-md);
 
 ### 2.5 导航
 
-> 形态变更：初版为浮动玻璃药丸，用户决策改为**全宽 sticky 顶栏**（常规博客形态，manifest D11）。
+> 形态变更：浮动玻璃药丸 → 全宽 sticky 顶栏（D11）→ **fixed 悬浮顶栏 + 首页透明态**（M2 UI 改版，manifest D13）。
 
-- 顶栏：`sticky top-0 z-50 border-b border-border/60 bg-bg/80 backdrop-blur-md`，容器 `max-w-[1100px]`、高 `h-16`；占据文档流，内容无需避让。
+- 顶栏：`fixed inset-x-0 top-0 z-50 border-b`，容器 `max-w-[1100px]`、高 `h-16`；非首页/滚动后 `border-border/60 bg-bg/80 backdrop-blur-md`；首页首屏透明（`border-transparent bg-transparent`），滚动越过阈值 300ms 过渡为实心。
+- 非首页内容以 `pt-24/28` 补偿顶栏高度；首页 Hero 满屏，顶栏悬浮其上。
 - 桌面：左 logo（`font-display` 粗体），右侧文字导航（`text-sm font-medium text-text-muted`，hover/active `text-accent`）+ 主题切换。
-- 移动：logo + 主题切换 + 汉堡按钮，下拉玻璃面板列 5 项（图标 + 文字，行触控 ≥ 44px）。
+- 移动：logo + 主题切换 + 汉堡按钮，下拉玻璃面板（图标 + 文字，行触控 ≥ 44px）。
 
 ---
 
@@ -212,11 +213,11 @@ box-shadow: var(--shadow-md);
 
 三种影响融合：
 
-| 影响           | 角色     | 表达                                          |
-| -------------- | -------- | --------------------------------------------- |
-| **玻璃态**     | 主导表面 | 卡片、导航、hero 面板 — 半透明 + 模糊         |
-| **极光背景**   | 背景氛围 | 大块模糊渐变光斑，12s 缓慢 morph               |
-| **动效驱动**   | 交互层   | 滚动揭示、视差、入场 stagger                    |
+| 影响         | 角色     | 表达                                  |
+| ------------ | -------- | ------------------------------------- |
+| **玻璃态**   | 主导表面 | 卡片、导航、hero 面板 — 半透明 + 模糊 |
+| **极光背景** | 背景氛围 | 大块模糊渐变光斑，12s 缓慢 morph      |
+| **动效驱动** | 交互层   | 滚动揭示、视差、入场 stagger          |
 
 **氛围关键词：** 通透 · 清新 · 柔软 · 轻科技 · 轻 ACG · 克制
 
@@ -224,13 +225,13 @@ box-shadow: var(--shadow-md);
 
 **背景系统（按页面）：**
 
-| 页面     | 背景                                      |
-| -------- | ----------------------------------------- |
-| 首页     | 极光渐变光斑 + hero 视觉（克制）           |
-| 文章列表 | 实心浅色背景 + 极淡网格                    |
-| 文章详情 | 实心浅色表面（保证可读性）                 |
-| 项目     | 极光光斑（弱化）                           |
-| 追番     | 偏深渐变（夜空）+ 极淡网格                 |
+| 页面     | 背景                             |
+| -------- | -------------------------------- |
+| 首页     | 极光渐变光斑 + hero 视觉（克制） |
+| 文章列表 | 实心浅色背景 + 极淡网格          |
+| 文章详情 | 实心浅色表面（保证可读性）       |
+| 项目     | 极光光斑（弱化）                 |
+| 追番     | 偏深渐变（夜空）+ 极淡网格       |
 
 **允许的装饰元素（克制）：**
 
@@ -246,16 +247,16 @@ box-shadow: var(--shadow-md);
 
 ### 3.3 动效规范
 
-| 交互           | 方式              | 时长         | 缓动        |
-| -------------- | ----------------- | ------------ | ----------- |
-| 按钮 hover     | CSS transition    | 150ms        | ease-out    |
-| 卡片 hover 抬升| CSS transition    | 200ms        | ease-out    |
-| 主题切换       | CSS transition    | 300ms        | ease-out    |
-| 区块入场       | GSAP ScrollTrigger| 600ms        | power2.out  |
-| Hero 入场      | GSAP Timeline     | 800ms 总计   | power3.out  |
-| 卡片 stagger   | GSAP ScrollTrigger| 80–100ms/卡  | power2.out  |
-| 页面过渡       | GSAP + Router     | 200ms        | power2.inOut |
-| 极光光斑漂移 | CSS animation     | 12s          | ease-in-out（alternate）|
+| 交互            | 方式               | 时长        | 缓动                     |
+| --------------- | ------------------ | ----------- | ------------------------ |
+| 按钮 hover      | CSS transition     | 150ms       | ease-out                 |
+| 卡片 hover 抬升 | CSS transition     | 200ms       | ease-out                 |
+| 主题切换        | CSS transition     | 300ms       | ease-out                 |
+| 区块入场        | GSAP ScrollTrigger | 600ms       | power2.out               |
+| Hero 入场       | GSAP Timeline      | 800ms 总计  | power3.out               |
+| 卡片 stagger    | GSAP ScrollTrigger | 80–100ms/卡 | power2.out               |
+| 页面过渡        | GSAP + Router      | 200ms       | power2.inOut             |
+| 极光光斑漂移    | CSS animation      | 12s         | ease-in-out（alternate） |
 
 - `@media (prefers-reduced-motion: reduce)` 禁用一切非必要动效（GSAP 全部包裹、粒子关闭）。
 - 移动端降级：粒子减半、关闭视差层、视频改静态图。
@@ -269,30 +270,30 @@ box-shadow: var(--shadow-md);
 
 ## 4. 无障碍（Critical）
 
-| 规则       | 实现                                                        | 优先级   |
-| ---------- | ----------------------------------------------------------- | -------- |
-| 色彩对比   | 正文 ≥ 4.5:1；粉/紫/浅蓝只作装饰或大号文字（见 §1.1 纪律）  | CRITICAL |
-| 焦点       | 所有可交互元素 `focus-visible` 可见 ring                     | CRITICAL |
-| 触控目标   | ≥ 44×44px                                                  | CRITICAL |
-| alt 文本   | 所有有意义图片必填描述性 alt                                | HIGH     |
-| ARIA       | 纯图标按钮必 `aria-label`；装饰图标 `aria-hidden`           | HIGH     |
-| 键盘导航   | Tab 顺序 = 视觉顺序；导航重度页提供 skip link               | HIGH     |
-| 减少动效   | `prefers-reduced-motion` 包裹所有 GSAP                       | HIGH     |
-| 非仅颜色   | 状态/标签必配图标或文字                                     | HIGH     |
-| 表单标签   | 每个输入 `<label for>`（正文搜索、评论等）                  | HIGH     |
+| 规则     | 实现                                                       | 优先级   |
+| -------- | ---------------------------------------------------------- | -------- |
+| 色彩对比 | 正文 ≥ 4.5:1；粉/紫/浅蓝只作装饰或大号文字（见 §1.1 纪律） | CRITICAL |
+| 焦点     | 所有可交互元素 `focus-visible` 可见 ring                   | CRITICAL |
+| 触控目标 | ≥ 44×44px                                                  | CRITICAL |
+| alt 文本 | 所有有意义图片必填描述性 alt                               | HIGH     |
+| ARIA     | 纯图标按钮必 `aria-label`；装饰图标 `aria-hidden`          | HIGH     |
+| 键盘导航 | Tab 顺序 = 视觉顺序；导航重度页提供 skip link              | HIGH     |
+| 减少动效 | `prefers-reduced-motion` 包裹所有 GSAP                     | HIGH     |
+| 非仅颜色 | 状态/标签必配图标或文字                                    | HIGH     |
+| 表单标签 | 每个输入 `<label for>`（正文搜索、评论等）                 | HIGH     |
 
 ---
 
 ## 5. 响应式
 
-| 断点    | 宽度      | 列数   | 导航                         | Hero                 |
-| ------- | --------- | ------ | ---------------------------- | -------------------- |
-| 移动    | < 768px   | 1 列   | 汉堡下拉菜单                 | 静态图，无视频       |
-| 平板    | 768–1023px| 2 列   | 内联紧凑导航                 | 视频降级视差         |
-| 桌面    | ≥ 1024px  | 2–3 列 | 完整内联导航                 | 全量视觉 + 视差      |
+| 断点 | 宽度       | 列数   | 导航         | Hero            |
+| ---- | ---------- | ------ | ------------ | --------------- |
+| 移动 | < 768px    | 1 列   | 汉堡下拉菜单 | 静态图，无视频  |
+| 平板 | 768–1023px | 2 列   | 内联紧凑导航 | 视频降级视差    |
+| 桌面 | ≥ 1024px   | 2–3 列 | 完整内联导航 | 全量视觉 + 视差 |
 
 - 移动优先：320px 起可用；卡片 1→2→3 列；移动端字号整体降一级。
-- 顶栏 `sticky top-0` 占据文档流（§2.5），内容无需避让留白。
+- 顶栏 `fixed top-0` 悬浮（§2.5）：非首页内容以 `pt-24/28` 避让，首页 Hero 满屏。
 
 ---
 
@@ -308,7 +309,8 @@ box-shadow: var(--shadow-md);
 
 @theme {
   /* 字体（--font-* 由 next/font 在 layout 注入变量） */
-  --font-display: var(--font-quicksand), "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-display:
+    var(--font-quicksand), "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   --font-sans: var(--font-inter), "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
@@ -410,7 +412,10 @@ box-shadow: var(--shadow-md);
     @apply bg-bg text-text;
     font-family: var(--font-sans);
   }
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     font-family: var(--font-display);
   }
 }
@@ -451,13 +456,13 @@ box-shadow: var(--shadow-md);
 
 本文档取代 `docs/archive/design-system-old/`，落地时按此映射改 `globals.css`：
 
-| 旧（archive / 占位） | 新（本文档）           | 说明                         |
-| -------------------- | ---------------------- | ---------------------------- |
-| `--nk-accent` / `--color-brand` | `--color-accent` | 品牌主色统一语义名           |
-| `--color-brand-light/dark` | `--color-accent-light/dark` | 同上                     |
-| `--nk-divider` / `--color-border` | `--color-border` | 分隔线统一                    |
-| `--color-card`（与 surface 重复）| 并入 `--color-surface` | 去重                        |
-| `--nk-glass*`         | `--color-glass(-border)` | 玻璃态纳入 `--color-*`       |
-| Lucide 图标           | Iconify mdi             | 依 manifest 技术选型         |
-| Vue 3                 | Next.js 16 + React 19   | 依 manifest 技术选型         |
-| Google Fonts CDN 导入 | next/font 自托管        | REQ-G7 + 静态导出 + 国内访问 |
+| 旧（archive / 占位）              | 新（本文档）                | 说明                         |
+| --------------------------------- | --------------------------- | ---------------------------- |
+| `--nk-accent` / `--color-brand`   | `--color-accent`            | 品牌主色统一语义名           |
+| `--color-brand-light/dark`        | `--color-accent-light/dark` | 同上                         |
+| `--nk-divider` / `--color-border` | `--color-border`            | 分隔线统一                   |
+| `--color-card`（与 surface 重复） | 并入 `--color-surface`      | 去重                         |
+| `--nk-glass*`                     | `--color-glass(-border)`    | 玻璃态纳入 `--color-*`       |
+| Lucide 图标                       | Iconify mdi                 | 依 manifest 技术选型         |
+| Vue 3                             | Next.js 16 + React 19       | 依 manifest 技术选型         |
+| Google Fonts CDN 导入             | next/font 自托管            | REQ-G7 + 静态导出 + 国内访问 |

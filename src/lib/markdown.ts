@@ -77,7 +77,7 @@ function escapeHtml(value: string): string {
 
 /** Mermaid 占位卡样式见 globals.css .mermaid-slot（管线产出原始 HTML，不走 Tailwind 扫描） */
 function mermaidSlotHtml(code: string): string {
-  return `<div class="mermaid-slot" aria-busy="true" aria-label="图表" data-mermaid="${escapeHtml(code.trim())}"></div>`;
+  return `<div class="mermaid-slot" role="img" aria-busy="true" aria-label="图表" data-mermaid="${escapeHtml(code.trim())}"></div>`;
 }
 
 /** 从渲染后的 HTML 提取 h2/h3（锚点由 rehype-slug 保证存在；先剔除锚点 <a> 整体，再剥剩余标签） */

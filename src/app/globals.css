@@ -148,6 +148,8 @@
   /* 文章标题锚点平滑滚动 + 避让 sticky 顶栏（design-system/posts.md P-8） */
   html {
     scroll-behavior: smooth;
+    /* 消除移动端双击缩放延迟（guidelines：touch-action） */
+    touch-action: manipulation;
   }
   @media (prefers-reduced-motion: reduce) {
     html {

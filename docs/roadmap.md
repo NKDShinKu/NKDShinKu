@@ -29,9 +29,14 @@
 - [x] 移动端修复：webview 闪屏（渐进渲染时序）与首屏 JS 减重
 - [x] 设计走查（web-design-guidelines + 设计文档 §8 清单）与文档同步
 
-## M2 内容层 ⏳
+## M2 内容层 ✅
 
-方向：Markdown 内容管线、博客列表/详情页、RSS/sitemap、示例文章。
+- [x] 技术选型定稿（D12）与内容管线：unified + gray-matter 构建期渲染；frontmatter 校验、中文阅读时长、置顶排序、draft 过滤、标签 slug
+- [x] 文章列表页：横向列表卡、分类徽章（前往语义）、分页路由；分类/标签索引页；归档时间线
+- [x] 文章详情页：prose 排版、Shiki 双主题代码高亮 + 复制按钮、TOC scrollspy（锚点不进历史栈）、Mermaid 懒加载、Article 结构化数据、返回键
+- [x] 站点文件：RSS（feed.xml）、sitemap、robots 补 Sitemap 行；Pagefind 索引验证（23 页入库）
+- [x] UI 细节改版（D13）：极光全屏首屏（背景图方案移除）、顶栏 fixed 化（首页透明态）、横向列表卡、移动端与无障碍走查
+- [x] 示例文章 4 篇上线（建站随笔 / 静态导出笔记 / Tailwind 教程 / 发布流水线）；首页接入最新文章
 
 ## M3 功能模块 ⏳
 

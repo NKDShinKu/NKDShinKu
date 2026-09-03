@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Quicksand } from "next/font/google";
 import { siteConfig } from "@/lib/site.config";
 import { themeInitScript } from "@/lib/theme";
@@ -41,6 +41,14 @@ export const metadata: Metadata = {
     description: siteConfig.description,
     url: siteConfig.url,
   },
+};
+
+/** theme-color 随主题匹配页面底色（guidelines：dark mode & theming） */
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f0f4f8" },
+    { media: "(prefers-color-scheme: dark)", color: "#1a1b2e" },
+  ],
 };
 
 export default function RootLayout({

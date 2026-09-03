@@ -111,6 +111,7 @@ src/
 - pnpm 报 `ERR_PNPM_UNEXPECTED_STORE`：node_modules 与 store 链接位置漂移（本项目经历过本地 `.pnpm-store` ↔ 全局 store），跑一次 `pnpm install` 重链即可。
 - 删除/重命名 `app/` 路由文件后 `pnpm typecheck` 可能报 `.next/types/validator.ts` 引用已删模块：`.next` 陈旧生成类型所致，`rm -rf .next` 后重跑即绿。
 - Next 16 静态导出下 `sitemap.ts` / `robots.ts` / route handler 必须显式 `export const dynamic = "force-static"`，否则构建直接报错（官方文档未明说，实测所得）。
+- 非 ASCII（中文）动态路由参数 + `output: export`：dev 服务器按编码 URL 匹配 gSP 产出（中文原始形态 500、编码目录 GH Pages 404）——路由参数一律 ASCII slug（分类走固定映射、标签走覆盖表+拼音，中文仅展示，见 `src/lib/posts.ts`）。
 
 ## 8. 维护约定
 
