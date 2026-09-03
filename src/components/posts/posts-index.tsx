@@ -39,6 +39,14 @@ export function PostsIndex({ page, totalPages, posts, context = { kind: "all" } 
           <p className="text-text-muted mx-auto mt-2 max-w-[480px]">
             教程、笔记与日常，记录学习与思考。
           </p>
+          {/* 归档入口（REQ-P3）：归档页无导航直达，从文章页进入 */}
+          <Link
+            href="/archive/"
+            className="text-accent-dark focus-visible:outline-accent mt-4 inline-flex items-center gap-1.5 rounded-md text-sm transition-colors duration-150 ease-fast hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2"
+          >
+            <span className="icon-[mdi--history] size-4" aria-hidden />
+            按时间线浏览归档
+          </Link>
         </Reveal>
       ) : (
         <Reveal className="mb-10">
