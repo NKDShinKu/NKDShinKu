@@ -7,7 +7,7 @@
 ## 1. 项目概况
 
 - 定位：二次元风格的现代个人技术博客；蓝白基调，排版/配色/微透视/交互优先，二次元素材克制使用。
-- 内容板块：文章（含教程/笔记/日常分类）、项目（卡片跳转外部）、追番（Bangumi）、关于；详见 `docs/requirements.md`。
+- 内容板块：文章（含教程/笔记/日常分类）、实验室（外链项目 + 站内 demo/工具/实验，见 D15）、追番（Bangumi）、关于；详见 `docs/requirements.md`。
 - 域名：`https://nkdshinku.com`（DNS 托管于 Cloudflare）
 - 仓库：`https://github.com/NKDShinKu/NKDShinKu`（public）
 
@@ -35,7 +35,7 @@
 | 动画     | GSAP（+ @gsap/react）                         | 滚动/入场/过渡动画；尊重 prefers-reduced-motion               | ✅（M1 已安装）        |
 | 语言     | TypeScript 5.9（strict）                      | 勿升 TS 7（生态兼容未验证）                                   | ✅                     |
 | 包管理   | pnpm                                          | lockfile 锁定                                                 | ✅                     |
-| 动态数据 | 浏览器端 fetch（Bangumi 等）                  | 静态导出下唯一可行方式；需加载/失败态                         | ⏳ M3                  |
+| 动态数据 | 浏览器端 fetch（Bangumi 等）                  | 静态导出下唯一可行方式；需加载/失败态                         | ✅ 直连实测通过（D14），待 M3 落地 |
 | 图床     | Cloudflare R2（bucket `nkdshinku-assets`）    | 自定义域 `img.nkdshinku.com`                                  | ✅ 已建，文章接入待 M4 |
 | 评论     | giscus                                        | 前置：开 Discussions + 安装 giscus App                        | ⏳ M3/M4               |
 | 内容管线 | unified（remark + rehype）+ gray-matter       | 构建期渲染、零客户端 JS；插件覆盖 GFM/标题锚点/代码高亮       | ⏳ M2                  |
@@ -54,14 +54,14 @@
 | GitHub        | `NKDShinKu/NKDShinKu`                           | 代码 + Actions + Pages     | ✅       |
 | Cloudflare    | zone `nkdshinku.com`                            | DNS + R2                   | ✅       |
 | Cloudflare R2 | bucket `nkdshinku-assets` → `img.nkdshinku.com` | 图床                       | ✅ 已建  |
-| Bangumi       | 用户 ID `796189`                                | 追番数据（浏览器端 fetch） | ⏳ M3    |
+| Bangumi       | 用户 ID `796189`                                | 追番数据（浏览器端 fetch） | ✅ 直连实测通过（D14），M3 落地 |
 | giscus        | 待开 Discussions + 安装 App                     | 评论                       | ⏳ M3/M4 |
 
 ## 6. 风险与决策树
 
 ### 6.1 风险清单
 
-1. Bangumi API 浏览器端直连的 CORS / User-Agent / 限流需实测（浏览器 fetch 无法自定义 UA）。
+1. ~~Bangumi API 浏览器直连的 CORS / User-Agent / 限流~~ 已实测排除（2026-09，D14）：ACAO `*`、浏览器 UA 放行、12 并发无限流，走直连分支。
 2. GitHub Pages 国内访问质量一般；不可接受则迁移 Cloudflare Pages（代码零改动）。
 3. 图床素材版权：插图使用自绘 / AI 生成 / 明确授权素材。
 
@@ -69,8 +69,8 @@
 
 ```
 浏览器实测 api.bgm.tv CORS
- ├─ 可用 → 浏览器直连 + 本地缓存（REQ-B1/B6）✅
- └─ 受限 → 方案 B：Cloudflare Worker 代理（补 CORS 头 + 缓存 + 限流保护）
+ ├─ 可用 → 浏览器直连 + 本地缓存（REQ-B1/B6）✅（2026-09 实测走此分支，见 D14）
+ └─ 受限 → 方案 B：Cloudflare Worker 代理（补 CORS 头 + 缓存 + 限流保护，保留为退路）
            ├─ Worker 部署在 nkdshinku.com 同 zone（api.nkdshinku.com）
            └─ 失败 → 方案 C：GitHub Actions 定时抓取 → 静态 JSON 随站构建（数据有延迟）
 ```
@@ -80,7 +80,7 @@
 | #   | 决策               | 结论                                                                                                                                                                                                                                                                                                                          | 日期    |
 | --- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | D1  | 文章与教程组织方式 | 合并为「文章」板块，用分类/标签区分；日常并入文章分类                                                                                                                                                                                                                                                                         | 2026-08 |
-| D2  | 项目/日常内容管理  | 项目 = 结构化配置 + 卡片跳转外部（无站内详情页）；日常 = 文章分类                                                                                                                                                                                                                                                             | 2026-08 |
+| D2  | 项目/日常内容管理  | 项目 = 结构化配置 + 卡片跳转外部（无站内详情页）；日常 = 文章分类（**已被 D15 取代**：实验室新增站内 demo 页）                                                                                                                                                                                                                                                             | 2026-08 |
 | D3  | Bangumi 接入       | 浏览器直连 API，CORS 受限时 Cloudflare Worker 代理兜底（§6.2）                                                                                                                                                                                                                                                                | 2026-08 |
 | D4  | 内容语言           | 仅中文                                                                                                                                                                                                                                                                                                                        | 2026-08 |
 | D5  | 互动功能           | 不设友链页面、不设访问统计；RSS 默认提供；giscus 保留 P3 暂缓                                                                                                                                                                                                                                                                 | 2026-08 |
@@ -92,6 +92,9 @@
 | D11 | 导航形态           | 全宽 sticky 顶栏（常规博客形态，用户决策），弃用浮动玻璃药丸／底部条                                                                                                                                                                                                                                                          | 2026-08 |
 | D12 | M2 技术选型        | 管线 unified+gray-matter；高亮 Shiki 双主题；Mermaid 懒加载客户端渲染；RSS/sitemap 改 metadata routes 与静态 route handler（实测可行，替代 D9 的 RSS 预构建脚本项）；摘要取 frontmatter description，阅读时长中文自算                                                                                                         | 2026-09 |
 | D13 | M2 UI 细节改版     | 横向列表卡（880px 单列）；新增分类/标签索引页 + 列表页头三入口，分类徽章改「前往」语义无选中态；顶栏 fixed 化（首页首屏透明态，D11 演进）；详情返回键 history.back 兜底 /posts/；页内锚点 replaceState 不进历史栈；Hero 背景图方案多版尝试后移除，回归极光首屏；路由参数 slug 化（分类英文映射、标签覆盖表+拼音，中文仅展示） | 2026-09 |
+| D14 | Bangumi 直连实测   | D3 决策树走直连分支：`api.bgm.tv` ACAO `*`、任意 Origin 放行、浏览器 UA 200、12 并发无限流、`limit` 上限 100、默认按 `updated_at` 倒序；UID `796189` 可直接作 API username；Worker 代理保留为退路。数据形态：577 部 = 想看 120 / 看过 389 / 在看 41 / 搁置 17 / 抛弃 10 | 2026-09 |
+| D15 | 板块更名「实验室」 | 原「项目」板块推倒重写（用户决策）：更名实验室 Lab、路由 `/lab`，同时收纳外链型（跳仓库/直链）与站内型（`/lab/[slug]` demo/小工具/实验）条目，取代 D2 的「无站内详情页」约束；REQ-J 重构为 REQ-L | 2026-09 |
+| D16 | 关于页设计方向     | 「站点事实卡」路线（用户决策）：站名由来/理念/技术栈/站点状态等卡片为主体，REQ-A1 个人内容收敛为紧凑区块；个性化记忆点在卡片文案与小组件，非个人档案墙 | 2026-09 |
 
 ## 8. 变更记录
 
@@ -113,3 +116,5 @@
 | 2026-09 | HTTPS 证书签发完成（闭环 2026-08「签发中」记录）                                                                        |
 | 2026-09 | M2 阶段 0 选型定稿（D12）：内容管线 / 高亮 / Mermaid / 站点文件；实测 sitemap.ts 静态导出需显式 force-static            |
 | 2026-09 | M2 内容层完成（管线 / 列表详情 / 分类标签归档 / Mermaid / RSS·sitemap）+ UI 细节改版定稿（D13），移动端与无障碍走查通过 |
+| 2026-09 | M3 阶段 0 spike：Bangumi API 从生产源浏览器直连实测通过（CORS/UA/限流/分页/排序），D3 决策树锁定直连分支，记为 D14 |
+| 2026-09 | M3 需求重构：项目板块更名实验室（D15，REQ-J→REQ-L，站内 demo 页入 IA）；关于页定站点事实卡方向（D16）；搜索弃独立页改页头入口 + 全局弹窗（REQ-S 重写）；追番页调研/设计/落地排至 M3 末尾 |

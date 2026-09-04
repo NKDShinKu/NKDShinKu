@@ -1,6 +1,6 @@
 # content/ —— 站点内容目录
 
-内容层（文章、项目）在路线图 M2 阶段实现。本文档约定**内容怎么组织与编写**。
+内容层（文章、实验室）在路线图 M2/M3 阶段实现。本文档约定**内容怎么组织与编写**。
 
 ## 1. 目录结构
 
@@ -8,7 +8,7 @@
 content/
 ├── posts/            # 文章（含教程/笔记/日常，文件名即 slug）
 │   └── 2026-08-01-hello-world.md
-└── projects.ts       # 项目结构化配置
+└── lab.ts            # 实验室条目结构化配置（外链项目 + 站内 demo）
 ```
 
 - 文章用 **Markdown + frontmatter**，统一经 `src/lib/` 加载与渲染（构建期，服务端组件）。
@@ -31,29 +31,27 @@ content/
 | `draft`       | 可选 | 草稿（构建忽略）                                            |
 | `series`      | 可选 | 系列名（预留）                                              |
 
-## 3. 项目数据模型（`projects.ts`）
+## 3. 实验室数据模型（`lab.ts`）
 
-> 分组 + 多链接模型：按主题分组、每个项目多个 `{label, href}` 链接。
+> 2026-09 重构（D15）：原 `projects.ts` 模型取代。两类形态——**外链型**（跳仓库/直链）与**站内型**（`/lab/[slug]` 可直接体验的 demo/小工具）。站内 demo 的页面实现是代码（`src/`），这里只登记条目元数据。
 
 ```ts
-interface ProjectGroup {
-  title: string; // 分组标题（如「AI 与 Agent」）
-  description?: string;
-  projects: Project[];
-}
-
-interface Project {
-  slug: string; // 唯一标识
-  name: string; // 项目名
+interface LabItem {
+  slug: string; // ASCII，唯一；站内型即路由 /lab/[slug]
+  name: string; // 条目名
   tagline: string; // 一句话简介
-  description: string; // 卡片描述
+  type: "project" | "tool" | "experiment"; // 类型徽章，用于分组展示
   tech: string[]; // 技术栈标签
-  links: { label: string; href: string }[]; // 多链接跳转（GitHub / 在线访问 / 视频…，至少一个）
-  cover?: string; // 封面（R2）
   status: "active" | "archived" | "planned"; // 维护中 / 归档 / 构思
-  featured?: boolean; // 精选
+  featured?: boolean; // 置顶
+  cover?: string; // 封面（R2）
+  kind: "external" | "internal";
+  links: { label: string; href: string }[]; // 外链型必填（GitHub / 在线访问 / 视频…至少一个）；站内型可留空
 }
 ```
+
+- `kind: "internal"` 的条目必须有对应的 `/lab/[slug]` 静态路由实现（`generateStaticParams` 派生自此配置）。
+- 分组展示按 `type` 聚合（如「项目 / 小工具 / 实验」），`featured` 置顶。
 
 ## 4. 图片与发布流程
 

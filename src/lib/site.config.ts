@@ -14,10 +14,10 @@ const sections = [
     span: "md:col-span-2",
   },
   {
-    href: "/projects",
-    label: "项目",
+    href: "/lab",
+    label: "实验室",
     icon: "icon-[mdi--flask-outline]",
-    description: "个人项目与实验记录，点击直达仓库与演示。",
+    description: "个人项目、小工具与实验 demo，直达仓库或站内体验。",
     span: "",
   },
   {
