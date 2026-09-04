@@ -59,20 +59,20 @@ export function HomeHero() {
         >
           {subtitle}
         </p>
-
-        {/* 原生锚点：平滑滚动走 CSS scroll-behavior（reduced-motion 下自动降级）；样式沿用原滚动指示器 */}
-        <a
-          data-hero-scroll
-          href="#home-content"
-          className="text-text-muted hover:text-accent focus-visible:outline-accent mt-12 inline-flex flex-col items-center gap-1 rounded-md text-xs transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2"
-        >
-          <span
-            className="icon-[mdi--chevron-down] motion-safe:animate-bounce-soft mx-auto block size-5"
-            aria-hidden
-          />
-          向下滚动探索
-        </a>
       </div>
+
+      {/* 滚动指示器：绝对定位贴近视口底部（用户走查修订）；锚点平滑滚动走 CSS scroll-behavior */}
+      <a
+        data-hero-scroll
+        href="#home-content"
+        className="text-text-muted hover:text-accent focus-visible:outline-accent absolute inset-x-0 bottom-7 mx-auto flex w-fit flex-col items-center gap-1 rounded-md text-xs transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2"
+      >
+        <span
+          className="icon-[mdi--chevron-down] motion-safe:animate-bounce-soft mx-auto block size-5"
+          aria-hidden
+        />
+        向下滚动探索
+      </a>
     </section>
   );
 }

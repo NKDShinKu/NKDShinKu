@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono, Quicksand } from "next/font/google";
 import { siteConfig } from "@/lib/site.config";
 import { themeInitScript } from "@/lib/theme";
 import { AuroraBackground } from "@/components/layout/aurora-background";
+import { BackToTop } from "@/components/layout/back-to-top";
 import { ParticlesBackground } from "@/components/layout/particles-canvas";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -80,6 +81,8 @@ export default function RootLayout({
           {children}
         </main>
         <SiteFooter />
+        {/* 回到顶部（滚动百分比环形进度，见组件注释） */}
+        <BackToTop />
       </body>
     </html>
   );

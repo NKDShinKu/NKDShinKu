@@ -19,13 +19,22 @@ export type CardProps = ComponentProps<"div"> & {
   variant?: CardVariant;
   /** 可交互（hover 抬升 + 阴影增强），纯展示卡不开启 */
   interactive?: boolean;
+  /** 内边距覆盖（默认 p-6；Tailwind 同属性类并存时生效顺序不可控，须经由此 prop 覆盖） */
+  padding?: string;
 };
 
-export function Card({ variant = "surface", interactive = false, className, ...props }: CardProps) {
+export function Card({
+  variant = "surface",
+  interactive = false,
+  padding = "p-6",
+  className,
+  ...props
+}: CardProps) {
   return (
     <div
       className={[
-        "rounded-md border p-6",
+        "rounded-md border",
+        padding,
         variantStyles[variant],
         interactive ? interactiveStyles[variant] : "",
         className,

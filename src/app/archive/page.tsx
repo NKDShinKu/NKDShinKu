@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BackButton } from "@/components/posts/back-button";
 import { EmptyState } from "@/components/posts/pagination";
 import { Tag } from "@/components/ui/tag";
 import { getAllPosts } from "@/lib/posts";
@@ -25,7 +26,10 @@ export default function ArchivePage() {
 
   return (
     <div className="mx-auto w-full max-w-[1100px] px-5 pt-24 pb-16 sm:px-6 md:pt-28 md:pb-24">
-      <header className="mb-10 text-center">
+      <div className="mx-auto max-w-[720px]">
+        <BackButton fallbackHref="/posts/" />
+      </div>
+      <header className="mt-6 mb-10 text-center">
         <p className="text-accent-dark text-xs font-bold tracking-widest uppercase">Archive</p>
         <h1 className="mt-2 text-2xl font-bold">归档</h1>
         <p className="text-text-muted mx-auto mt-2 max-w-[480px]">共 {posts.length} 篇文章。</p>

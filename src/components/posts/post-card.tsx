@@ -32,11 +32,12 @@ export function PostCard({ post, className }: PostCardProps) {
       <Card
         variant="surface"
         interactive
-        className={`group relative h-full overflow-hidden bg-gradient-to-br from-surface via-surface to-accent/[0.07] ${className ?? ""}`}
+        padding="p-1 md:p-1.5"
+        className={`group from-surface via-surface to-accent/[0.07] relative h-full overflow-hidden bg-gradient-to-br ${className ?? ""}`}
       >
         {/* 左侧品牌竖线：hover 点亮 */}
         <span
-          className="bg-accent absolute inset-y-0 left-0 w-[3px] origin-center scale-y-25 opacity-0 transition-[transform,opacity] duration-200 ease-base group-hover:scale-y-100 group-hover:opacity-100"
+          className="bg-accent ease-base absolute inset-y-0 left-0 w-[3px] origin-center scale-y-25 opacity-0 transition-[transform,opacity] duration-200 group-hover:scale-y-100 group-hover:opacity-100"
           aria-hidden
         />
 
@@ -45,14 +46,14 @@ export function PostCard({ post, className }: PostCardProps) {
             <div className="flex flex-wrap items-center gap-2">
               <Tag>{post.category}</Tag>
               {post.pinned ? (
-                <span className="inline-flex items-center gap-1 rounded-full bg-accent px-3 py-1 text-xs font-medium text-white">
+                <span className="bg-accent inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium text-white">
                   <span className="icon-[mdi--pin] size-3.5" aria-hidden />
                   置顶
                 </span>
               ) : null}
             </div>
 
-            <h2 className="mt-2 text-lg font-semibold transition-colors duration-200 ease-base group-hover:text-accent">
+            <h2 className="ease-base group-hover:text-accent mt-2 text-lg font-semibold transition-colors duration-200">
               {post.title}
             </h2>
 
@@ -70,7 +71,7 @@ export function PostCard({ post, className }: PostCardProps) {
                 {post.readingMinutes} 分钟
               </span>
               <span
-                className="text-accent ml-auto -translate-x-1 opacity-0 transition-[transform,opacity] duration-200 ease-base group-hover:translate-x-0 group-hover:opacity-100"
+                className="text-accent ease-base ml-auto -translate-x-1 opacity-0 transition-[transform,opacity] duration-200 group-hover:translate-x-0 group-hover:opacity-100"
                 aria-hidden
               >
                 <span className="icon-[mdi--arrow-right] size-4" />
@@ -86,7 +87,7 @@ export function PostCard({ post, className }: PostCardProps) {
                 width={840}
                 height={525}
                 loading="lazy"
-                className="aspect-[16/10] h-full w-full object-cover transition-transform duration-300 ease-base group-hover:scale-[1.04]"
+                className="ease-base aspect-[16/10] h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
               />
             </span>
           ) : null}

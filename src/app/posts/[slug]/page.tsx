@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AnchorScroll } from "@/components/posts/anchor-scroll";
+import { AdjacentPostCard } from "@/components/posts/adjacent-post-card";
 import { CodeCopyButtons } from "@/components/posts/code-copy-buttons";
 import { BackButton } from "@/components/posts/back-button";
 import { MermaidRenderer } from "@/components/posts/mermaid-chart";
@@ -125,8 +126,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           aria-label="文章导航"
           className="mt-10 grid gap-4 sm:grid-cols-2"
         >
-          <AdjacentCard label="上一篇" post={prev} align="left" />
-          <AdjacentCard label="下一篇" post={next} align="right" />
+          <AdjacentPostCard label="上一篇" post={prev} align="left" />
+          <AdjacentPostCard label="下一篇" post={next} align="right" />
         </nav>
 
         <script
@@ -143,37 +144,5 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       <MermaidRenderer />
       <AnchorScroll />
     </div>
-  );
-}
-
-type AdjacentCardProps = {
-  label: string;
-  post: { slug: string; title: string } | null;
-  align: "left" | "right";
-};
-
-/** 上一篇 / 下一篇（§2.8）：无文章时禁用态占位 */
-function AdjacentCard({ label, post, align }: AdjacentCardProps) {
-  return (
-    <Link
-      href={post ? `/posts/${post.slug}/` : "/posts/"}
-      aria-disabled={!post}
-      className={`focus-visible:outline-accent block rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 ${
-        align === "right" ? "sm:text-right" : ""
-      } ${post ? "" : "pointer-events-none opacity-40"}`}
-    >
-      <div className="border-border bg-surface hover:border-accent/60 hover:shadow-lg rounded-md border p-4 transition-[border-color,box-shadow] duration-200 ease-base">
-        <p className="text-text-muted inline-flex items-center gap-1 text-xs">
-          {align === "left" ? (
-            <span className="icon-[mdi--chevron-left] size-4" aria-hidden />
-          ) : null}
-          {label}
-          {align === "right" ? (
-            <span className="icon-[mdi--chevron-right] size-4" aria-hidden />
-          ) : null}
-        </p>
-        <p className="mt-1 text-base font-medium">{post ? post.title : "暂无更多文章"}</p>
-      </div>
-    </Link>
   );
 }
