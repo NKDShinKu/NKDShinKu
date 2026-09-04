@@ -104,9 +104,11 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
         <hr className="border-border my-8" />
 
-        {/* 正文：零入场动画（P-9，阅读优先）；内容来源构建期渲染，静态 HTML 可信 */}
+        {/* 正文：零入场动画（P-9，阅读优先）；内容来源构建期渲染，静态 HTML 可信
+            data-pagefind-body：站点存在该标记后 Pagefind 仅索引文章正文（REQ-S2 首期仅文章） */}
         <article
           className="post-body"
+          data-pagefind-body
           dangerouslySetInnerHTML={{ __html: html }}
         />
 

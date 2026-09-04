@@ -22,7 +22,10 @@ export default function LabPage() {
   const groups = groupLabItemsByType(normalizeLabItems(LAB_ITEMS));
 
   return (
-    <div className="mx-auto w-full max-w-[1100px] px-5 pt-24 pb-16 sm:px-6 md:pt-28 md:pb-24">
+    <div
+      className="mx-auto w-full max-w-[1100px] px-5 pt-24 pb-16 sm:px-6 md:pt-28 md:pb-24"
+      data-pagefind-ignore
+    >
       <header className="mb-10">
         <h1 className="font-display text-2xl font-bold md:text-3xl">实验室</h1>
         <p className="text-text-muted mt-2 text-sm">
