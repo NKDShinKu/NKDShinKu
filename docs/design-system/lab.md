@@ -96,7 +96,7 @@
   底部 pb-16 md:pb-24
 ```
 
-- `LabDemoShell`（`src/components/lab/lab-demo-shell.tsx`）：客户端边界组件，接收 demo 组件或 URL；**demo 实现是独立叶子客户端组件**（`src/components/lab/demos/`），壳不 import 具体逻辑。
+- `LabDemoShell`（服务端组件）：统一卡片框 + `<noscript>` 无 JS 降级提示（REQ-G6 渐进增强）；**交互边界下沉到 demo 叶子客户端组件**（`src/components/lab/demos/`），经 `demos/registry.ts`（slug → 组件映射）接入页面，壳不感知具体逻辑。
 - 条目说明区内容来源：`lab.ts` 的 `description`（Markdown 渲染走既有管线，字段名与 content README 对齐）。
 - SEO：站内条目页 metadata（title/description 派生自 `LabItem`）；`og` 同文章页策略。
 

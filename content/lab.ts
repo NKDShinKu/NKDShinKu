@@ -48,15 +48,15 @@ export const LAB_ITEMS: readonly LabItem[] = [
   },
   {
     slug: "hello-lab",
-    name: "实验室 Demo",
-    tagline: "站内实验页机制的最小示例——一个可交互的打招呼小工具。",
+    name: "今日运势",
+    tagline: "站内实验页机制的首个示例——「今日运势」抽签小工具。",
     type: "experiment",
     tech: ["React 19"],
     status: "active",
     kind: "internal",
     links: [],
     description:
-      "这是 `/lab/[slug]` 站内条目页的第一个示例。它验证从配置驱动的静态路由、demo 挂载壳到无 JS 降级的完整链路。换成你自己的小工具时，改这里的 description 并在 `src/components/lab/demos/` 新增组件即可。",
+      "这是 `/lab/[slug]` 站内条目页的第一个示例，验证从配置驱动的静态路由、demo 挂载壳到无 JS 降级的完整链路。想换成自己的小工具：在 `src/components/lab/demos/` 新增组件，并在 `registry.ts` 登记即可。",
   },
 ] as const satisfies readonly LabItem[];
 
