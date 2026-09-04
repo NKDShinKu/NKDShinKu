@@ -42,7 +42,7 @@ interface LabItem {
   tagline: string; // 一句话简介
   type: "project" | "tool" | "experiment"; // 类型徽章，用于分组展示
   tech: string[]; // 技术栈标签
-  status: "active" | "archived" | "planned"; // 维护中 / 归档 / 构思
+  status: "active" | "completed" | "archived" | "planned"; // 维护中 / 已完成 / 归档 / 构思
   featured?: boolean; // 置顶
   cover?: string; // 封面（R2）
   kind: "external" | "internal";

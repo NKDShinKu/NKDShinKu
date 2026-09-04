@@ -17,7 +17,6 @@ export const LAB_ITEMS: readonly LabItem[] = [
     type: "project",
     tech: ["Next.js", "React 19", "Tailwind 4", "TypeScript"],
     status: "active",
-    featured: true,
     kind: "external",
     links: [
       { label: "GitHub 仓库", href: "https://github.com/NKDShinKu/NKDShinKu" },
@@ -30,7 +29,7 @@ export const LAB_ITEMS: readonly LabItem[] = [
     tagline: "优雅直观的在线简历生成工具——多模板可视化编辑，实时预览，一键导出 PDF。",
     type: "project",
     tech: ["Vue 3", "Pinia", "TypeScript", "Tailwind CSS"],
-    status: "active",
+    status: "archived",
     kind: "external",
     links: [
       { label: "GitHub 仓库", href: "https://github.com/codepaintstudio/cp-resume" },
@@ -43,7 +42,7 @@ export const LAB_ITEMS: readonly LabItem[] = [
     tagline: "技术社区前端平台——Vue3 实现内容创作、展示与互动，含文章管理与数据分析。",
     type: "project",
     tech: ["Vue 3", "Pinia", "TypeScript"],
-    status: "active",
+    status: "completed",
     kind: "external",
     links: [{ label: "GitHub 仓库", href: "https://github.com/NKDShinKu/TechShareHub" }],
   },

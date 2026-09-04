@@ -14,11 +14,12 @@
 | ---- | ------------ | -------------------------------------------------------------------------------------------------------------------------- |
 | L-1  | 页面背景     | 沿用主文档 §3.2「实验室（原项目）：极光光斑（弱化）」——透出全局极光/萤火，本页不新增背景层                                 |
 | L-2  | 卡片材质     | 列表卡**实心 surface**（主文档 §1.6 文字区纪律）；玻璃态仅允许出现在页头类型徽章与空状态外框                               |
-| L-3  | 栅格         | Bento 网格（主文档 §3.4 次模式）：`grid gap-6 md:grid-cols-2 xl:grid-cols-3`；featured 条目 `md:col-span-2`（REQ-L5）     |
+| L-3  | 栅格         | `grid gap-6 md:grid-cols-2 xl:grid-cols-3`；**同组卡片尺寸一致**（2026-09 走查修订：featured 不跨列，仅排序置前 +「精选」徽章，REQ-L5） |
 | L-4  | 类型分组     | 按 `type` 分组渲染（项目 / 小工具 / 实验），组标题用主文档 §2.4 章节标题紧凑变体；**首版不做页内筛选**（REQ-L6 留 P2）    |
-| L-5  | 外链与站内区分 | 类型徽章 + 卡片右上角行动箭头：站内型 `mdi--open-in-new` 置灰、外链型 `mdi--arrow-top-right` 品牌色；卡片整体行为一致（点击进入） |
+| L-5  | 链接形态     | **显式图标按钮，弃整卡链接**（2026-09 走查修订）：外链每链接一枚按钮（仓库显 GitHub 图标），点击弹确认框后新窗口打开（D17）；站内型 `→` 按钮本窗跳转 |
 | L-6  | 站内条目页壳 | `/lab/[slug]` 统一骨架：返回栏 + 条目标题/元信息 + demo 区（`min-h-[400px]`）+ 条目说明区；demo 实现为独立组件（叶子客户端组件） |
-| L-7  | 封面图       | 可选；无封面时以类型图标 + 渐变底占位（`from-accent/10 via-surface to-twilight/10`），16:10 显式宽高（REQ-G8）             |
+| L-7  | 封面图       | **条目卡不放封面区**（2026-09 走查修订：紧凑卡）；`cover` 字段保留数据模型备用                                           |
+| L-11 | 外链确认弹窗 | @radix-ui/react-dialog 无样式原语 + 设计 token 自研样式（manifest §3 例外条款适用）；焦点圈定 / Esc / 焦点归还由原语保证；弃 stretched-link 整卡链接（多链接嵌套 a 非法 + 用户要求显式按钮） |
 | L-8  | 动效         | 卡片 `Reveal subtle` stagger 0.05（同文章卡）；hover 抬升 `-translate-y-1` + `shadow-lg-glow`；站内 demo 页无入场动画      |
 | L-9  | 搜索范围     | 本板块条目不进 Pagefind 索引（REQ-S2 后续扩展）；Pagefind 索引构建时需排除 `/lab` demo 页内容                              |
 
@@ -28,26 +29,28 @@
 
 > 均为自研组件，文件落位 `src/components/lab/`；样式全用工具类，禁止裸 hex。
 
-### 2.1 LabCard 条目卡（列表页）
+### 2.1 LabCard 条目卡（列表页，2026-09 走查修订：紧凑等大）
 
-- Bento 网格单元，外层 `<Link>`（站内型 → `/lab/[slug]`；外链型 → `links[0].href`，`target="_blank" rel="noopener noreferrer"`），包 `Card variant="surface" interactive`。
+- **紧凑卡，无封面/占位区**；同组卡片尺寸一致；卡片本体不可点，链接为显式图标按钮。
 
 ```
 ┌────────────────────────────┐
-│ [类型 Tag]      [状态点]    │   类型：项目/工具/实验；状态：维护中/归档/构思（点+文字）
-│ 条目名（text-lg semibold） │   h2；hover → text-accent（200ms）
-│ 一句话简介（text-sm muted）│   line-clamp-2
-│ ┌────────────────────────┐│
-│ │ 封面 16:10 / 图标占位   ││   可选；hover scale-[1.04]
-│ └────────────────────────┘│
-│ 🔧 React · TypeScript  ↗  │   tech 标签 xs；行动箭头 hover 滑入
+│ [类型Tag] [状态]     [精选?] │   featured：accent 底 star「精选」徽章靠右
+│ 条目名（text-base/lg semibold）│
+│ 一句话简介（text-sm muted）  │   line-clamp-2
+│ ──────────────────────────  │   border-t border-border/60
+│ tech · tech · tech   [按钮区]│   tech 纯文本 · 分隔；右侧链接按钮 44px
 └────────────────────────────┘
 ```
 
-- 底色同 PostCard：`bg-gradient-to-br from-surface via-surface to-accent/[0.07]`。
-- 类型徽章配色（§2.3）；状态用 `success/warning/border` 点 + `text-xs` 文案（非仅颜色）。
-- 外链型多链接时：卡片主点击 = `links[0]`；其余链接在**详情描述层不出现**——外链型无详情页，多链接以卡内小图标行呈现（GitHub `mdi--github` / 演示 `mdi--open-in-new` / 视频 `mdi--play-circle-outline`，`aria-label`，44px 触控）。
-- 站内型卡片行动箭头为 `mdi--arrow-right`（站内跳转语义），配 `aria-hidden`。
+- 底色沿 `from-surface via-surface to-accent/[0.07]` 渐变；卡片 hover **仅描边点亮**（`hover:border-accent/40`），无抬升（本体不可点）。
+- 按钮区：外链型 = 每链接一枚 `ExternalLinkButton`（仓库 `mdi--github` / 在线 `mdi--open-in-new` / 视频 `mdi--play-circle-outline`）；站内型 = `Link` + `mdi--arrow-right`（本窗跳转）。
+
+### 2.1b ExternalLinkButton 外链确认按钮（D17，叶子客户端组件）
+
+- 图标按钮（44px）唤起 Radix Dialog 确认框：标题「即将离开本站」+ 目标 URL（font-mono 展示）+ 说明文案 + 取消 / 继续访问（primary）。
+- 确认后 `window.open(href, "_blank", "noopener,noreferrer")`；无中间跳转页。
+- 焦点圈定 / Esc / 遮罩点击关闭 / 焦点归还触发按钮由 Radix Dialog 原语保证（REQ-G6）；样式全走 token（`bg-surface` 弹窗卡、`bg-bg/60 backdrop-blur-sm` 遮罩，`z-[60]`）。
 
 ### 2.2 类型徽章（Tag 扩展）
 
@@ -59,12 +62,14 @@
 
 - 均为静态徽章（非交互），`rounded-full px-2.5 py-1 text-xs font-medium`。
 
-### 2.3 状态指示（卡片右上角）
+### 2.3 状态指示（徽章行内）
 
-- `active`（维护中）：`bg-success/12 text-[green-700 深]`——亮色 `text-success` 配对深变体待落地时以对比度实测为准；暗色 `text-success`。图标 `mdi--circle-small` 实心点。
-- `archived`（归档）：`bg-bg/60 text-text-muted`，图标 `mdi--archive-outline`。
-- `planned`（构思）：`bg-warning/12` + 深变体文字，图标 `mdi--lightbulb-outline`。
-- 一律**点/图标 + 文字**，不允许纯色点（无障碍：非仅颜色）。
+- 形态：统一 `border-border/60 bg-bg/60 text-text-muted` 药丸——语义由文字承载，彩色图标仅点缀（非仅颜色纪律）。
+- `active`（维护中）：`mdi--circle-small` 实心点，`text-success`。
+- `completed`（已完成）：`mdi--check-circle-outline`，`text-success`。
+- `archived`（归档）：`mdi--archive-outline`，`text-text-muted`。
+- `planned`（构思）：`mdi--lightbulb-outline`，`text-warning`。
+- 排序权重：active > completed > planned > archived（组内同 featured 优先后）。
 
 ### 2.4 分组标题（L-4）
 
@@ -148,9 +153,9 @@
 
 ## 6. 交付验收清单（本板块增量，接主文档 §8）
 
-- [ ] 外链卡新窗口打开且 `rel="noopener noreferrer"`；站内卡本窗口跳转
+- [ ] 外链经确认弹窗新窗口打开（`noopener noreferrer`），取消不跳转、Esc/遮罩可关、焦点归还按钮；站内卡本窗口跳转
+- [ ] 同组卡片尺寸一致（featured 不跨列），「精选」徽章仅 featured 条目显示
 - [ ] 类型/状态徽章在亮/暗两态下文字对比度实测（sakura/twilight 徽章重点）
-- [ ] featured 大卡 2 列跨度在 md/xl 断点正确塌缩
 - [ ] 站内条目页 demo 区 375px 无横向溢出；JS 禁用提示可见
 - [ ] 条目数从 0 → 3 → 10 增长时布局不破（空态/单列/满网格自测）
 - [ ] `/lab` 与 `/lab/[slug]` 在 375/768/1024/1440 四档无横向滚动

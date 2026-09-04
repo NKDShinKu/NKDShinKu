@@ -9,7 +9,7 @@
 export const LAB_TYPES = ["project", "tool", "experiment"] as const;
 export type LabType = (typeof LAB_TYPES)[number];
 
-export const LAB_STATUSES = ["active", "archived", "planned"] as const;
+export const LAB_STATUSES = ["active", "completed", "archived", "planned"] as const;
 export type LabStatus = (typeof LAB_STATUSES)[number];
 
 /** 类型展示文案（徽章/分组标题用），集中在此防散落硬编码 */
@@ -19,8 +19,16 @@ export const LAB_TYPE_LABELS: Record<LabType, string> = {
   experiment: "实验",
 };
 
+/** 分组小标签（英文大写装饰行，lab.md §2.4 章节标题） */
+export const LAB_TYPE_EN_LABELS: Record<LabType, string> = {
+  project: "Projects",
+  tool: "Tools",
+  experiment: "Experiments",
+};
+
 export const LAB_STATUS_LABELS: Record<LabStatus, string> = {
   active: "维护中",
+  completed: "已完成",
   archived: "归档",
   planned: "构思",
 };
@@ -48,11 +56,12 @@ export interface LabItem {
   description?: string;
 }
 
-/** status 展示权重（lab.md §2.4：active > planned > archived） */
+/** status 展示权重：active > completed > planned > archived */
 const STATUS_WEIGHT: Record<LabStatus, number> = {
   active: 0,
-  planned: 1,
-  archived: 2,
+  completed: 1,
+  planned: 2,
+  archived: 3,
 };
 
 /** 单条目静态校验：slug ASCII、外链型至少一链、站内型须有 description（demo 页内容） */
