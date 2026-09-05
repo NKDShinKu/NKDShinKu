@@ -52,7 +52,7 @@ export default function AboutPage() {
               label="站名由来"
               tone="brand"
               value={
-                <span className="bg-gradient-to-r from-accent to-twilight-dark dark:to-twilight bg-clip-text font-display text-2xl font-bold text-transparent md:text-3xl">
+                <span className="from-accent to-twilight-dark dark:to-twilight font-display bg-gradient-to-r bg-clip-text text-2xl font-bold text-transparent md:text-3xl">
                   {ABOUT_FACTS.nameOrigin.value}
                 </span>
               }
@@ -87,7 +87,7 @@ export default function AboutPage() {
           <Reveal delay={0.12} subtle>
             <FactCard
               icon="icon-[mdi--wrench-outline]"
-              label="技术栈"
+              label="本站技术栈"
               value={
                 <ul className="flex flex-wrap gap-1.5" aria-label="站点技术栈">
                   {ABOUT_FACTS.techStack.map((tech) => (
@@ -105,7 +105,9 @@ export default function AboutPage() {
               label="站点状态"
               tone="warning"
               value={
-                <span className="font-display text-lg font-bold md:text-xl">{siteStatus.value}</span>
+                <span className="font-display text-lg font-bold md:text-xl">
+                  {siteStatus.value}
+                </span>
               }
               description={siteStatus.description}
             />
@@ -116,7 +118,9 @@ export default function AboutPage() {
               label="写作字数"
               tone="twilight"
               value={
-                <span className="font-display text-2xl font-bold md:text-3xl">{wordCount.value}</span>
+                <span className="font-display text-2xl font-bold md:text-3xl">
+                  {wordCount.value}
+                </span>
               }
               description={wordCount.description}
             />
@@ -128,12 +132,12 @@ export default function AboutPage() {
               value={<span className="font-display text-lg font-bold md:text-xl">GitHub</span>}
               description={
                 <>
-                  本站源码开源于 GitHub，欢迎 Issue 与 Star。{" "}
+                  本站仓库。{" "}
                   <Link
                     href={siteConfig.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-accent-dark hover:text-accent focus-visible:outline-accent inline-flex items-center gap-0.5 font-medium underline decoration-accent/40 underline-offset-4 transition-colors duration-150 ease-fast focus-visible:outline-2 focus-visible:outline-offset-2"
+                    className="text-accent-dark hover:text-accent focus-visible:outline-accent decoration-accent/40 ease-fast inline-flex items-center gap-0.5 font-medium underline underline-offset-4 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2"
                   >
                     前往仓库
                     <span className="icon-[mdi--arrow-top-right] size-3.5" aria-hidden />

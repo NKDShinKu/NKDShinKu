@@ -21,7 +21,7 @@ export const ABOUT_FACTS = {
     value: "个人博客",
     description: "教程、笔记与日常，与我的ACG爱好",
   },
-  techStack: ["Next.js", "React 19", "Tailwind CSS 4", "TypeScript"],
+  techStack: ["Next.js", "React 19", "Tailwind CSS 4", "TypeScript", "GSAP"],
 } as const;
 
 /** 一句话人设：从站点 hero 文案派生，不另行硬编码（问候面板用） */
