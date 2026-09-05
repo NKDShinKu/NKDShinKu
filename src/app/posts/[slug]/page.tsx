@@ -94,11 +94,11 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             </span>
           </div>
 
-          <h1 className="mt-4 text-3xl leading-tight font-bold [text-wrap:balance] md:text-4xl">
+          <h1 className="mt-4 text-2xl leading-tight font-bold [text-wrap:balance] md:text-3xl">
             {post.title}
           </h1>
 
-          <p className="text-text-muted mt-4 border-l-2 border-sakura pl-4 text-lg leading-relaxed">
+          <p className="text-text-muted mt-4 border-l-2 border-sakura pl-4 text-base leading-relaxed">
             {post.description}
           </p>
         </header>

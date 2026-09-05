@@ -63,10 +63,10 @@ export default async function LabItemPage({ params }: { params: Promise<{ slug: 
           <LabTypeBadge type={item.type} />
           <LabStatusBadge status={item.status} />
         </div>
-        <h1 className="font-display mt-3 text-3xl leading-tight font-bold [text-wrap:balance] md:text-4xl">
+        <h1 className="font-display mt-3 text-2xl leading-tight font-bold [text-wrap:balance] md:text-3xl">
           {item.name}
         </h1>
-        <p className="text-text-muted border-sakura mt-4 border-l-2 pl-4 text-lg leading-relaxed">
+        <p className="text-text-muted border-sakura mt-4 border-l-2 pl-4 text-base leading-relaxed">
           {item.tagline}
         </p>
       </header>

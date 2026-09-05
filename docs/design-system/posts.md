@@ -151,9 +151,9 @@ flex justify-center gap-10（xl 起）
 ├──────────────┴─────────┤
 │ « 返回（BackButton）    │   history.back()；无历史兜底 /posts/（P-15）
 │ 元信息行（§2.5）        │
-│ H1 标题                 │   text-3xl md:text-4xl font-display font-bold
+│ H1 标题                 │   text-2xl md:text-3xl font-display font-bold
 │                          │   leading-tight [text-wrap:balance]
-│ 导语（description）      │   text-lg text-text-muted leading-relaxed
+│ 导语（description）      │   text-base text-text-muted leading-relaxed
 │                          │   border-l-2 border-sakura pl-4
 │ ───────────────        │   分隔线 border-border
 │ 正文 prose（§4）         │   零入场动画（P-9）
