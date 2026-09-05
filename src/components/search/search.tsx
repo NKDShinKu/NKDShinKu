@@ -185,11 +185,12 @@ export function Search({ recent }: { recent: SearchRecentPost[] }) {
             </kbd>
           </div>
 
-          {/* 结果区（S-5/S-8/S-11） */}
+          {/* 结果区（S-5/S-8/S-11）；listbox 语义仅在真实结果存在时生效——
+              加载/错误/最近文章/空态的子元素不是 option，避免 listbox 内混入链接的 ARIA 违规 */}
           <div
             id="search-results"
-            role="listbox"
-            aria-label="搜索结果"
+            role={visibleResults.length > 0 ? "listbox" : undefined}
+            aria-label={visibleResults.length > 0 ? "搜索结果" : undefined}
             className="max-h-[55vh] overflow-y-auto overscroll-contain md:max-h-[60vh]"
           >
             {loadingIndex ? (

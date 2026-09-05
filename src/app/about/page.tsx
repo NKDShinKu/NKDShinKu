@@ -52,7 +52,7 @@ export default function AboutPage() {
               label="站名由来"
               tone="brand"
               value={
-                <span className="bg-gradient-to-r from-accent to-twilight bg-clip-text font-display text-2xl font-bold text-transparent md:text-3xl">
+                <span className="bg-gradient-to-r from-accent to-twilight-dark dark:to-twilight bg-clip-text font-display text-2xl font-bold text-transparent md:text-3xl">
                   {ABOUT_FACTS.nameOrigin.value}
                 </span>
               }

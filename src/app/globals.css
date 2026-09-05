@@ -34,13 +34,16 @@
   --text-4xl: 3rem;
   --text-4xl--line-height: 1.1;
 
-  /* 品牌色：天蓝（accent）× 樱粉 × 暮紫 */
+  /* 品牌色：天蓝（accent）× 樱粉 × 暮紫
+     sakura/twilight-dark：浅色底上的文字级深变体（实测 #f0a0b8 小字对比 2.0:1 不达标，阶段4走查补） */
   --color-accent: #5b8fd4;
   --color-accent-light: #8fb8e8;
   --color-accent-dark: #3a6fb0;
   --color-sakura: #f0a0b8;
   --color-sakura-light: #f4c0d0;
+  --color-sakura-dark: #b0557a;
   --color-twilight: #9b8ec4;
+  --color-twilight-dark: #6f5fa8;
 
   /* 语义色（亮） */
   --color-bg: #f0f4f8;

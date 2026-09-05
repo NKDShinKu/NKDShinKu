@@ -54,11 +54,11 @@
 
 ### 2.2 类型徽章（Tag 扩展）
 
-| type         | 文案   | 样式（接主文档 §2.3 配色纪律）                | 图标                          |
-| ------------ | ------ | --------------------------------------------- | ----------------------------- |
-| `project`    | 项目   | `bg-accent/10 text-accent-dark`               | `mdi--cube-outline`           |
-| `tool`       | 小工具 | `bg-twilight/12 text-twilight`（配对图标）    | `mdi--tools`                  |
-| `experiment` | 实验   | `bg-sakura/12 text-sakura`（仅徽章语境）      | `mdi--flask-outline`          |
+| type         | 文案   | 样式（接主文档 §2.3 配色纪律）                        | 图标                          |
+| ------------ | ------ | ------------------------------------------------------ | ----------------------------- |
+| `project`    | 项目   | `bg-accent/10 text-accent-dark`                        | `mdi--cube-outline`           |
+| `tool`       | 小工具 | `bg-twilight/12 text-twilight-dark dark:text-twilight` | `mdi--tools`                  |
+| `experiment` | 实验   | `bg-sakura/12 text-sakura-dark dark:text-sakura`       | `mdi--flask-outline`          |
 
 - 均为静态徽章（非交互），`rounded-full px-2.5 py-1 text-xs font-medium`。
 

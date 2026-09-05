@@ -36,7 +36,9 @@
 | `--color-accent-dark`  | 主色深变体       | `#3A6FB0`                | ~5.5:1         | 小号强调文字（标签/链接）  |
 | `--color-sakura`       | 次强调（樱粉）   | `#F0A0B8`                | < 3:1          | 装饰 / 渐变 / 空状态点缀   |
 | `--color-sakura-light` | 樱粉浅变体       | `#F4C0D0`                | < 3:1          | 渐变 / 背景                |
+| `--color-sakura-dark`  | 樱粉深变体（文字级） | `#B0557A`            | ~5:1           | 浅色底小号彩字（徽章文字） |
 | `--color-twilight`     | 三次强调（暮紫） | `#9B8EC4`                | < 3:1          | 装饰 / 渐变 / 夜空元素     |
+| `--color-twilight-dark`| 暮紫深变体（文字级） | `#6F5FA8`            | ~5.5:1         | 浅色底小号彩字（徽章文字） |
 | `--color-text`         | 正文             | `#2D2B3A`                | ~13:1          | 所有正文/标题              |
 | `--color-text-muted`   | 次要文字         | `#6B6880`                | ~5.5:1         | 说明 / 日期 / 辅助         |
 | `--color-border`       | 分隔线 / 边框    | `#E2E8F0`                | —              | 卡片描边 / 分隔            |
@@ -68,7 +70,7 @@
 **对比度纪律（ACG 粉彩色的关键约束）：**
 
 - 正文/标题一律用 `--color-text`（亮）或 `--color-text-muted`；**不要用粉/紫/浅蓝作小号正文**。
-- `accent` / `sakura` / `twilight` 仅用于：图标、大号标题渐变、装饰块、状态点、空状态氛围。需要**小号彩色文字**时（标签、链接），用 `--color-accent-dark`（≥ 4.5:1）。
+- `accent` / `sakura` / `twilight` 仅用于：图标、大号标题渐变、装饰块、状态点、空状态氛围。需要**小号彩色文字**时（标签、链接），用 `--color-accent-dark`，樱粉/暮紫用对应 `*-dark` 深变体（均 ≥ 4.5:1）。
 - **品牌色作彩底不作对比度限制**（按钮、选中态、徽章等）：视觉优先，`bg-accent text-white` 可用。
   此为用户决策（project-manifest D10）；正文 / 长文本的对比度纪律不变。
 - 状态色（success/warning/danger）作文字时必须与图标/文案配对，不能只靠颜色传达含义（`color-only`）。
@@ -187,8 +189,8 @@ box-shadow: var(--shadow-md);
 - 基础：`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium`。
 - 配色变体（背景 10–12% 透明度 + 对应前景色）：
   - 默认（天蓝）：`bg-accent/10 text-accent-dark`
-  - 樱粉：`bg-sakura/12 text-sakura`（仅装饰语境；作文字时改用更深变体或配对图标）
-  - 暮紫：`bg-twilight/12 text-twilight`
+  - 樱粉：`bg-sakura/12 text-sakura-dark dark:text-sakura`（浅色底小字用深变体保 4.5:1；暗色底原值达标）
+  - 暮紫：`bg-twilight/12 text-twilight-dark dark:text-twilight`
   - 成功：`bg-success/12 text-[…]`（配对文案）
 - 选中态：`bg-accent text-white`（品牌色底不作对比度限制，见 §1.1 纪律与 manifest D10）。
 
