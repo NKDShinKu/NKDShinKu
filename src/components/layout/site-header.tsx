@@ -7,15 +7,16 @@ import { siteConfig } from "@/lib/site.config";
 import { MobileMenu } from "@/components/layout/mobile-menu";
 import { NavLinks } from "@/components/layout/nav-links";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
+import { Search, type SearchRecentPost } from "@/components/search/search";
 
 /**
  * 全站页头：fixed 悬浮顶栏（D11 演进，见 manifest）
  *
  * - 非首页：玻璃实心底（原形态）
  * - 首页：首屏透明（Hero 顶部渐变遮罩垫底），滚动越过阈值后过渡为实心底（300ms）
- * - 文字配色两态一致（浅色遮罩方案，不切白字）
+ * - 右侧控制区：搜索（REQ-S）+ 主题切换 + 移动端菜单
  */
-export function SiteHeader() {
+export function SiteHeader({ searchRecent }: { searchRecent: SearchRecentPost[] }) {
   const pathname = usePathname();
   const onHome = pathname === "/";
   const [scrolled, setScrolled] = useState(false);
@@ -54,6 +55,7 @@ export function SiteHeader() {
         </Link>
         <div className="flex items-center gap-1 md:gap-2">
           <NavLinks />
+          <Search recent={searchRecent} />
           <ThemeToggle />
           <MobileMenu />
         </div>

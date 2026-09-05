@@ -76,7 +76,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
         <header className="mt-8">
           <div className="text-text-muted flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
-            <Tag>{post.category}</Tag>
+            {/* data-pagefind-meta：结果行展示分类（search.md S-5） */}
+            <Tag data-pagefind-meta="category">{post.category}</Tag>
             <span className="inline-flex items-center gap-1">
               <span className="icon-[mdi--calendar-outline] size-4" aria-hidden />
               <time dateTime={post.date}>{post.date}</time>

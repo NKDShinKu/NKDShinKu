@@ -370,3 +370,36 @@
 .dark .post-body figure[data-rehype-pretty-code-figure] {
   color: var(--shiki-dark) !important;
 }
+
+/* 搜索弹窗进出场（search.md §4；reduced-motion 直接显隐）
+   动画终结态与 -translate-x-1/2 定位类一致，结束后由定位类接管 */
+@keyframes search-dialog-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+.search-dialog[data-state="open"] {
+  animation: search-dialog-in 250ms ease-out;
+}
+@keyframes search-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.search-overlay[data-state="open"] {
+  animation: search-overlay-in 300ms ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .search-dialog[data-state="open"],
+  .search-overlay[data-state="open"] {
+    animation: none;
+  }
+}

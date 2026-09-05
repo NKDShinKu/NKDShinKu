@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Quicksand } from "next/font/google";
 import { siteConfig } from "@/lib/site.config";
 import { themeInitScript } from "@/lib/theme";
+import { getAllPosts } from "@/lib/posts";
 import { AuroraBackground } from "@/components/layout/aurora-background";
 import { BackToTop } from "@/components/layout/back-to-top";
 import { ParticlesBackground } from "@/components/layout/particles-canvas";
@@ -57,6 +58,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // 搜索弹窗空态的「最近文章」（S-11）：构建期派生，客户端组件仅接收纯数据
+  const searchRecent = getAllPosts()
+    .slice(0, 5)
+    .map((post) => ({ title: post.title, href: `/posts/${post.slug}/` }));
+
   return (
     <html
       lang="zh-CN"
@@ -76,7 +82,7 @@ export default function RootLayout({
         <AuroraBackground />
         <ParticlesBackground />
         {/* 顶栏 fixed 悬浮（首页首屏透明态，见 site-header）：非首页页面各自以 pt-24/28 补偿高度 */}
-        <SiteHeader />
+        <SiteHeader searchRecent={searchRecent} />
         <main id="main" tabIndex={-1} className="flex-1 focus:outline-none">
           {children}
         </main>
