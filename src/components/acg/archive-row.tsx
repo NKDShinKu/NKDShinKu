@@ -37,7 +37,7 @@ export function ArchiveRow({ item, showProgress = false }: ArchiveRowProps) {
         />
 
         <div className="flex">
-          <div className="w-32 shrink-0 sm:w-36 md:w-40">
+          <div className="border-border bg-surface relative w-32 shrink-0 overflow-hidden rounded-l-md sm:w-36 md:w-40">
             <img
               src={item.subject.cover}
               alt={`${name} 封面`}
@@ -46,6 +46,36 @@ export function ArchiveRow({ item, showProgress = false }: ArchiveRowProps) {
               loading="lazy"
               className="ease-base h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
             />
+            {/* 封面浮动信息（仅移动端 sm:hidden）：桌面数据在右侧面板，避免重复 */}
+            <div className="sm:hidden">
+              {rank > 0 ? (
+                <span className="absolute left-1.5 top-1.5 rounded-full bg-black/55 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
+                  Rank {rank}
+                </span>
+              ) : null}
+              {score > 0 ? (
+                <span className="bg-accent absolute right-1.5 top-1.5 rounded-full px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                  ★ {score.toFixed(1)}
+                </span>
+              ) : null}
+              {item.rate > 0 || showProgress ? (
+                <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/85 to-transparent px-1.5 pb-1 pt-4 text-[10px] text-white">
+                  <span className="inline-flex items-center gap-0.5">
+                    {item.rate > 0 ? (
+                      <>
+                        <span className="text-accent-light">★</span>
+                        {item.rate}
+                      </>
+                    ) : null}
+                  </span>
+                  {showProgress ? (
+                    <span className="font-mono">
+                      {item.epStatus}/{eps || "?"}
+                    </span>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
           </div>
 
           <div className="min-w-0 flex-1 p-4 md:p-5">
