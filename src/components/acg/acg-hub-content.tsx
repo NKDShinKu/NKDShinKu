@@ -106,7 +106,7 @@ export function AcgHubContent() {
               </div>
             </Reveal>
             <div
-              className="scrollbar-fade flex gap-4 overflow-x-auto pb-3.5"
+              className="scrollbar-fade flex gap-4 overflow-x-auto pb-1"
               data-testid={`acg-cover-stream-${section.type}`}
             >
               {preview
