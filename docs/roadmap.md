@@ -44,8 +44,8 @@
 - [x] 关于页（D16）：站点事实卡路线——问候面板 + 7 张彩色节奏事实卡，字数/站点状态构建期派生
 - [x] 搜索弹窗（REQ-S 重写）：页头入口 + Ctrl/Cmd+K + Pagefind 懒加载即时检索；索引经 `data-pagefind-body` 收敛至文章正文
 - [x] 阶段走查：对比度数值审计（74 项，两页两态）——补 sakura/twilight 深变体 token、搜索弹窗 ARIA 修正；375/1280 无横向溢出；focus trap / Esc 焦点归还 / reduced-motion 验证通过
-- [ ] ACG 板块·番剧归档（`/acg/anime`，REQ-M，D14 直连已实测）：设计 + 落地（含 `/acg` hub）
-- [ ] 首页最近在看小部件（REQ-H5，依赖 ACG 数据层）
+- [x] ACG 板块（D18，REQ-M）：数据层（Bangumi 收藏缓存 + SWR）、`/acg` 橱窗 hub（三区叠层封面卡 + 品牌渐变页头）、`/acg/anime` 番剧归档（收藏分布条 + 编辑式行卡 + 加载更多）；走查含对比度数值审计、375–1440 四档溢出、缓存 SWR 行为
+- [ ] 首页最近在看小部件（REQ-H5，依赖 ACG 数据层，数据层已就绪）
 - [ ] giscus 评论（P3，默认不上线，启用需用户确认）
 
 ## M4 上线 ⏳
