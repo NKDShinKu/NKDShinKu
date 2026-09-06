@@ -6,7 +6,7 @@ import { siteConfig } from "@/lib/site.config";
 export function SiteFooter() {
   return (
     <footer className="border-border/60 border-t">
-      <div className="text-text-muted mx-auto flex w-full max-w-[1100px] flex-col gap-3 px-6 py-8 text-sm sm:flex-row sm:items-center sm:justify-between">
+      <div className="text-text-muted mx-auto flex w-full max-w-[1440px] flex-col gap-3 px-5 py-8 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-6">
         <div>
           {/* 年份在构建期固化为构建当年；静态导出无运行时，靠持续重建保持新鲜 */}
           <p>

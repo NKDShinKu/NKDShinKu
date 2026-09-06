@@ -46,7 +46,7 @@ export function SiteHeader({ searchRecent }: { searchRecent: SearchRecentPost[] 
         transparent ? "border-transparent bg-transparent" : "border-border/60 bg-bg/80 backdrop-blur-md"
       }`}
     >
-      <div className="mx-auto flex h-16 w-full max-w-[1100px] items-center justify-between px-4 md:px-6">
+      <div className="mx-auto flex h-16 w-full max-w-[1440px] items-center justify-between px-5 sm:px-6">
         <Link
           href="/"
           className="font-display text-text hover:text-accent ease-fast focus-visible:outline-accent rounded-md text-lg font-bold tracking-tight transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2"
