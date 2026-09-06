@@ -107,7 +107,7 @@ export function AcgHubContent() {
               </div>
             </Reveal>
             <HScroll
-              className="flex gap-4 pb-2"
+              className="flex gap-4 pb-3.5"
               testId={`acg-cover-stream-${section.type}`}
             >
               {preview
