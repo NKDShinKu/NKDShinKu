@@ -45,7 +45,7 @@ export default function AboutPage() {
 
       <section aria-labelledby="about-site" className="mt-12">
         <SectionHeading id="about-site" en="About This Site" title="关于本站" />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Reveal delay={0} subtle className="sm:col-span-2">
             <FactCard
               icon="icon-[mdi--book-open-variant]"

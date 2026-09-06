@@ -427,10 +427,29 @@
   background: var(--color-text-muted);
 }
 
-/* 原生滚动条隐藏（覆盖式滚动条组件 HScroll 的配套类；触屏走原生触摸滚动） */
+/* 原生滚动条隐藏（归档页移动 pills 用；触屏走原生触摸滚动） */
 .no-scrollbar {
   scrollbar-width: none;
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* 透明原生滚动条（acg.md §2.1，用户决策）：空间常驻零位移、无动画（已接受），
+   悬停显形；配容器的 padding-bottom 做封面与滚动条的间距 */
+.scrollbar-fade {
+  scrollbar-color: transparent transparent;
+}
+.scrollbar-fade:hover {
+  scrollbar-color: var(--color-border) transparent;
+}
+.scrollbar-fade::-webkit-scrollbar {
+  height: 6px;
+}
+.scrollbar-fade::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background: transparent;
+}
+.scrollbar-fade:hover::-webkit-scrollbar-thumb {
+  background: var(--color-border);
 }

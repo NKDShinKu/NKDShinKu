@@ -63,7 +63,7 @@ export default function LabPage() {
               </h2>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
               {group.items.map((item, index) => (
                 <Reveal key={item.slug} delay={index * 0.05} subtle>
                   <LabCard item={item} className="h-full" />

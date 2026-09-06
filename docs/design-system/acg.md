@@ -44,7 +44,7 @@
 └────────────┘
 ```
 
-- 卡宽 `w-36 md:w-40`，横滚流用 `HScroll` 覆盖式滚动条组件（`components/ui/h-scroll.tsx`）：原生滚动条隐藏，自绘拇指悬浮底部**零布局位移**，悬停/聚焦/拖拽时 200ms 渐显、可拖拽；封面 hover `scale-[1.04]`。
+- 卡宽 `w-36 md:w-40`，横滚流 `flex gap-4 pb-3.5 scrollbar-fade`：**透明原生滚动条**（空间常驻零位移、无动画——用户接受；悬停显形，配 `padding-bottom` 做封面与滚动条的间距；见 globals.css）；封面 hover `scale-[1.04]`。
 - 整卡外链 `bgm.tv/subject/{id}`（新窗口 + `aria-label` + `title`）；`rel="noopener noreferrer"`。
 - 叠层白字依赖 scrim（图片底色不可预测）——设计系统「纯黑禁令」的**图片叠层例外**，仅限此处。
 - 三区数据：在看（进度叠层）/ 看过 / 想看，各 `limit=12`（previews 缓存）。
