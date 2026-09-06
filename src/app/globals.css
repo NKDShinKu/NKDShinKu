@@ -407,10 +407,12 @@
   }
 }
 
-/* 全局滚动条：细圆角 + token 配色（Firefox/WebKit 双通路），统一站点质感 */
+/* 全局滚动条：细圆角（Firefox/WebKit 双通路），统一站点质感
+   拇指 = text-muted 与底色 35% 混合（仅比 border 深一点点，用户走查定档）；
+   button 显式隐藏——Windows Chrome 自定义滚动条会残留两端箭头指示器 */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--color-border) transparent;
+  scrollbar-color: color-mix(in srgb, var(--color-text-muted) 35%, var(--color-bg)) transparent;
 }
 ::-webkit-scrollbar {
   width: 8px;
@@ -421,10 +423,16 @@
 }
 ::-webkit-scrollbar-thumb {
   border-radius: 9999px;
-  background: var(--color-border);
+  background: color-mix(in srgb, var(--color-text-muted) 35%, var(--color-bg));
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-text-muted);
+  background: color-mix(in srgb, var(--color-text-muted) 60%, var(--color-bg));
+}
+::-webkit-scrollbar-button {
+  display: none;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 /* 原生滚动条隐藏（归档页移动 pills 用；触屏走原生触摸滚动） */
@@ -441,7 +449,7 @@
   scrollbar-color: transparent transparent;
 }
 .scrollbar-fade:hover {
-  scrollbar-color: var(--color-border) transparent;
+  scrollbar-color: color-mix(in srgb, var(--color-text-muted) 35%, var(--color-bg)) transparent;
 }
 .scrollbar-fade::-webkit-scrollbar {
   height: 6px;
@@ -451,5 +459,5 @@
   background: transparent;
 }
 .scrollbar-fade:hover::-webkit-scrollbar-thumb {
-  background: var(--color-border);
+  background: color-mix(in srgb, var(--color-text-muted) 35%, var(--color-bg));
 }
