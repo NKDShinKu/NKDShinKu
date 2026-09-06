@@ -18,9 +18,9 @@
 | M-4  | 橱窗三区     | 番剧橱窗分三区（用户决策顺序）：在看 → 看过 → 想看，各取前 12；**番剧级区块头**（「番剧」标题 + 「进入归档 · 查看全部 →」）承载下钻主入口；分组小标题弱化（text-base semibold，非 display 大字），右侧「更多 →」带 `?group=` 初始分组；**无独立勋章行** |
 | M-5  | 叠层封面卡   | 竖封面 2:3 叠层式（方案 1，用户决策）：左上 Rank 叠标（scrim 白字）+ 右上 BN 社区评分 pill（accent 底 ★）+ 底部渐变层两行——**个人评分 ★N（左）/ 进度（右，仅在看区）行在标题上方常驻渲染（缺失留白），中文名恒贴底**；整卡外链新窗口，**无确认弹窗** |
 | M-6  | 占位子类     | 游戏/音乐/小说三小卡：图标 + 名称 + 「策划中」warning 徽章；非链接、无 hover 位移                                                |
-| M-7  | 归档页栅格   | 顶栏（返回 + 标题区 + TOTAL）→ `grid-cols-[260px_1fr]`：左栏 sticky（大字分组标题 + 英文副题 + 五分组 Tab）+ 右侧行卡两列        |
-| M-8  | 行卡         | 竖封面(2:3, w-40) + 信息区（中文名 lg / 原名 xs muted / 简介 clamp-3 / 标签行）+ 数据面板（我的评分大数字 / BN 评分 / 放送日期 / 进度）；整卡点击新窗口跳 bgm.tv 条目页（stretched-link，同实验室卡修订前教训：无内层链接则无嵌套问题） |
-| M-9  | 分组 Tab     | 左栏纵向按钮列表：active = `bg-accent/10 text-accent-dark border-l-2 border-accent`；移动端折叠为顶部横向滚动 pills               |
+| M-7  | 归档页栅格   | 顶栏（返回 + 标题区 + 刷新 + TOTAL）→ `grid lg:grid-cols-[260px_1fr]`：左栏 sticky **「收藏分布」条形列表**（组名 + 英文小字 + 等宽计数 + 细进度条，宽度 ∝ 计数/总数，active 为 accent→twilight 渐变填充）+ 右侧行卡；移动端分组折叠为顶部横滚 pills（active 渐变底） |
+| M-8  | 行卡         | 竖封面(h-full 拉伸) + 信息区（**定高切片**：中文名 clamp-2 固定两行 / 原名恒渲染暮紫小字 / 简介+短评共享定高 3 行区（无短评：简介×3；有短评：简介×1+短评×2）/ 标签行恒渲染）+ 数据面板（我的评分大数字 / BN / Rank / 放送日期 / 进度）；整卡 stretched-link 新窗口跳 bgm.tv |
+| M-9  | 分组 Tab     | 见 M-7 分布条；`aria-current` 标注 active；计数等宽字（非仅颜色）                                                              |
 | M-10 | 数据层       | `src/lib/acg.ts`：fetch 封装 + localStorage 缓存（key `acg-collections-v1`，TTL **30 分钟**，O2 建议值）+ `refresh()` 手动刷新；hub 走 previews 轻缓存（3 预览请求），归档走 groups 全量缓存；纯客户端（静态导出无构建期取数） |
 | M-11 | 三态         | 骨架屏（封面/行卡 shimmer，`aria-busy`）→ 错误行 + 重试 → 空分组提示；页面框架（标题/Tab/占位卡）不依赖 API                |
 | M-12 | SEO          | 两页 metadata（title/description/canonical）；内容动态无 SSG，不进 Pagefind（天然排除）                                          |
@@ -144,7 +144,8 @@ grid lg:grid-cols-[260px_1fr] gap-10
 
 ## 6. 响应式与无障碍要点（本板块增量）
 
-- 断点：hub 封面流全端横滚；归档 `<lg` 单列 + 顶部 pills；行卡 `xl` 双列 / 以下单列。
+- 响应式 grid 一律写显式 `grid-cols-1` 基线（隐式 auto 轨道按 max-content 撑破容器——375 溢出实测根因，已录 AGENTS §7）。
+- 行卡定高切片：标题 2 行 / 原名 1 行 / 简介+短评共享区 3 行 / 标签 1 行，超长一律省略号（title 属性兜底全名），无滚动动效。
 - hub 随主题：亮/暗两态用标准 token（text/muted/surface），对比度走主文档纪律。
 - 封面/行卡外链 `aria-label` 含「新窗口」；`rel="noopener noreferrer"`。
 - 分组 Tab：`aria-current="true"` 标注 active；计数徽章可读（非仅颜色）。

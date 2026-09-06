@@ -43,7 +43,7 @@ export default function AcgPage() {
             更多子类
           </h2>
         </div>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           {PLACEHOLDERS.map((item, index) => (
             <Reveal key={item.name} delay={index * 0.05} subtle>
               <PlaceholderCard icon={item.icon} name={item.name} />
