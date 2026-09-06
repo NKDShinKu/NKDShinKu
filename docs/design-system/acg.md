@@ -4,7 +4,7 @@
 > 覆盖路由：`/acg`（ACG 橱窗 hub）、`/acg/anime`（番剧归档）。
 > 对应需求：REQ-M1–M11、REQ-H4/H5（首页小部件另行任务）。
 > 板块定义（manifest D18）：ACG 两层结构，番剧先行；数据源 Bangumi v0 API 浏览器直连（D14 实测）。
-> **2026-09 用户决策**：板块更名 ACG；hub 去头像/标语（数字勋章保留）；番剧橱窗卡 = 封面 + 少量信息；时间胶囊 RSS 弃用；容器 1400–1600 → 定档 **1440px**；归档页排版参考「编辑档案」式（顶栏 TOTAL + 左栏标题 + 行卡，取其神不抄其形）。
+> **2026-09 用户决策**：板块更名 ACG；hub 去头像/标语、去数字勋章行；番剧橱窗 = **三区（在看 → 看过 → 想看）叠层封面卡**（排名 + BN 评分 + 个人评分 + 在看进度）；时间胶囊 RSS 弃用；容器 1400–1600 → 定档 **1440px**；归档页排版参考「编辑档案」式（顶栏 TOTAL + 左栏标题 + 行卡，取其神不抄其形）。
 
 ---
 
@@ -15,14 +15,14 @@
 | M-1  | 容器         | ACG 两页专用 **`max-w-[1440px]`**（页面级覆盖主文档 1100）；px-5 sm:px-6，超宽屏居中不塌（REQ-G3）                              |
 | M-2  | hub 氛围     | hub **随主题正常翻转**（用户决策）：亮色=「天空」、暗色=「夜空」——板块性格由主题双态天然承担，呼应站点关键词「天空·夜空」；背景沿用全局极光/星点粒子（用户决策：不额外加强）；页头区叠极淡品牌渐变（`from-accent/10 to-transparent`） |
 | M-3  | 归档页基调   | 随主题正常翻转，信息密度优先、无特殊背景——hub 重氛围、归档重阅读 |
-| M-4  | 数字勋章     | 页头一行六枚（在看/想看/看过/搁置/抛弃/总计）：等宽大数字 + 小标签，数字 `font-mono text-2xl`；数据来自 v0 `total` 字段        |
-| M-5  | 橱窗封面卡   | 竖封面 2:3 + 中文名一行 + 评分一行（我的评分优先，0 → 显示 BN 评分并标注「BN」）；在看列表 `updated_at` 倒序取 12；点击新窗口跳条目页，**无确认弹窗**（高频轻交互，用户决策） |
+| M-4  | 橱窗三区     | 番剧橱窗分三区（用户决策顺序）：在看 → 看过 → 想看，各取前 12；**番剧级区块头**（「番剧」标题 + 「进入归档 · 查看全部 →」）承载下钻主入口；分组小标题弱化（text-base semibold，非 display 大字），右侧「更多 →」带 `?group=` 初始分组；**无独立勋章行** |
+| M-5  | 叠层封面卡   | 竖封面 2:3 叠层式（方案 1，用户决策）：左上 Rank 叠标（scrim 白字）+ 右上 BN 社区评分 pill（accent 底 ★）+ 底部渐变层两行——**个人评分 ★N（左）/ 进度（右，仅在看区）行在标题上方常驻渲染（缺失留白），中文名恒贴底**；整卡外链新窗口，**无确认弹窗** |
 | M-6  | 占位子类     | 游戏/音乐/小说三小卡：图标 + 名称 + 「策划中」warning 徽章；非链接、无 hover 位移                                                |
 | M-7  | 归档页栅格   | 顶栏（返回 + 标题区 + TOTAL）→ `grid-cols-[260px_1fr]`：左栏 sticky（大字分组标题 + 英文副题 + 五分组 Tab）+ 右侧行卡两列        |
 | M-8  | 行卡         | 竖封面(2:3, w-40) + 信息区（中文名 lg / 原名 xs muted / 简介 clamp-3 / 标签行）+ 数据面板（我的评分大数字 / BN 评分 / 放送日期 / 进度）；整卡点击新窗口跳 bgm.tv 条目页（stretched-link，同实验室卡修订前教训：无内层链接则无嵌套问题） |
 | M-9  | 分组 Tab     | 左栏纵向按钮列表：active = `bg-accent/10 text-accent-dark border-l-2 border-accent`；移动端折叠为顶部横向滚动 pills               |
-| M-10 | 数据层       | `src/lib/acg.ts`：fetch 封装 + localStorage 缓存（key `acg-collections-v1`，TTL **30 分钟**，O2 建议值）+ `refresh()` 手动刷新；纯客户端（静态导出无构建期取数） |
-| M-11 | 三态         | 骨架屏（勋章/封面/行卡 shimmer，`aria-busy`）→ 错误行 + 重试 → 空分组提示；页面框架（标题/Tab/占位卡）不依赖 API                |
+| M-10 | 数据层       | `src/lib/acg.ts`：fetch 封装 + localStorage 缓存（key `acg-collections-v1`，TTL **30 分钟**，O2 建议值）+ `refresh()` 手动刷新；hub 走 previews 轻缓存（3 预览请求），归档走 groups 全量缓存；纯客户端（静态导出无构建期取数） |
+| M-11 | 三态         | 骨架屏（封面/行卡 shimmer，`aria-busy`）→ 错误行 + 重试 → 空分组提示；页面框架（标题/Tab/占位卡）不依赖 API                |
 | M-12 | SEO          | 两页 metadata（title/description/canonical）；内容动态无 SSG，不进 Pagefind（天然排除）                                          |
 
 ---
@@ -32,32 +32,22 @@
 > 均为自研组件，文件落位 `src/components/acg/`；样式全用工具类，禁止裸 hex。
 > 背景沿用全局极光/星点粒子，本板块无特殊处理（用户决策）。
 
-### 2.1 StatBadge 数字勋章（hub 页头）
+### 2.1 AnimeCoverCard 叠层封面卡（hub 橱窗，M-5）
 
 ```
-┌──────────┐
-│    41    │   font-mono text-2xl md:text-3xl font-bold（text-text）
-│  在看    │   text-xs uppercase tracking-widest（text-muted）
-└──────────┘
+┌────────────┐
+│ [Rank 42]  │ [★8.7]  ← 左上 Rank scrim 叠标；右上 BN 评分 accent pill
+│            │
+│ ░░渐变░░   │   from-black/85 via-black/45
+│ ★9   进度 9/12 │   个人评分 ★（左）+ 进度（右，仅在看区）；行常驻、缺失留白
+│ 中文名      │   truncate 白字 + title 提示，恒贴底
+└────────────┘
 ```
 
-- 六枚横排（`flex flex-wrap gap-x-8 gap-y-4`）：在看 / 想看 / 看过 / 搁置 / 抛弃 / 总计；总计数值前加「TOTAL」小标（编辑档案式呼应）。
-- 无卡片包裹（裸排，橱窗感）；加载时数字位渲染骨架块。
-
-### 2.2 AnimeCoverCard 橱窗封面卡（hub，M-5）
-
-```
-┌────────┐
-│ 封面    │   2:3，rounded-md border border-border，hover scale-[1.04]
-│ (2:3)  │
-├────────┤
-│ 中文名  │   text-sm font-medium truncate
-│ ★ 8.7  │   text-xs：我的评分（text-accent-dark）｜无则 BN 评分（text-muted + 「BN」标）
-└────────┘
-```
-
-- 宽度：横向滚动流 `flex gap-4 overflow-x-auto`，卡 `w-32 md:w-36 shrink-0`；外层 `<a target="_blank" rel="noopener noreferrer">`（`aria-label="《中文名》在 Bangumi 查看（新窗口）"`）。
-- hub 数据：在看组前 12（`updated_at` 倒序，单请求 limit=12）。
+- 卡宽 `w-36 md:w-40`，横滚流 `flex gap-4 overflow-x-auto`；封面 hover `scale-[1.04]`。
+- 整卡外链 `bgm.tv/subject/{id}`（新窗口 + `aria-label` + `title`）；`rel="noopener noreferrer"`。
+- 叠层白字依赖 scrim（图片底色不可预测）——设计系统「纯黑禁令」的**图片叠层例外**，仅限此处。
+- 三区数据：在看（进度叠层）/ 看过 / 想看，各 `limit=12`（previews 缓存）。
 
 ### 2.3 PlaceholderCard 占位子类卡（hub，M-6）
 
@@ -93,7 +83,7 @@
 
 ### 2.7 三态规范（M-11）
 
-- 骨架：勋章 = `h-9 w-16 rounded bg-border/60 animate-pulse`；封面卡 = 同尺寸灰块；行卡 = 整卡灰块；骨架区 `aria-busy="true"`；shimmer 用 `animate-pulse`（reduced-motion 下静态色块）。
+- 骨架：封面卡 = 同尺寸灰块；行卡 = 整卡灰块；骨架区 `aria-busy="true"`；shimmer 用 `animate-pulse`（reduced-motion 下静态色块）。
 - 错误：区域级错误行（`text-danger` + 图标）+ 重试按钮（ghost 小按钮）；已缓存数据可用时**先渲染缓存再后台刷新**（stale-while-revalidate 语义）。
 - 空分组：「这个分组还没有收藏」+ 云图标（复用空态模式）。
 
@@ -107,10 +97,10 @@
 容器：max-w-[1440px] px-5 sm:px-6；pt-24 md:pt-28 pb-16 md:pb-24；随主题正常翻转（M-2）
 ─────────────────────────────────────
   页头（叠极淡品牌渐变）：「ACG」font-display text-3xl md:text-4xl + 一句副标（text-text-muted）
-  数字勋章行 ×6（§2.1）                                ← Reveal
   ─────────────────────────────────
-  番剧橱窗：区块头（「番剧」text-xl + 在看摘要 + 「进入归档 →」链接）
-  封面卡流横滚 ×12（§2.2）                             ← Reveal subtle
+  番剧区块头（h2）：「番剧」+ 「进入归档 · 查看全部 →」                     ← Reveal
+  分组小标题（h3 弱化）：在看/看过/想看 + 总数 + 更多 →               ← Reveal
+  封面卡流横滚 ×12（§2.1）
   ─────────────────────────────────
   占位子类 ×3（§2.3）
   底部 pb-16 md:pb-24
@@ -131,8 +121,8 @@ grid lg:grid-cols-[260px_1fr] gap-10
 ## 4. 数据层（M-10，`src/lib/acg.ts`）
 
 - 端点（D14 实测）：`GET /v0/users/796189/collections?subject_type=2&type={1..5}&limit=100&offset=N`；`type` 1=想看 2=看过 3=在看 4=搁置 5=抛弃；默认 `updated_at` 倒序。
-- 缓存：localStorage `acg-collections-v1` = `{ cachedAt, groups: { [type]: { total, items } } }`；TTL 30 分钟（O2 建议值，设计定稿）；过期/无缓存 → 网络取 + 写回；未过期 → 直接用 + 静默后台刷新（SWR 语义）。
-- 请求预算：hub 首次 = 在看(12) + 五分组 total（limit=1 ×5）= 6 请求；归档每组首开 = 按 `total/100` 分页拉全组；`refresh()` 清缓存全量重拉。
+- 缓存：localStorage `acg-collections-v1` = `{ groups: { [type]: { cachedAt, total, items } }, previews: { cachedAt, sections } }`；TTL 30 分钟（O2 建议值，设计定稿）；过期/无缓存 → 网络取 + 写回；未过期 → 直接用 + 静默后台刷新（SWR 语义）。
+- 请求预算：hub 首次 = 三区预览（在看/看过/想看 各 limit=12）= 3 请求（previews 缓存）；归档每组首开 = 按 `total/100` 分页拉全组（groups 缓存）；`refresh()` 强制网络重拉。
 - 降级：请求失败 → 抛给 UI 三态；缓存未过期永远可用。
 - 客户端边界：页面外壳为服务端组件（标题/布局/占位卡），数据区为叶子客户端组件（`useAcg` hook 消费 lib）。
 
@@ -165,8 +155,8 @@ grid lg:grid-cols-[260px_1fr] gap-10
 
 ## 7. 交付验收清单（本板块增量，接主文档 §8）
 
-- [ ] hub 亮/暗两态走查（标准 token，含勋章与封面卡文字对比）
-- [ ] 六枚勋章数值与 Bangumi 实际 total 一致；缓存生效（二次进入无网络请求，DevTools 验证）
+- [ ] hub 亮/暗两态走查（标准 token，含叠层卡 scrim 上的白字可读性）
+- [ ] 三区（在看/看过/想看）数值与 Bangumi 实际 total 一致；缓存生效（二次进入无网络请求，DevTools 验证）
 - [ ] 归档页五分组切换正确拉取对应数据；看过组「加载更多」分页正确（389 → 100×3+89）
 - [ ] 行卡全字段渲染正确（我的评分 0 → 「—」；BN 评分/日期/进度/短评）
 - [ ] 条目外链新窗口 + `aria-label`；hub 封面卡无确认弹窗

@@ -21,10 +21,10 @@ const sections = [
     span: "",
   },
   {
-    href: "/bangumi",
-    label: "追番",
-    icon: "icon-[mdi--television-classic]",
-    description: "Bangumi 追番记录、进度与评分。",
+    href: "/acg",
+    label: "ACG",
+    icon: "icon-[mdi--star-four-points-outline]",
+    description: "二次元收藏橱窗——番剧追番记录、进度与评分。",
     span: "",
   },
   {

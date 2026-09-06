@@ -44,6 +44,8 @@ export interface AcgSubject {
   summary: string;
   /** Bangumi 社区评分（0 = 无评分） */
   score: number;
+  /** Bangumi 排名（0 = 无排名） */
+  rank: number;
   /** 放送日期（YYYY-MM-DD 或空） */
   date: string;
   /** 社区热门标签（前 3） */
@@ -74,13 +76,15 @@ export interface AcgGroupResult {
   fromCache: boolean;
 }
 
+export interface AcgSectionPreview {
+  type: AcgGroupType;
+  total: number;
+  items: AcgCollectionItem[];
+}
+
 export interface AcgHubData {
-  /** 五分组计数（key 为 type） */
-  totals: Record<AcgGroupType, number>;
-  /** 收藏总数 */
-  grandTotal: number;
-  /** 在看列表（updated_at 倒序，橱窗卡流用） */
-  recentWatching: AcgCollectionItem[];
+  /** 橱窗区块（在看 → 看过 → 想看），各取前 12 */
+  sections: AcgSectionPreview[];
   fromCache: boolean;
 }
 
@@ -93,6 +97,7 @@ interface RawSubject {
   short_summary?: unknown;
   tags?: { name?: unknown }[];
   score?: unknown;
+  rank?: unknown;
   date?: unknown;
   eps?: unknown;
 }
@@ -125,6 +130,7 @@ function parseItem(raw: RawCollection): AcgCollectionItem | null {
       cover: asString(images?.common) || asString(images?.medium) || asString(images?.large),
       summary: asString(s.short_summary),
       score: asNumber(s.score),
+      rank: asNumber(s.rank),
       date: asString(s.date),
       tags: Array.isArray(s.tags)
         ? s.tags.slice(0, 3).map((t) => asString(t.name)).filter(Boolean)
@@ -181,6 +187,11 @@ interface AcgCacheEntry {
 }
 interface AcgCache {
   groups: Partial<Record<AcgGroupType, AcgCacheEntry>>;
+  /** hub 橱窗预览（在看/看过/想看 各前 12） */
+  previews?: {
+    cachedAt: number;
+    sections: Partial<Record<AcgGroupType, { total: number; items: AcgCollectionItem[] }>>;
+  };
 }
 
 function readCache(): AcgCache {
@@ -251,8 +262,8 @@ export async function getGroupData(
   return { data, fromCache: false };
 }
 
-/** 轻查询：只取分组计数（缓存优先，不拉条目列表） */
-async function getGroupTotal(type: AcgGroupType, refresh?: boolean): Promise<number> {
+/** 轻查询：只取分组计数（缓存优先，不拉条目列表）；归档顶栏 TOTAL 用 */
+export async function getGroupTotal(type: AcgGroupType, refresh?: boolean): Promise<number> {
   const cached = readCache().groups[type];
   if (!refresh && cached && Date.now() - cached.cachedAt < CACHE_TTL_MS) {
     revalidateInBackground(type, cached.cachedAt);
@@ -263,23 +274,44 @@ async function getGroupTotal(type: AcgGroupType, refresh?: boolean): Promise<num
   return page.total;
 }
 
-/** hub 数据：五分组计数 + 在看列表（并行请求，首次 6 个） */
+/** hub 橱窗区块顺序（用户决策）：在看 → 看过 → 想看 */
+const HUB_SECTIONS = [3, 2, 1] as const satisfies readonly AcgGroupType[];
+const PREVIEW_LIMIT = 12;
+
+/** hub 数据：三区橱窗预览（并行 3 请求，previews 缓存 30 分钟） */
 export async function getHubData(options?: { refresh?: boolean }): Promise<AcgHubData> {
-  const watchingResult = await getGroupData(3, options);
-  const [wish, completed, onHold, dropped] = await Promise.all(
-    ([1, 2, 4, 5] as const).map((type) => getGroupTotal(type, options?.refresh)),
+  const cached = readCache().previews;
+  if (!options?.refresh && cached && Date.now() - cached.cachedAt < CACHE_TTL_MS) {
+    const sections: AcgSectionPreview[] = [];
+    for (const type of HUB_SECTIONS) {
+      const entry = cached.sections[type];
+      if (entry) sections.push({ type, total: entry.total, items: entry.items });
+    }
+    if (sections.length === HUB_SECTIONS.length) {
+      return { sections, fromCache: true };
+    }
+  }
+  const pages = await Promise.all(
+    HUB_SECTIONS.map((type) => fetchGroupPage(type, 0, PREVIEW_LIMIT)),
   );
-  const totals: Record<AcgGroupType, number> = {
-    3: watchingResult.data.total,
-    1: wish,
-    2: completed,
-    4: onHold,
-    5: dropped,
-  };
-  return {
-    totals,
-    grandTotal: Object.values(totals).reduce((sum, n) => sum + n, 0),
-    recentWatching: watchingResult.data.items.slice(0, 12),
-    fromCache: watchingResult.fromCache,
-  };
+  const sections = pages.map((page, i) => ({
+    type: HUB_SECTIONS[i],
+    total: page.total,
+    items: page.items,
+  }));
+  if (typeof window !== "undefined") {
+    try {
+      const cache = readCache();
+      cache.previews = {
+        cachedAt: Date.now(),
+        sections: Object.fromEntries(
+          sections.map((s) => [s.type, { total: s.total, items: s.items }]),
+        ),
+      };
+      window.localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+    } catch {
+      /* 写失败不影响功能 */
+    }
+  }
+  return { sections, fromCache: false };
 }
