@@ -7,7 +7,7 @@
 ## 1. 项目概况
 
 - 定位：二次元风格的现代个人技术博客；蓝白基调，排版/配色/微透视/交互优先，二次元素材克制使用。
-- 内容板块：文章（含教程/笔记/日常分类）、实验室（外链项目 + 站内 demo/工具/实验，见 D15）、追番（Bangumi）、关于；详见 `docs/requirements.md`。
+- 内容板块：文章（含教程/笔记/日常分类）、实验室（外链项目 + 站内 demo/工具/实验，见 D15）、ACG（番剧收藏先行，预留扩展，见 D18）、关于；详见 `docs/requirements.md`。
 - 域名：`https://nkdshinku.com`（DNS 托管于 Cloudflare）
 - 仓库：`https://github.com/NKDShinKu/NKDShinKu`（public）
 
@@ -54,7 +54,7 @@
 | GitHub        | `NKDShinKu/NKDShinKu`                           | 代码 + Actions + Pages     | ✅       |
 | Cloudflare    | zone `nkdshinku.com`                            | DNS + R2                   | ✅       |
 | Cloudflare R2 | bucket `nkdshinku-assets` → `img.nkdshinku.com` | 图床                       | ✅ 已建  |
-| Bangumi       | 用户 ID `796189`                                | 追番数据（浏览器端 fetch） | ✅ 直连实测通过（D14），M3 落地 |
+| Bangumi       | 用户 ID `796189`                                | ACG 番剧数据（浏览器端 fetch） | ✅ 直连实测通过（D14），M3 落地 |
 | giscus        | 待开 Discussions + 安装 App                     | 评论                       | ⏳ M3/M4 |
 
 ## 6. 风险与决策树
@@ -69,7 +69,7 @@
 
 ```
 浏览器实测 api.bgm.tv CORS
- ├─ 可用 → 浏览器直连 + 本地缓存（REQ-B1/B6）✅（2026-09 实测走此分支，见 D14）
+ ├─ 可用 → 浏览器直连 + 本地缓存（REQ-M9）✅（2026-09 实测走此分支，见 D14）
  └─ 受限 → 方案 B：Cloudflare Worker 代理（补 CORS 头 + 缓存 + 限流保护，保留为退路）
            ├─ Worker 部署在 nkdshinku.com 同 zone（api.nkdshinku.com）
            └─ 失败 → 方案 C：GitHub Actions 定时抓取 → 静态 JSON 随站构建（数据有延迟）
@@ -96,6 +96,7 @@
 | D15 | 板块更名「实验室」 | 原「项目」板块推倒重写（用户决策）：更名实验室 Lab、路由 `/lab`，同时收纳外链型（跳仓库/直链）与站内型（`/lab/[slug]` demo/小工具/实验）条目，取代 D2 的「无站内详情页」约束；REQ-J 重构为 REQ-L | 2026-09 |
 | D16 | 关于页设计方向     | 「站点事实卡」路线（用户决策）：站名由来/理念/技术栈/站点状态等卡片为主体，REQ-A1 个人内容收敛为紧凑区块；个性化记忆点在卡片文案与小组件，非个人档案墙 | 2026-09 |
 | D17 | 外链确认弹窗       | 用户决策（翻 D9「外链守卫不采纳」案）：实验室外链跳转前弹确认框；实现引入 `@radix-ui/react-dialog` 无样式原语 + 设计 token 自研样式（§3 例外条款适用），T5 搜索弹窗复用同一原语 | 2026-09 |
+| D18 | 板块更名「ACG」    | 用户决策：追番板块更名 ACG（`/bangumi` → `/acg`），两层结构——`/acg` 橱窗 hub + `/acg/anime` 番剧归档（编辑档案式排版，容器 1440px），游戏/音乐/小说占位子类预留扩展；时间胶囊 RSS 实测 bgm.tv 不放 CORS 头、浏览器不可直连，决策弃用（方案 A），Worker 代理保留为可选项；收藏主体走 v0 API 直连（D14）。需求 REQ-B 重写为 REQ-M | 2026-09 |
 
 ## 8. 变更记录
 
@@ -121,3 +122,4 @@
 | 2026-09 | M3 需求重构：项目板块更名实验室（D15，REQ-J→REQ-L，站内 demo 页入 IA）；关于页定站点事实卡方向（D16）；搜索弃独立页改页头入口 + 全局弹窗（REQ-S 重写）；追番页调研/设计/落地排至 M3 末尾 |
 | 2026-09 | M3 实验室走查修订：条目卡紧凑等大（弃封面占位与 featured 跨列）、外链改显式图标按钮 + 确认弹窗（D17，引入 Radix Dialog） |
 | 2026-09 | M3 首批落地完成（实验室/关于页/搜索弹窗）并整体走查：对比度数值审计 74 项，补 sakura/twilight 浅色底文字级深变体 token；搜索索引经 data-pagefind-body 收敛至文章正文 |
+| 2026-09 | ACG 板块需求重构（D18）：追番更名 ACG 两层结构，时间胶囊 RSS 弃用（方案 A），REQ-B 重写为 REQ-M |
