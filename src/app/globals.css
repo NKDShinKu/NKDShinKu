@@ -407,13 +407,28 @@
   }
 }
 
-/* 全局滚动条：细圆角（Firefox/WebKit 双通路），统一站点质感
-   拇指 = text-muted 与底色 35% 混合（仅比 border 深一点点，用户走查定档）；
-   button 显式隐藏——Windows Chrome 自定义滚动条会残留两端箭头指示器 */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--color-text-muted) 35%, var(--color-bg)) transparent;
+/* ============ 滚动条（统一站点质感） ============
+ * 细圆角拇指 = text-muted 与底色 35% 混合（仅比 border 深一点，用户走查定档）。
+ * 引擎分流（关键）：Chrome 121+ 里 scrollbar-color/width 非 auto 会覆盖 ::-webkit-scrollbar
+ * 伪元素，使「隐藏两端箭头」失效——故标准属性仅在 Firefox 启用（Firefox 无箭头按钮、
+ * 无需隐藏），Chromium 走 ::-webkit-scrollbar 伪元素；@supports 隔离两通路，勿混写。
+ */
+@supports not selector(::-webkit-scrollbar) {
+  /* Firefox 通路 */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--color-text-muted) 35%, var(--color-bg)) transparent;
+  }
+  .scrollbar-fade {
+    scrollbar-color: transparent transparent;
+  }
+  .scrollbar-fade:hover,
+  .scrollbar-fade[data-hovered="true"] {
+    scrollbar-color: color-mix(in srgb, var(--color-text-muted) 35%, var(--color-bg)) transparent;
+  }
 }
+
+/* Chromium / WebKit 通路 */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -428,6 +443,7 @@
 ::-webkit-scrollbar-thumb:hover {
   background: color-mix(in srgb, var(--color-text-muted) 60%, var(--color-bg));
 }
+/* 隐藏两端箭头指示器（Windows Chrome 自定义滚动条残留） */
 ::-webkit-scrollbar-button {
   display: none;
 }
@@ -444,20 +460,16 @@
 }
 
 /* 透明原生滚动条（acg.md §2.1，用户决策）：空间常驻零位移、无动画（已接受），
-   悬停显形；配容器的 padding-bottom 做封面与滚动条的间距 */
-.scrollbar-fade {
-  scrollbar-color: transparent transparent;
-}
-.scrollbar-fade:hover {
-  scrollbar-color: color-mix(in srgb, var(--color-text-muted) 35%, var(--color-bg)) transparent;
-}
+   悬停显形；配容器的 padding-bottom 做封面与滚动条的间距。
+   显形触发用 :hover + [data-hovered] 双通路：Chrome 下容器 :hover 不触发
+   ::-webkit-scrollbar-thumb（实测），故由组件 mouseenter/leave 切 data-hovered 兜底。 */
 .scrollbar-fade::-webkit-scrollbar {
   height: 6px;
 }
 .scrollbar-fade::-webkit-scrollbar-thumb {
-  border-radius: 9999px;
   background: transparent;
 }
-.scrollbar-fade:hover::-webkit-scrollbar-thumb {
+.scrollbar-fade:hover::-webkit-scrollbar-thumb,
+.scrollbar-fade[data-hovered="true"]::-webkit-scrollbar-thumb {
   background: color-mix(in srgb, var(--color-text-muted) 35%, var(--color-bg));
 }

@@ -22,6 +22,8 @@ const PREVIEW_COUNT = 12;
 export function AcgHubContent() {
   const [data, setData] = useState<AcgSectionPreview[] | null>(null);
   const [error, setError] = useState(false);
+  // 当前鼠标悬停的分组 type：驱动橱窗滚动条显形（规避 Chrome 下容器 :hover 不触发 ::-webkit-scrollbar-thumb）
+  const [hoveredType, setHoveredType] = useState<number | null>(null);
 
   // 首次加载：effect 内只在异步回调 setState（react-hooks 纪律）；data === null 即加载中（骨架）
   useEffect(() => {
@@ -107,6 +109,9 @@ export function AcgHubContent() {
             </Reveal>
             <div
               className="scrollbar-fade flex gap-4 overflow-x-auto pb-1"
+              data-hovered={hoveredType === section.type ? "true" : undefined}
+              onMouseEnter={() => setHoveredType(section.type)}
+              onMouseLeave={() => setHoveredType((cur) => (cur === section.type ? null : cur))}
               data-testid={`acg-cover-stream-${section.type}`}
             >
               {preview
