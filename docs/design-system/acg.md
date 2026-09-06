@@ -44,7 +44,7 @@
 └────────────┘
 ```
 
-- 卡宽 `w-36 md:w-40`，横滚流 `flex gap-4 overflow-x-auto`；封面 hover `scale-[1.04]`。
+- 卡宽 `w-36 md:w-40`，横滚流 `flex gap-4 overflow-x-auto scrollbar-reveal`（滚动条默认隐藏、悬停容器浮现，全局滚动条细圆角样式见 globals.css）；封面 hover `scale-[1.04]`。
 - 整卡外链 `bgm.tv/subject/{id}`（新窗口 + `aria-label` + `title`）；`rel="noopener noreferrer"`。
 - 叠层白字依赖 scrim（图片底色不可预测）——设计系统「纯黑禁令」的**图片叠层例外**，仅限此处。
 - 三区数据：在看（进度叠层）/ 看过 / 想看，各 `limit=12`（previews 缓存）。

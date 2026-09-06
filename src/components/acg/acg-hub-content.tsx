@@ -106,8 +106,7 @@ export function AcgHubContent() {
               </div>
             </Reveal>
             <div
-              className="flex gap-4 overflow-x-auto pb-2"
-              style={{ scrollbarWidth: "thin" }}
+              className="scrollbar-reveal flex gap-4 overflow-x-auto pb-2"
               data-testid={`acg-cover-stream-${section.type}`}
             >
               {preview

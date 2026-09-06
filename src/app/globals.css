@@ -406,3 +406,42 @@
     animation: none;
   }
 }
+
+/* 全局滚动条：细圆角 + token 配色（Firefox/WebKit 双通路），统一站点质感 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background: var(--color-border);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* 横滚流滚动条悬停显隐（acg.md §2.1）：默认隐藏，悬停/聚焦容器时以细条浮现 */
+.scrollbar-reveal {
+  scrollbar-width: none;
+}
+.scrollbar-reveal::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-reveal:hover,
+.scrollbar-reveal:focus-within {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+.scrollbar-reveal:hover::-webkit-scrollbar {
+  display: block;
+}
+.scrollbar-reveal:hover::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+}
