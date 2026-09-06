@@ -44,6 +44,8 @@ export const siteConfig = {
   email: "2010182879@qq.com",
   author: "NKDShinKu",
   locale: "zh-CN",
+  /** Bangumi 用户 ID（ACG 板块数据源，manifest D6/D14） */
+  bangumiUserId: "796189",
   /**
    * 首页全屏 Hero 文案。背景图方案经多版尝试效果不达预期已移除，
    * 首屏透出全局极光/萤火背景；`向下滚动探索` 锚点跳转 #home-content。
