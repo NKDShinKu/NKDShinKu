@@ -427,21 +427,10 @@
   background: var(--color-text-muted);
 }
 
-/* 横滚流滚动条悬停显隐（acg.md §2.1）：默认隐藏，悬停/聚焦容器时以细条浮现 */
-.scrollbar-reveal {
+/* 原生滚动条隐藏（覆盖式滚动条组件 HScroll 的配套类；触屏走原生触摸滚动） */
+.no-scrollbar {
   scrollbar-width: none;
 }
-.scrollbar-reveal::-webkit-scrollbar {
+.no-scrollbar::-webkit-scrollbar {
   display: none;
-}
-.scrollbar-reveal:hover,
-.scrollbar-reveal:focus-within {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-border) transparent;
-}
-.scrollbar-reveal:hover::-webkit-scrollbar {
-  display: block;
-}
-.scrollbar-reveal:hover::-webkit-scrollbar-thumb {
-  background: var(--color-border);
 }

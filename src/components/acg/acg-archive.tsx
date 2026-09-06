@@ -141,7 +141,7 @@ export function AcgArchive() {
   );
 
   const groupTabsMobile = (
-    <div className="scrollbar-reveal mb-5 flex gap-2 overflow-x-auto pb-1 lg:hidden">
+    <div className="no-scrollbar mb-5 flex gap-2 overflow-x-auto pb-1 lg:hidden">
       {ACG_GROUP_TYPES.map((type) => {
         const isActive = type === groupType;
         return (

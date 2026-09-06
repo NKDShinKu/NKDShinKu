@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimeCoverCard } from "@/components/acg/anime-cover-card";
 import { Reveal } from "@/components/motion/reveal";
+import { HScroll } from "@/components/ui/h-scroll";
 import { getHubData, type AcgSectionPreview } from "@/lib/acg";
 
 /** 橱窗区块（用户决策顺序）：在看 → 看过 → 想看；在看卡叠层显示观看进度 */
@@ -105,9 +106,9 @@ export function AcgHubContent() {
                 </Link>
               </div>
             </Reveal>
-            <div
-              className="scrollbar-reveal flex gap-4 overflow-x-auto pb-2"
-              data-testid={`acg-cover-stream-${section.type}`}
+            <HScroll
+              className="flex gap-4 pb-2"
+              testId={`acg-cover-stream-${section.type}`}
             >
               {preview
                 ? preview.items.map((item) => (
@@ -122,7 +123,7 @@ export function AcgHubContent() {
                       <div className="border-border/60 bg-border/60 aspect-[2/3] animate-pulse rounded-md border" />
                     </div>
                   ))}
-            </div>
+            </HScroll>
           </div>
         );
       })}
