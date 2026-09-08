@@ -6,6 +6,8 @@ import { AdjacentPostCard } from "@/components/posts/adjacent-post-card";
 import { CodeCopyButtons } from "@/components/posts/code-copy-buttons";
 import { BackButton } from "@/components/posts/back-button";
 import { MermaidRenderer } from "@/components/posts/mermaid-chart";
+import { PostComments } from "@/components/posts/post-comments";
+import { JumpToComments } from "@/components/posts/jump-to-comments";
 import { TableOfContents } from "@/components/posts/table-of-contents";
 import { Tag } from "@/components/ui/tag";
 import { renderMarkdown } from "@/lib/markdown";
@@ -132,6 +134,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             <AdjacentPostCard label="下一篇" post={next} align="right" />
           </nav>
 
+          {/* 评论（REQ-P10 / D19）：抽屉式 giscus，enabled 关闭即不挂载 */}
+          {siteConfig.comments.enabled ? <PostComments /> : null}
+
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd(post)) }}
@@ -141,10 +146,11 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         {headings.length > 0 ? <TableOfContents headings={headings} /> : null}
       </div>
 
-      {/* 复制按钮 / Mermaid 渲染 / 锚点滚动（纯增强，见组件注释）；随文章页挂载 */}
+      {/* 复制按钮 / Mermaid 渲染 / 锚点滚动 / 浮动评论直达（纯增强，见组件注释）；随文章页挂载 */}
       <CodeCopyButtons />
       <MermaidRenderer />
       <AnchorScroll />
+      {siteConfig.comments.enabled ? <JumpToComments /> : null}
     </div>
   );
 }

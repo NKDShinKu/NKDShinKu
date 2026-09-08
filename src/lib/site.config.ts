@@ -47,6 +47,19 @@ export const siteConfig = {
   /** Bangumi 用户 ID（ACG 板块数据源，manifest D6/D14） */
   bangumiUserId: "796189",
   /**
+   * giscus 评论（REQ-P10 / D19 重启）：数据存 GitHub Discussions，抽屉式形态（D9 采纳）。
+   * enabled 一键开关：国内实测加载不佳时置 false 即整块下线，无需回滚代码。
+   * ID 来源：giscus.app 生成（repo Discussions 已开、giscus App 已装）。
+   */
+  comments: {
+    enabled: true,
+    repo: "NKDShinKu/NKDShinKu",
+    repoId: "R_kgDOQxC3RQ",
+    category: "Blog",
+    categoryId: "DIC_kwDOQxC3Rc4DFIEx",
+    mapping: "pathname",
+  },
+  /**
    * 首页全屏 Hero 文案。背景图方案经多版尝试效果不达预期已移除，
    * 首屏透出全局极光/萤火背景；`向下滚动探索` 锚点跳转 #home-content。
    */
