@@ -3,10 +3,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AnchorScroll } from "@/components/posts/anchor-scroll";
 import { AdjacentPostCard } from "@/components/posts/adjacent-post-card";
+import { AuthorCard } from "@/components/posts/author-card";
 import { CodeCopyButtons } from "@/components/posts/code-copy-buttons";
 import { BackButton } from "@/components/posts/back-button";
 import { MermaidRenderer } from "@/components/posts/mermaid-chart";
 import { PostComments } from "@/components/posts/post-comments";
+import { PostPanelDrawer } from "@/components/posts/post-panel-drawer";
 import { JumpToComments } from "@/components/posts/jump-to-comments";
 import { TableOfContents } from "@/components/posts/table-of-contents";
 import { Tag } from "@/components/ui/tag";
@@ -129,11 +131,6 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             </div>
           ) : null}
 
-          <nav aria-label="文章导航" className="mt-10 grid gap-4 sm:grid-cols-2">
-            <AdjacentPostCard label="上一篇" post={prev} align="left" />
-            <AdjacentPostCard label="下一篇" post={next} align="right" />
-          </nav>
-
           {/* 评论（REQ-P10 / D19）：抽屉式 giscus，enabled 关闭即不挂载 */}
           {siteConfig.comments.enabled ? <PostComments /> : null}
 
@@ -143,7 +140,19 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           />
         </div>
 
-        {headings.length > 0 ? <TableOfContents headings={headings} /> : null}
+        {/* 右栏面板（用户需求，透明风）：作者信息 + 上下篇单行条目 + 目录
+            sticky + max-h 防 sticky 溢出（底部留 2rem 呼吸位）；目录组件内部自带
+            「标题钉住 + 仅列表内滚」（min-h-0 随面板收缩，滚动条隐藏），作者卡与上下篇恒定可见 */}
+        <aside className="hidden w-64 shrink-0 xl:block">
+          <div className="sticky top-24 flex max-h-[calc(100dvh-8rem)] flex-col gap-5">
+            <AuthorCard />
+            <nav aria-label="文章导航" className="flex shrink-0 items-center gap-2">
+              <AdjacentPostCard label="上一篇" post={prev} />
+              <AdjacentPostCard label="下一篇" post={next} />
+            </nav>
+            {headings.length > 0 ? <TableOfContents headings={headings} /> : null}
+          </div>
+        </aside>
       </div>
 
       {/* 复制按钮 / Mermaid 渲染 / 锚点滚动 / 浮动评论直达（纯增强，见组件注释）；随文章页挂载 */}
@@ -151,6 +160,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       <MermaidRenderer />
       <AnchorScroll />
       {siteConfig.comments.enabled ? <JumpToComments /> : null}
+      {/* xl 以下右栏收进抽屉（作者卡/上下篇/目录），三横线浮动按钮唤出 */}
+      <PostPanelDrawer headings={headings} prev={prev} next={next} />
     </div>
   );
 }

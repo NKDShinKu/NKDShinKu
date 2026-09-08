@@ -29,7 +29,7 @@ export function JumpToComments() {
       type="button"
       onClick={onClick}
       aria-label="跳到评论区"
-      className="border-border bg-surface/80 text-text focus-visible:outline-accent hover:border-accent hover:text-accent fixed right-5 bottom-[5.25rem] z-40 grid size-12 cursor-pointer place-items-center rounded-full border shadow-md backdrop-blur-sm transition-[border-color,color] duration-200 ease-out focus-visible:outline-2 focus-visible:outline-offset-2"
+      className="border-border bg-surface/80 text-text focus-visible:outline-accent hover:border-accent hover:text-accent fixed right-5 bottom-[9.5rem] z-40 grid size-12 cursor-pointer place-items-center rounded-full border shadow-md backdrop-blur-sm transition-[border-color,color] duration-200 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 xl:bottom-[5.25rem]"
     >
       <span className="icon-[mdi--comment-text-outline] size-5" aria-hidden />
     </button>

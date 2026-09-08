@@ -46,6 +46,8 @@ export const siteConfig = {
   locale: "zh-CN",
   /** Bangumi 用户 ID（ACG 板块数据源，manifest D6/D14） */
   bangumiUserId: "796189",
+  /** 作者一句话签名（文章页作者卡等；用户文案 2026-09） */
+  authorTagline: "祈祷明天对你来说，也是美好的一天。",
   /**
    * giscus 评论（REQ-P10 / D19 重启）：数据存 GitHub Discussions，抽屉式形态（D9 采纳）。
    * enabled 一键开关：国内实测加载不佳时置 false 即整块下线，无需回滚代码。

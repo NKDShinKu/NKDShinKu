@@ -101,16 +101,23 @@ html.dark .shiki span {
 
 ### 2.7 TOC 侧栏（详情页桌面，REQ-P6）
 
-- `hidden xl:block w-56 shrink-0`；内层 `sticky top-24 max-h-[calc(100dvh-7rem)] overflow-y-auto`。
-- 标题「目录」：`text-xs font-bold tracking-widest uppercase text-accent-dark`。
+- 右栏面板（§2.8a）的一节；标题「目录」：`text-xs font-bold tracking-widest uppercase text-accent-dark`。
 - 条目：h2 `text-sm`、h3 `text-sm pl-4`；默认 `border-l-2 border-transparent text-text-muted`；scrollspy 命中 `border-accent text-accent-dark font-medium`（200ms）；当前条目 `aria-current="true"`。
-- 客户端组件（IntersectionObserver）；无 JS 时整块不渲染（服务端可渐进增强判断）。
+- 客户端组件（IntersectionObserver）；长文超视口时由面板容器的 `max-h + overflow-y-auto` 内部滚动兜底。
+- 目录点击跳转后不进历史栈；移动端在抽屉内点击后自动关闭抽屉（§2.8a）。
 
-### 2.8 上一篇 / 下一篇（详情页底部，REQ-P7，P2）
+### 2.8 上一篇 / 下一篇（REQ-P7）
 
-- `grid gap-4 sm:grid-cols-2`，两张 `Card surface interactive`：
-  左「← 上一篇」右「下一篇 →」；小标 `text-xs text-text-muted` + 标题 `text-base font-medium` hover `text-accent`。
-- 无对应文章时该格渲染为禁用态占位（`opacity-40`）。
+- **桌面右栏（§2.8a）**：`‹ 上一篇` / `下一篇 ›` 两条等宽玻璃短条并排（`gap-2`），hover/聚焦浮出标题气泡（朝下、超长 truncate）。
+- **移动端抽屉（§2.8a）**：`stacked` 形态——纵向全宽两条沉底、上方 `border-t` 装饰线，标题单行直显省略（触屏无 hover）。
+- 换页走 `router.replace` 不进历史栈（D13）；无对应文章时禁用态（`opacity-40`）。
+
+### 2.8a 右栏面板与抽屉（2026-09 用户需求，参考成熟博客）
+
+- **桌面（≥xl）**：`aside w-64` 右栏 = 作者卡 + 上下篇短条 + 目录（§2.7）；sticky 容器 `top-24 max-h-[calc(100dvh-7rem)] overflow-y-auto`（长文目录超视口时面板内部滚动）。
+- **作者卡**：浅染玻璃卡纵向居中——头像 64px（站点图标兜底，O3 素材到位即换）→ 名字 → `siteConfig.authorTagline` 签名。
+- **移动端（<xl）**：右栏收进抽屉（Radix Dialog，搜索弹窗同款原语）；「三横线」浮动按钮唤出（回顶部与评论直达按钮之间）；目录点击后自动关闭。
+- **浮动按钮堆叠（<xl）**：回顶部（bottom-5）→ 面板抽屉（5.25rem）→ 评论直达（9.5rem）；xl+ 抽屉按钮隐藏、评论直达归位 5.25rem。
 
 ### 2.9 归档时间线（`/archive`，REQ-P3）
 
