@@ -38,6 +38,8 @@ export async function generateMetadata({
       publishedTime: post.date,
       modifiedTime: post.updated ?? post.date,
       tags: [...post.tags],
+      // openGraph 嵌套对象不与根布局合并，文章页须显式声明（OG 全站共用品牌图，D19）
+      images: [{ url: "/og.png", width: 1200, height: 630, alt: post.title }],
     },
   };
 }
@@ -72,71 +74,68 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       {/* 双列：正文 720px 居中 + TOC 侧栏（xl 起，design-system/posts.md §3.2） */}
       <div className="mx-auto flex max-w-[720px] justify-center gap-10 xl:max-w-none xl:justify-between">
         <div className="w-full max-w-[720px]">
-        <BackButton fallbackHref="/posts/" />
+          <BackButton fallbackHref="/posts/" />
 
-        <header className="mt-8">
-          <div className="text-text-muted flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
-            {/* data-pagefind-meta：结果行展示分类（search.md S-5） */}
-            <Tag data-pagefind-meta="category">{post.category}</Tag>
-            <span className="inline-flex items-center gap-1">
-              <span className="icon-[mdi--calendar-outline] size-4" aria-hidden />
-              <time dateTime={post.date}>{post.date}</time>
-            </span>
-            {post.updated ? (
+          <header className="mt-8">
+            <div className="text-text-muted flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+              {/* data-pagefind-meta：结果行展示分类（search.md S-5） */}
+              <Tag data-pagefind-meta="category">{post.category}</Tag>
               <span className="inline-flex items-center gap-1">
-                <span className="icon-[mdi--update] size-4" aria-hidden />
-                更新于 <time dateTime={post.updated}>{post.updated}</time>
+                <span className="icon-[mdi--calendar-outline] size-4" aria-hidden />
+                <time dateTime={post.date}>{post.date}</time>
               </span>
-            ) : null}
-            <span className="inline-flex items-center gap-1">
-              <span className="icon-[mdi--clock-outline] size-4" aria-hidden />
-              {post.readingMinutes} 分钟阅读
-            </span>
-          </div>
+              {post.updated ? (
+                <span className="inline-flex items-center gap-1">
+                  <span className="icon-[mdi--update] size-4" aria-hidden />
+                  更新于 <time dateTime={post.updated}>{post.updated}</time>
+                </span>
+              ) : null}
+              <span className="inline-flex items-center gap-1">
+                <span className="icon-[mdi--clock-outline] size-4" aria-hidden />
+                {post.readingMinutes} 分钟阅读
+              </span>
+            </div>
 
-          <h1 className="mt-4 text-2xl leading-tight font-bold [text-wrap:balance] md:text-3xl">
-            {post.title}
-          </h1>
+            <h1 className="mt-4 text-2xl leading-tight font-bold [text-wrap:balance] md:text-3xl">
+              {post.title}
+            </h1>
 
-          <p className="text-text-muted mt-4 border-l-2 border-sakura pl-4 text-base leading-relaxed">
-            {post.description}
-          </p>
-        </header>
+            <p className="text-text-muted border-sakura mt-4 border-l-2 pl-4 text-base leading-relaxed">
+              {post.description}
+            </p>
+          </header>
 
-        <hr className="border-border my-8" />
+          <hr className="border-border my-8" />
 
-        {/* 正文：零入场动画（P-9，阅读优先）；内容来源构建期渲染，静态 HTML 可信
+          {/* 正文：零入场动画（P-9，阅读优先）；内容来源构建期渲染，静态 HTML 可信
             data-pagefind-body：站点存在该标记后 Pagefind 仅索引文章正文（REQ-S2 首期仅文章） */}
-        <article
-          className="post-body"
-          data-pagefind-body
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
+          <article
+            className="post-body"
+            data-pagefind-body
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
 
-        {post.tags.length > 0 ? (
-          <div className="mt-10 flex flex-wrap items-center gap-2">
-            {post.tags.map((tag) => (
-              <Link key={tag} href={`/posts/tag/${tagSlug(tag)}/`}>
-                <Tag className="transition-colors duration-150 ease-fast hover:bg-accent/15">
-                  {tag}
-                </Tag>
-              </Link>
-            ))}
-          </div>
-        ) : null}
+          {post.tags.length > 0 ? (
+            <div className="mt-10 flex flex-wrap items-center gap-2">
+              {post.tags.map((tag) => (
+                <Link key={tag} href={`/posts/tag/${tagSlug(tag)}/`}>
+                  <Tag className="ease-fast hover:bg-accent/15 transition-colors duration-150">
+                    {tag}
+                  </Tag>
+                </Link>
+              ))}
+            </div>
+          ) : null}
 
-        <nav
-          aria-label="文章导航"
-          className="mt-10 grid gap-4 sm:grid-cols-2"
-        >
-          <AdjacentPostCard label="上一篇" post={prev} align="left" />
-          <AdjacentPostCard label="下一篇" post={next} align="right" />
-        </nav>
+          <nav aria-label="文章导航" className="mt-10 grid gap-4 sm:grid-cols-2">
+            <AdjacentPostCard label="上一篇" post={prev} align="left" />
+            <AdjacentPostCard label="下一篇" post={next} align="right" />
+          </nav>
 
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd(post)) }}
-        />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd(post)) }}
+          />
         </div>
 
         {headings.length > 0 ? <TableOfContents headings={headings} /> : null}
