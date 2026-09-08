@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { HomeHero } from "@/components/home/home-hero";
+import { RecentWatching } from "@/components/acg/recent-watching";
 import { Reveal } from "@/components/motion/reveal";
 import { PostCard } from "@/components/posts/post-card";
 import { Card } from "@/components/ui/card";
 import { getAllPosts } from "@/lib/posts";
 import { siteConfig } from "@/lib/site.config";
 
-/** 首页：全屏 Hero（滚动过渡见组件）→ 最新文章（横卡）→ 板块入口；滚动叙事仅首页保留 */
+/** 首页：全屏 Hero → 最新文章（横卡）→ 最近在看（Bangumi 实时）→ 板块入口；滚动叙事仅首页保留 */
 export default function HomePage() {
   const latestPosts = getAllPosts().slice(0, 3);
 
@@ -43,12 +44,14 @@ export default function HomePage() {
           </Reveal>
         </section>
 
+        <RecentWatching />
+
         <section className="pb-16 md:pb-24" aria-label="板块入口">
           <Reveal className="mb-10 text-center">
             <p className="text-accent-dark text-xs font-bold tracking-widest uppercase">Explore</p>
             <h2 className="mt-2 text-2xl font-bold">板块导航</h2>
             <p className="text-text-muted mx-auto mt-2 max-w-[480px]">
-              从这里进入文章、项目、追番与关于。
+              从这里进入文章、实验室、ACG 与关于。
             </p>
           </Reveal>
 
