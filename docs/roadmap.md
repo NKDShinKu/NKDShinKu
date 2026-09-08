@@ -46,11 +46,22 @@
 - [x] 阶段走查：对比度数值审计（74 项，两页两态）——补 sakura/twilight 深变体 token、搜索弹窗 ARIA 修正；375/1280 无横向溢出；focus trap / Esc 焦点归还 / reduced-motion 验证通过
 - [x] ACG 板块（D18，REQ-M）：数据层（Bangumi 收藏缓存 + SWR）、`/acg` 橱窗 hub（三区叠层封面卡 + 品牌渐变页头）、`/acg/anime` 番剧归档（收藏分布条 + 编辑式行卡 + 加载更多）；走查含对比度数值审计、375–1440 四档溢出、缓存 SWR 行为
 - [x] 首页最近在看小部件（REQ-H5）：复用 AnimeCoverCard + ACG 缓存（30 分钟共享），失败/空组整块隐藏
-- [x] giscus 评论：维持 P3 暂缓（默认不上线，重启需用户确认）
 
-## M4 上线 ⏳
+## M4 上线 🔨
 
-方向：部署收尾（HTTPS 证书 + 验证）、R2 图床接入、性能与移动端走查、正式发布。
+方向：上线收尾 + 正式发布（2026-09 方案定稿并开工；giscus 评论经用户确认重启，从 P3 暂缓转入本期）。
+
+- [ ] T0 基线清理：删孤儿占位图、文档漂移与状态同步（design-system 首页布局、deploy-checklist HTTPS）
+- [ ] T1 文章目录按年重组：`content/posts/<年>/` 子目录，posts.ts 递归遍历 + 跨目录重名 slug 校验，URL 零变化
+- [ ] T2 完整站点图标集（REQ-F6）：favicon.ico / apple-touch-icon / manifest（generate-icons 脚本从 icon.svg 派生）
+- [ ] T3 OG 社交分享图（REQ-G4 / O4）：静态品牌图 1200×630 全站共用 + twitter card，样稿评审先行
+- [ ] T4 llms.txt（REQ-F4）：静态文件，站点说明 + 文章索引
+- [ ] T5 正文图片渲染优化：rehype 注入 lazy/async，缺 alt 构建期 warn
+- [ ] T6 R2 图床接入：API Token + rclone、目录约定 `/images/posts/`、测试图验证
+- [ ] T7 文章封面自绘接入：样稿评审 → 4 张 840×525（16:10）→ R2 上传 → frontmatter cover
+- [ ] T8 giscus 评论（REQ-P10 / D5 重启）：抽屉式形态，配置收敛 site.config（含开关），国内实测后定开关终态
+- [ ] T9 性能与移动端走查：Lighthouse 四页两态、chunk/字体产物分析、375–1440 溢出抽查
+- [ ] T10 发布收尾：Enforce HTTPS、站长验证（REQ-F5）、404/Pagefind/OG/图标/封面/评论线上六项验证、文档闭环
 
 ## M5 迭代 ⏳
 

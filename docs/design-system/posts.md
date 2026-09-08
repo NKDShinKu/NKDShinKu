@@ -177,8 +177,8 @@ flex justify-center gap-10（xl 起）
 
 ### 3.5 首页「最新文章」区块改造（REQ-H2/H3）
 
-- 区块头：§2.4 居中版式 + 右上「查看全部 →」链接（`text-sm text-accent-dark hover:text-accent`）。
-- 栅格 `grid gap-6 md:grid-cols-3`，取最新 3 篇（`pinned` 优先）；卡片复用 PostCard（无封面形态）。
+- 区块头：§2.4 居中版式；「查看全部文章 →」链接居中置于列表下方（D13 演进：区块头右上链接方案未采用）。
+- 布局 `mx-auto flex max-w-[880px] flex-col gap-5` 纵向单列（D13：横向列表卡 880px 单列），取最新 3 篇（`pinned` 优先）；卡片复用 PostCard。
 - 替换 M1 的「建设中」占位卡。
 
 ---
