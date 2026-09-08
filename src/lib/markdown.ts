@@ -18,6 +18,33 @@ import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
+import type { Element, Root, RootContent } from "hast";
+
+/**
+ * 正文图片优化（REQ-G8）：img 节点注入 lazy/async 属性；
+ * alt 缺失构建期 warn（无障碍底线提醒，不阻断构建——装饰图允许 alt=""）。
+ */
+function rehypeImages() {
+  return (tree: Root) => {
+    visitImages(tree, (node) => {
+      node.properties.loading = "lazy";
+      node.properties.decoding = "async";
+      if (typeof node.properties.alt !== "string") {
+        console.warn(
+          `[markdown] 正文图片缺 alt：<${node.properties.src ?? "?"}>（装饰图请显式写 alt=""）`,
+        );
+      }
+    });
+  };
+}
+
+/** 最小 hast 遍历（img 不会嵌套子元素，逐层下钻即可，不引 visit 依赖） */
+function visitImages(node: Root | RootContent, callback: (img: Element) => void) {
+  if (node.type === "element" && node.tagName === "img") callback(node);
+  if ("children" in node && Array.isArray(node.children)) {
+    for (const child of node.children) visitImages(child, callback);
+  }
+}
 
 export interface Heading {
   id: string;
@@ -29,6 +56,7 @@ const processor = unified()
   .use(remarkParse)
   .use(remarkGfm)
   .use(remarkRehype)
+  .use(rehypeImages)
   .use(rehypeSlug)
   .use(rehypeAutolinkHeadings, {
     behavior: "append",
