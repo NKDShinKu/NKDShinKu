@@ -1,5 +1,6 @@
 ---
 title: Next.js 16 静态导出的五个坑
+cover: https://img.nkdshinku.com/images/posts/nextjs-static-export-notes.png
 description: force-static 必须显式声明、trailingSlash 与 GitHub Pages、Pagefind 只索引构建产物、.next 陈旧类型、pnpm store 漂移——建站实录踩坑合集。
 date: 2026-09-01
 category: 笔记

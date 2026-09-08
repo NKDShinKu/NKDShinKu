@@ -1,5 +1,6 @@
 ---
 title: 你好，世界：这个博客诞生了
+cover: https://img.nkdshinku.com/images/posts/hello-world.png
 description: 从一版废弃的 Vue 尝试，到 Next.js 全静态导出——这个博客为什么存在，以及它将装下什么。
 date: 2026-08-30
 category: 日常

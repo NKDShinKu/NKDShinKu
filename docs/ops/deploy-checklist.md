@@ -21,14 +21,14 @@
   - [ ] Pagefind 产物存在 `https://nkdshinku.com/pagefind/pagefind.js`
 - [x] 本地 `git remote -v` 确认为 `NKDShinKu/NKDShinKu`
 
-## 2. Cloudflare R2 图床（M4 接入文章时完成）
+## 2. Cloudflare R2 图床（M4 已接入）
 
 - [x] R2 创建存储桶 `nkdshinku-assets`
 - [x] 绑定自定义域 `img.nkdshinku.com` → 该存储桶
-- [ ] 创建 API Token（对象读/写权限），本地配置 rclone（S3 兼容端点）
-- [ ] 约定目录：`/images/posts/`、`/images/projects/`；公网 URL 形如
+- [x] 创建 API Token（对象读/写），本地配置 rclone（S3 兼容端点，remote 名 `r2`）
+- [x] 约定目录：`/images/posts/`、`/images/projects/`；公网 URL 形如
       `https://img.nkdshinku.com/images/...`（文章 frontmatter 的 `cover` 按此填写）
-- [ ] 上传测试图片并验证访问与缓存
+- [x] 上传测试图片并验证访问与缓存（4 张文章封面 200 OK / image/png / ETag / max-age=14400）
 
 ## 3. giscus 评论（M4 重启：D5 从 P3 暂缓转全量上线，T8 执行）
 

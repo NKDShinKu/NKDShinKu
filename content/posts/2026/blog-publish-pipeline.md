@@ -1,5 +1,6 @@
 ---
 title: 这篇博客是怎么发布出去的
+cover: https://img.nkdshinku.com/images/posts/blog-publish-pipeline.png
 description: 从一篇 Markdown 到 GitHub Pages 上线，一次 push 背后的完整流水线——用流程图和时序图讲清楚。
 date: 2026-09-02
 category: 教程

@@ -57,6 +57,16 @@ interface LabItem {
 
 ## 4. 图片与发布流程
 
-- 图片统一走 R2 图床（自定义域）；本地预览允许相对路径占位。
+- 图片统一走 R2 图床（自定义域 `img.nkdshinku.com`）；本地预览允许相对路径占位。
+- **上传命令**（rclone 已配置 remote `r2`，桶 `nkdshinku-assets`）：
+
+  ```bash
+  # 文章封面（源文件在 assets/covers/，由 scripts/generate-covers.mjs 生成）
+  rclone copy assets/covers r2:nkdshinku-assets/images/posts
+  # 其他图片按目录约定：/images/posts/（文章）、/images/projects/（实验室）
+  ```
+
+- 封面 URL 规则：`https://img.nkdshinku.com/images/posts/<slug>.png`（与文件名同名）。
+- R2 默认缓存 `max-age=14400`（4 小时）：同名覆盖更新后最长 4 小时生效，改名上传则即时。
 - 素材版权：自绘 / AI 生成 / 明确授权（见 `docs/project-manifest.md` 风险清单）。
 - 发布流程：写 Markdown → `pnpm dev` 本地预览 → 变更交用户评审 → commit（lint/typecheck/build 全绿）→ 用户 push → CI 部署。
