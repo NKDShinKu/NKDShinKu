@@ -2,7 +2,8 @@
  * 文章数据层 —— Markdown 内容管线的元信息读取与聚合
  *
  * 约定（content/README.md + docs/design-system/posts.md）：
- * - 文章位于 `content/posts/*.md`，文件名（去扩展名）即 slug（不含日期前缀，manifest D9）
+ * - 文章位于 `content/posts/<年>/*.md`（按年分子目录，D19），文件名（去扩展名）即 slug（不含日期前缀，manifest D9）
+ * - 排序依据 frontmatter `date`（必填），与文件名/目录结构无关
  * - frontmatter 字段以 content/README.md §2 为准；`draft: true` 构建期直接忽略
  * - 仅在构建期被服务端组件调用（node:fs），无任何浏览器端逻辑
  * - 元信息校验失败一律抛错：构建期快速失败优于静默产出坏数据
@@ -119,7 +120,11 @@ function requireString(data: Record<string, unknown>, key: string, file: string)
   return value;
 }
 
-function optionalString(data: Record<string, unknown>, key: string, file: string): string | undefined {
+function optionalString(
+  data: Record<string, unknown>,
+  key: string,
+  file: string,
+): string | undefined {
   const value = data[key];
   if (value === undefined) return undefined;
   if (typeof value !== "string" || value.length === 0) {
@@ -166,20 +171,25 @@ function requireDate(data: Record<string, unknown>, key: string, file: string): 
   return normalizeDate(data[key], key, file);
 }
 
-function optionalDate(data: Record<string, unknown>, key: string, file: string): string | undefined {
+function optionalDate(
+  data: Record<string, unknown>,
+  key: string,
+  file: string,
+): string | undefined {
   if (data[key] === undefined) return undefined;
   return normalizeDate(data[key], key, file);
 }
 
-function parsePost(slug: string, raw: string): RawPost {
+function parsePost(slug: string, raw: string, file: string): RawPost {
   const { data, content } = matter(raw);
-  const file = `${slug}.md`;
 
   const tags = optionalStringArray(data, "tags", file) ?? [];
   // 标签自由填写（中文为主）；slug 由 tagSlug 自动生成（覆盖表/拼音），转换后为空说明标签写法异常
   for (const tag of tags) {
     if (tagSlug(tag).length === 0) {
-      throw new Error(`[posts] ${file}: 标签「${tag}」无法生成有效路由 slug（转换后为空），请调整写法`);
+      throw new Error(
+        `[posts] ${file}: 标签「${tag}」无法生成有效路由 slug（转换后为空），请调整写法`,
+      );
     }
   }
 
@@ -209,16 +219,40 @@ function parsePost(slug: string, raw: string): RawPost {
   };
 }
 
+/**
+ * 递归收集目录下全部 .md 文件，返回相对路径（正斜杠，便于报错信息展示）。
+ * 目录按年分子目录（`content/posts/2026/…`，D19）；slug 一律取文件名，目录不参与路由。
+ */
+function collectMarkdownFiles(dir: string): string[] {
+  const files: string[] = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (entry.isDirectory()) {
+      files.push(...collectMarkdownFiles(path.join(dir, entry.name)));
+    } else if (entry.isFile() && entry.name.endsWith(".md")) {
+      files.push(path.relative(POSTS_DIR, path.join(dir, entry.name)).split(path.sep).join("/"));
+    }
+  }
+  return files;
+}
+
 /** 构建期读取一次并缓存；draft 在此过滤，排序 pinned 优先、日期倒序 */
 function loadPosts(): Post[] {
-  const files = readdirSync(POSTS_DIR).filter((file) => file.endsWith(".md"));
+  const files = collectMarkdownFiles(POSTS_DIR);
   if (files.length === 0) {
     throw new Error(`[posts] ${POSTS_DIR} 下没有任何 .md 文章`);
   }
+  const seen = new Map<string, string>();
   return files
     .map((file) => {
-      const slug = file.replace(/\.md$/, "");
-      return parsePost(slug, readFileSync(path.join(POSTS_DIR, file), "utf-8"));
+      const slug = path.basename(file, ".md");
+      const duplicate = seen.get(slug);
+      if (duplicate) {
+        throw new Error(
+          `[posts] slug「${slug}」跨目录重名：${duplicate} 与 ${file}（slug 取文件名，全局唯一）`,
+        );
+      }
+      seen.set(slug, file);
+      return parsePost(slug, readFileSync(path.join(POSTS_DIR, file), "utf-8"), file);
     })
     .filter((post) => !post.draft)
     .sort((a, b) => {

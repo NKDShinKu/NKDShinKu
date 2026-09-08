@@ -6,30 +6,32 @@
 
 ```
 content/
-├── posts/            # 文章（含教程/笔记/日常，文件名即 slug）
-│   └── 2026-08-01-hello-world.md
+├── posts/            # 文章（含教程/笔记/日常，按年分子目录，D19）
+│   └── 2026/
+│       └── hello-world.md
 └── lab.ts            # 实验室条目结构化配置（外链项目 + 站内 demo）
 ```
 
 - 文章用 **Markdown + frontmatter**，统一经 `src/lib/` 加载与渲染（构建期，服务端组件）。
+- **文件名（去扩展名）即 slug，全局唯一**（跨年份目录不可重名，构建期校验）；排序依据 frontmatter `date`，与文件名无关，不使用日期/序号前缀（D9）。
 - 分类初始集合：`教程` / `笔记` / `日常`（可扩展；枚举收敛在 `site.config` 或 lib 常量中）。
 - 标签自由填写，列表页自动聚合。
 
 ## 2. 文章 frontmatter 字段
 
-| 字段          | 必填 | 说明                                                        |
-| ------------- | ---- | ----------------------------------------------------------- |
-| `title`       | ✅   | 标题                                                        |
-| `description` | ✅   | 摘要；同时作 meta description                               |
-| `date`        | ✅   | 发布日期（ISO）                                             |
-| `updated`     | 可选 | 最后更新日期                                                |
-| `category`    | ✅   | 教程 / 笔记 / 日常                                          |
+| 字段          | 必填 | 说明                                                                                                       |
+| ------------- | ---- | ---------------------------------------------------------------------------------------------------------- |
+| `title`       | ✅   | 标题                                                                                                       |
+| `description` | ✅   | 摘要；同时作 meta description                                                                              |
+| `date`        | ✅   | 发布日期（ISO）                                                                                            |
+| `updated`     | 可选 | 最后更新日期                                                                                               |
+| `category`    | ✅   | 教程 / 笔记 / 日常                                                                                         |
 | `tags`        | 可选 | 标签数组，自由填写（中文为主）；路由 slug 自动生成——登记标签用 `src/lib/posts.ts` 覆盖表，其余转无声调拼音 |
-| `keywords`    | 可选 | SEO 关键词（meta keywords）                                 |
-| `cover`       | 可选 | 封面图（R2 绝对 URL，`img.nkdshinku.com/images/posts/...`） |
-| `pinned`      | 可选 | 置顶（首页优先展示）                                        |
-| `draft`       | 可选 | 草稿（构建忽略）                                            |
-| `series`      | 可选 | 系列名（预留）                                              |
+| `keywords`    | 可选 | SEO 关键词（meta keywords）                                                                                |
+| `cover`       | 可选 | 封面图（R2 绝对 URL，`img.nkdshinku.com/images/posts/...`）                                                |
+| `pinned`      | 可选 | 置顶（首页优先展示）                                                                                       |
+| `draft`       | 可选 | 草稿（构建忽略）                                                                                           |
+| `series`      | 可选 | 系列名（预留）                                                                                             |
 
 ## 3. 实验室数据模型（`lab.ts`）
 
