@@ -32,7 +32,8 @@ export function AnimeCoverCard({ item, showProgress = false }: AnimeCoverCardPro
       target="_blank"
       rel="noopener noreferrer"
       title={name}
-      aria-label={`《${name}》在 Bangumi 查看（新窗口）`}
+      /* 无覆盖式 aria-label：可访问名称取自内容（封面 alt + Rank/评分/进度 + 标题），
+         语音输入匹配可见文本（label-content-name-mismatch 走查修复） */
       className="group focus-visible:outline-accent relative w-36 shrink-0 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 md:w-40"
     >
       <div className="border-border bg-surface relative aspect-[2/3] overflow-hidden rounded-md border">
@@ -46,21 +47,21 @@ export function AnimeCoverCard({ item, showProgress = false }: AnimeCoverCardPro
         />
 
         {rank > 0 ? (
-          <span className="absolute left-2 top-2 rounded-full bg-black/55 px-2 py-0.5 text-xs font-medium text-white backdrop-blur-sm">
+          <span className="absolute top-2 left-2 rounded-full bg-black/55 px-2 py-0.5 text-xs font-medium text-white backdrop-blur-sm">
             Rank {rank}
           </span>
         ) : null}
 
         {/* 右上：BN 社区评分（与个人评分互换位置——用户决策，样式沿用个人评分 pill） */}
         {score > 0 ? (
-          <span className="bg-accent absolute right-2 top-2 rounded-full px-2 py-0.5 text-xs font-semibold text-white">
+          <span className="bg-accent absolute top-2 right-2 rounded-full px-2 py-0.5 text-xs font-semibold text-white">
             ★ {score.toFixed(1)}
           </span>
         ) : null}
 
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent px-2.5 pb-2 pt-10">
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent px-2.5 pt-10 pb-2">
           {/* 个人评分 + 进度行：常驻渲染（缺失留白），标题恒贴底对齐（用户决策方案 1） */}
-          <div className="text-white/85 flex min-h-5 items-center justify-between text-xs">
+          <div className="flex min-h-5 items-center justify-between text-xs text-white/85">
             <span className="inline-flex items-center gap-0.5">
               {item.rate > 0 ? (
                 <>

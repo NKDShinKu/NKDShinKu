@@ -60,7 +60,7 @@
 - [ ] T6 R2 图床接入：API Token + rclone、目录约定 `/images/posts/`、测试图验证
 - [ ] T7 文章封面自绘接入：样稿评审 → 4 张 840×525（16:10）→ R2 上传 → frontmatter cover
 - [ ] T8 giscus 评论（REQ-P10 / D5 重启）：抽屉式形态，配置收敛 site.config（含开关），国内实测后定开关终态
-- [ ] T9 性能与移动端走查：Lighthouse 四页两态、chunk/字体产物分析、375–1440 溢出抽查
+- [x] T9 性能与移动端走查：Lighthouse 四页两态（桌面 97–100 / 移动 80–93，CLS 全 0，SEO 全 100）；修复 ACG 封面卡 label-content-name-mismatch 36 处（去掉覆盖式 aria-label，可访问名称取自内容）；品牌色叠标对比度按 D10 豁免记录。M5 记录项：ACG hub 移动端 LCP 5.0s（Bangumi 客户端取数链路 + 封面原图 1.6MB，可用 bgm.tv URL 尺寸参数优化）、RSC prefetch 404 控制台噪音、unused/legacy JS ~60KiB、主线程 GSAP chunk 1.2s；375–1440 五页四档横向溢出 0
 - [ ] T10 发布收尾：Enforce HTTPS、站长验证（REQ-F5）、404/Pagefind/OG/图标/封面/评论线上六项验证、文档闭环
 
 ## M5 迭代 ⏳
