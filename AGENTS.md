@@ -2,7 +2,7 @@
 
 > AI 协作时的项目**规则**文件。项目事实（方案/选型/外部服务/决策/风险）见
 > `docs/project-manifest.md`；需求见 `docs/requirements.md`；进度见 `docs/roadmap.md`；
-> 部署步骤见 `docs/ops/deploy-checklist.md`。
+> 部署步骤见 `docs/ops/deploy-checklist.md`；**写文章 / 实验室 / 图片上传等内容操作手册见 `content/README.md`**。
 > 每次会话开始先读本文件与 project-manifest.md。
 > **每次 commit 前把变更清单交用户评审，确认后才能提交**（用户规则）。
 
