@@ -79,7 +79,7 @@ const covers = {
   <circle cx="640" cy="380" r="4" fill="${C.sakuraLight}" opacity="0.9"/>
   <!-- 标题区 -->
   <text x="420" y="330" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="52" font-weight="700" fill="${C.ink}" text-anchor="middle">Hello, World!</text>
-  <text x="420" y="384" font-family="'Microsoft YaHei', sans-serif" font-size="26" fill="${C.muted}" text-anchor="middle">这个博客诞生了 · 建站随笔</text>
+  <text x="420" y="384" font-family="'Microsoft YaHei', sans-serif" font-size="26" fill="${C.muted}" text-anchor="middle">这个博客的由来与打算</text>
   <!-- 品牌渐变短线 -->
   <linearGradient id="brand" x1="0" y1="0" x2="1" y2="0">
     <stop offset="0" stop-color="${C.accent}"/><stop offset="0.5" stop-color="${C.twilight}"/><stop offset="1" stop-color="${C.sakura}"/>
@@ -170,6 +170,99 @@ const covers = {
   <!-- 标题区 -->
   <text x="420" y="400" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="46" font-weight="700" fill="${C.ink}" text-anchor="middle">Pipeline</text>
   <text x="420" y="444" font-family="'Microsoft YaHei', sans-serif" font-size="24" fill="${C.muted}" text-anchor="middle">一篇 Markdown 的上线之旅</text>`,
+  },
+
+  "static-blog-giscus-guide": {
+    title: "giscus",
+    subtitle: "评论区接入实录",
+    body: `
+  ${base(`
+    <ellipse cx="130" cy="100" rx="200" ry="150" fill="${C.accent}" opacity="0.20" filter="url(#soft)"/>
+    <ellipse cx="740" cy="450" rx="210" ry="150" fill="${C.sakura}" opacity="0.22" filter="url(#soft)"/>
+    <ellipse cx="770" cy="90" rx="170" ry="130" fill="${C.twilight}" opacity="0.18" filter="url(#soft)"/>`)}
+  <defs>
+    <linearGradient id="bubbleGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="${C.accent}"/>
+      <stop offset="1" stop-color="${C.twilight}"/>
+    </linearGradient>
+    <linearGradient id="bubbleGrad2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="${C.sakura}"/>
+      <stop offset="1" stop-color="${C.accentLight}"/>
+    </linearGradient>
+  </defs>
+  <!-- 对话气泡母题：一问一答（评论区意象） -->
+  <g>
+    <rect x="170" y="130" width="200" height="96" rx="24" fill="url(#bubbleGrad)"/>
+    <path d="M 220 226 l 14 26 12 -26 z" fill="${C.accent}"/>
+    <g fill="#ffffff" opacity="0.9">
+      <circle cx="235" cy="178" r="9"/>
+      <circle cx="270" cy="178" r="9"/>
+      <circle cx="305" cy="178" r="9"/>
+    </g>
+  </g>
+  <g>
+    <rect x="470" y="200" width="220" height="88" rx="24" fill="url(#bubbleGrad2)"/>
+    <path d="M 600 288 l -12 26 -14 -26 z" fill="${C.sakura}"/>
+    <g stroke="#ffffff" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 520 244 l 18 18 34 -36"/>
+    </g>
+  </g>
+  <!-- 星屑点缀 -->
+  <path d="M 160 360 l 4 11 11 4 -11 4 -4 11 -4 -11 -11 -4 11 -4 z" fill="${C.sakura}" opacity="0.9"/>
+  <path d="M 710 330 l 3.5 9.5 9.5 3.5 -9.5 3.5 -3.5 9.5 -3.5 -9.5 -9.5 -3.5 9.5 -3.5 z" fill="${C.accent}" opacity="0.8"/>
+  <circle cx="250" cy="90" r="5" fill="${C.twilight}" opacity="0.7"/>
+  <circle cx="620" cy="90" r="4" fill="${C.sakuraLight}" opacity="0.9"/>
+  <!-- 标题区 -->
+  <text x="420" y="430" font-family="Arial, sans-serif" font-size="52" font-weight="700" fill="${C.ink}" text-anchor="middle">giscus</text>
+  <text x="420" y="474" font-family="'Microsoft YaHei', sans-serif" font-size="24" fill="${C.muted}" text-anchor="middle">给静态博客装上评论区</text>`,
+  },
+
+  "static-blog-seo-guide": {
+    title: "SEO",
+    subtitle: "静态博客的搜索引擎基建",
+    body: `
+  ${base(`
+    <ellipse cx="140" cy="110" rx="200" ry="150" fill="${C.accent}" opacity="0.20" filter="url(#soft)"/>
+    <ellipse cx="730" cy="450" rx="210" ry="150" fill="${C.twilight}" opacity="0.20" filter="url(#soft)"/>
+    <ellipse cx="780" cy="100" rx="160" ry="120" fill="${C.sakura}" opacity="0.18" filter="url(#soft)"/>`)}
+  <defs>
+    <linearGradient id="magGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="${C.accent}"/>
+      <stop offset="1" stop-color="${C.twilight}"/>
+    </linearGradient>
+  </defs>
+  <!-- 母题：页面网格 + 放大镜（被找到的意象） -->
+  <g>
+    <rect x="220" y="120" width="180" height="230" rx="14" fill="#ffffff" opacity="0.85"/>
+    <g fill="${C.accentLight}" opacity="0.9">
+      <rect x="244" y="150" width="90" height="12" rx="6"/>
+      <rect x="244" y="176" width="132" height="8" rx="4" opacity="0.7"/>
+      <rect x="244" y="192" width="132" height="8" rx="4" opacity="0.7"/>
+      <rect x="244" y="208" width="100" height="8" rx="4" opacity="0.7"/>
+    </g>
+    <g fill="${C.sakuraLight}">
+      <rect x="244" y="240" width="40" height="40" rx="8" opacity="0.8"/>
+      <rect x="294" y="240" width="40" height="40" rx="8" opacity="0.8"/>
+      <rect x="344" y="240" width="32" height="40" rx="8" opacity="0.8"/>
+    </g>
+    <rect x="244" y="296" width="132" height="8" rx="4" fill="${C.accentLight}" opacity="0.7"/>
+    <rect x="244" y="312" width="110" height="8" rx="4" fill="${C.accentLight}" opacity="0.7"/>
+  </g>
+  <!-- 放大镜 -->
+  <g>
+    <circle cx="480" cy="220" r="82" fill="#ffffff" opacity="0.25"/>
+    <circle cx="480" cy="220" r="82" fill="none" stroke="url(#magGrad)" stroke-width="16"/>
+    <circle cx="480" cy="220" r="82" fill="none" stroke="#ffffff" stroke-width="4" opacity="0.6"/>
+    <rect x="548" y="296" width="26" height="110" rx="13" fill="${C.accentDark}" transform="rotate(-45 561 351)"/>
+    <path d="M 452 196 l 8 20 20 8 -20 8 -8 20 -8 -20 -20 -8 20 -8 z" fill="#ffffff" opacity="0.85"/>
+  </g>
+  <!-- 星屑点缀 -->
+  <path d="M 700 200 l 4 11 11 4 -11 4 -4 11 -4 -11 -11 -4 11 -4 z" fill="${C.sakura}" opacity="0.9"/>
+  <circle cx="180" cy="420" r="5" fill="${C.twilight}" opacity="0.7"/>
+  <circle cx="660" cy="90" r="4" fill="${C.sakuraLight}" opacity="0.9"/>
+  <!-- 标题区 -->
+  <text x="420" y="430" font-family="Arial, sans-serif" font-size="56" font-weight="700" fill="${C.ink}" text-anchor="middle" letter-spacing="4">SEO</text>
+  <text x="420" y="474" font-family="'Microsoft YaHei', sans-serif" font-size="24" fill="${C.muted}" text-anchor="middle">让好内容被找到</text>`,
   },
 };
 
