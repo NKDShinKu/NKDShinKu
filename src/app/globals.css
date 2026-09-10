@@ -373,8 +373,12 @@
   }
 }
 
-/* Shiki 双主题：亮色为行内色（defaultColor），暗色经 --shiki-dark 变量切换。
-   行内样式只能用 !important 压过（Shiki 官方推荐写法） */
+/* Shiki 双主题：Shiki 4 的双主题输出只含 CSS 变量、无行内色，
+   亮暗两态都必须显式经变量取色（行内变量只能用 !important 压过，Shiki 官方推荐写法） */
+.post-body figure[data-rehype-pretty-code-figure] span,
+.post-body figure[data-rehype-pretty-code-figure] {
+  color: var(--shiki-light);
+}
 .dark .post-body figure[data-rehype-pretty-code-figure] span,
 .dark .post-body figure[data-rehype-pretty-code-figure] {
   color: var(--shiki-dark) !important;
