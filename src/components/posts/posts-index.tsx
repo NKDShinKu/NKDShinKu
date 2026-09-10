@@ -33,7 +33,7 @@ function EntranceLink({ href, icon, children }: { href: string; icon: string; ch
 
 /** 分类徽章图标（徽章 = 前往该分类页的链接，无选中态——用户决策） */
 const CATEGORY_ICONS: Record<PostCategory, string> = {
-  教程: "icon-[mdi--school-outline]",
+  技术: "icon-[mdi--code-braces]",
   笔记: "icon-[mdi--notebook-outline]",
   日常: "icon-[mdi--coffee-outline]",
 };

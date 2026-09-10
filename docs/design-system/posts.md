@@ -57,7 +57,7 @@
 
 - **语义重定义**：chips 是跳往分类页的**链接**，非本页筛选器——**无选中/高亮态**（含分类页）。
 - 形态：`rounded-full border-border bg-surface/70 backdrop-blur-sm`，`min-h-11`（触控纪律）、`flex-wrap`（禁止裁剪溢出）。
-- 内容：分类图标（教程 `mdi--school-outline` / 笔记 `mdi--notebook-outline` / 日常 `mdi--coffee-outline`，`text-accent`）+ 名称 + 计数小徽章（`bg-accent/10 text-accent-dark`）+ hover 右滑箭头 `mdi--chevron-right`。
+- 内容：分类图标（技术 `mdi--code-braces` / 笔记 `mdi--notebook-outline` / 日常 `mdi--coffee-outline`，`text-accent`）+ 名称 + 计数小徽章（`bg-accent/10 text-accent-dark`）+ hover 右滑箭头 `mdi--chevron-right`。
 - 「全部文章」徽章带 `mdi--home-outline`；hover 整体 `border-accent/50 bg-accent/10 text-accent`（150ms）。
 
 ### 2.3 标签索引页（`/posts/tags`，用户走查修订）
@@ -139,7 +139,7 @@ html.dark .shiki span {
 容器：mx-auto w-full max-w-[880px] px-5 sm:px-6；pt-24 md:pt-28（fixed 顶栏补偿）
 ─────────────────────────────────
   紧凑页头一行：左「文章」标题   右三入口（分类 / 标签 / 归档，EntranceLink）
-  分类徽章（全部文章 · 教程 · 笔记 · 日常，前往语义无选中态，§2.2）  ← flex-wrap
+  分类徽章（全部文章 · 技术 · 笔记 · 日常，前往语义无选中态，§2.2）  ← flex-wrap
   ─────────────────────────────
   文章横卡单列纵排 gap-5（§2.1）                  ← Reveal subtle stagger 0.05
   ─────────────────────────────

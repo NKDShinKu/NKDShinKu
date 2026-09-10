@@ -3,7 +3,7 @@ title: 用 Tailwind CSS 4 的 @theme 落地一套设计 Token
 cover: https://img.nkdshinku.com/images/posts/tailwind-v4-design-tokens.png
 description: 从设计稿到 CSS-first token：色彩语义化、暗色 class 策略、玻璃态规范与动效 token 的一次完整实践。
 date: 2026-08-31
-category: 教程
+category: 技术
 tags:
   - Tailwind
   - CSS

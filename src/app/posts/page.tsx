@@ -4,7 +4,7 @@ import { getPostsPage, getTotalPages } from "@/lib/posts-pagination";
 
 export const metadata: Metadata = {
   title: "文章",
-  description: "NKDShinKu 的博客文章：教程、技术笔记与日常。",
+  description: "NKDShinKu 的博客文章：技术、笔记与日常。",
   alternates: { canonical: "/posts/" },
 };
 

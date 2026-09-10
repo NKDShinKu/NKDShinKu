@@ -21,7 +21,7 @@ export default function HomePage() {
             <p className="text-accent-dark text-xs font-bold tracking-widest uppercase">Blog</p>
             <h2 className="mt-2 text-2xl font-bold">最新文章</h2>
             <p className="text-text-muted mx-auto mt-2 max-w-[480px]">
-              文章、教程与笔记，记录学习与思考。
+              文章、技术与笔记，记录学习与思考。
             </p>
           </Reveal>
 

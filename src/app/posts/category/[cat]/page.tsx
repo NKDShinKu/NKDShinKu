@@ -1,13 +1,19 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PostsIndex } from "@/components/posts/posts-index";
-import { categorySlug, categoryFromSlug, getPostsByCategory, POST_CATEGORIES, type PostCategory } from "@/lib/posts";
+import {
+  categorySlug,
+  categoryFromSlug,
+  getPostsByCategory,
+  POST_CATEGORIES,
+  type PostCategory,
+} from "@/lib/posts";
 
 /** 参数空间 = 固定三分类的英文 slug（ASCII，dev/build/GH Pages 全链路一致） */
 export const dynamicParams = false;
 
 const CATEGORY_DESCRIPTIONS: Record<PostCategory, string> = {
-  教程: "完整地讲清楚一件事，从原理到落地。",
+  技术: "技术相关的教程、实战与思考，成体系地讲清楚一件事。",
   笔记: "短平快的踩坑与经验记录。",
   日常: "随笔、追番与生活碎片。",
 };

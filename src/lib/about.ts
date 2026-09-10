@@ -19,7 +19,7 @@ export const ABOUT_FACTS = {
   },
   siteType: {
     value: "个人博客",
-    description: "教程、笔记与日常，与我的ACG爱好",
+    description: "技术、笔记与日常，与我的ACG爱好",
   },
   techStack: ["Next.js", "React 19", "Tailwind CSS 4", "TypeScript", "GSAP"],
 } as const;

@@ -10,7 +10,7 @@ const sections = [
     href: "/posts",
     label: "文章",
     icon: "icon-[mdi--file-document-outline]",
-    description: "教程、技术笔记与日常，记录学习与思考。",
+    description: "技术、笔记与日常，记录学习与思考。",
     span: "md:col-span-2",
   },
   {
@@ -39,7 +39,7 @@ const sections = [
 export const siteConfig = {
   name: "NKDShinKu",
   url: "https://nkdshinku.com",
-  description: "NKDShinKu 的个人博客 —— 记录文章、教程、实验室项目、日常与追番。",
+  description: "NKDShinKu 的个人博客 —— 记录技术、笔记、实验室项目、日常与追番。",
   github: "https://github.com/NKDShinKu/NKDShinKu",
   email: "2010182879@qq.com",
   author: "NKDShinKu",

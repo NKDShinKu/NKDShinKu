@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 const CATEGORY_DESCRIPTIONS: Record<(typeof POST_CATEGORIES)[number], string> = {
-  教程: "完整地讲清楚一件事，从原理到落地。",
+  技术: "技术相关的教程、实战与思考，成体系地讲清楚一件事。",
   笔记: "短平快的踩坑与经验记录。",
   日常: "随笔、追番与生活碎片。",
 };
@@ -23,12 +23,12 @@ export default function CategoriesPage() {
       <header className="mb-8">
         <Link
           href="/posts/"
-          className="text-text-muted focus-visible:outline-accent inline-flex items-center gap-1 text-sm transition-colors duration-150 ease-fast hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-4"
+          className="text-text-muted focus-visible:outline-accent ease-fast hover:text-accent inline-flex items-center gap-1 text-sm transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-4"
         >
           <span className="icon-[mdi--arrow-left] size-4" aria-hidden />
           返回全部文章
         </Link>
-        <h1 className="mt-3 font-display text-2xl font-bold">分类</h1>
+        <h1 className="font-display mt-3 text-2xl font-bold">分类</h1>
       </header>
 
       <div className="flex flex-col gap-5">
@@ -38,13 +38,13 @@ export default function CategoriesPage() {
             href={`/posts/category/${slug}/`}
             className="focus-visible:outline-accent block rounded-md focus-visible:outline-2 focus-visible:outline-offset-2"
           >
-            <div className="border-border bg-surface hover:border-accent/60 hover:shadow-lg group rounded-md border p-6 transition-[border-color,box-shadow] duration-200 ease-base">
+            <div className="border-border bg-surface hover:border-accent/60 group ease-base rounded-md border p-6 transition-[border-color,box-shadow] duration-200 hover:shadow-lg">
               <div className="flex items-center gap-3">
                 <span
                   className="icon-[mdi--folder-multiple-outline] text-accent size-6 shrink-0"
                   aria-hidden
                 />
-                <h2 className="text-lg font-semibold transition-colors duration-200 ease-base group-hover:text-accent">
+                <h2 className="ease-base group-hover:text-accent text-lg font-semibold transition-colors duration-200">
                   {name}
                 </h2>
                 <span className="text-text-muted text-sm">{count} 篇</span>

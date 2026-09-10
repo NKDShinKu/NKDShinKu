@@ -6,7 +6,7 @@
 
 ```
 content/
-├── posts/            # 文章（含教程/笔记/日常，按年分子目录，D19）
+├── posts/            # 文章（含技术/笔记/日常，按年分子目录，D19）
 │   └── 2026/
 │       └── hello-world.md
 └── lab.ts            # 实验室条目结构化配置（外链项目 + 站内 demo）
@@ -15,7 +15,7 @@ content/
 - 文章用 **Markdown + frontmatter**，统一经 `src/lib/` 加载与渲染（构建期，服务端组件）。
 - **文件名（去扩展名）即 slug，全局唯一**（跨年份目录不可重名，构建期校验）；排序依据 frontmatter `date`，与文件名无关，不使用日期/序号前缀（D9）。
 - **slug 一律 ASCII**（英文/数字/连字符，如 `my-post.md`；中文文件名会导致静态导出路由 500/404，见 AGENTS §7）。
-- 分类初始集合：`教程` / `笔记` / `日常`（可扩展；枚举收敛在 `site.config` 或 lib 常量中）。
+- 分类初始集合：`技术` / `笔记` / `日常`（D20 起教程并入技术；可扩展，枚举收敛在 posts.ts）。
 - 标签自由填写，列表页自动聚合。
 
 ## 2. 文章 frontmatter 字段
@@ -26,7 +26,7 @@ content/
 | `description` | ✅   | 摘要；同时作 meta description                                                                              |
 | `date`        | ✅   | 发布日期（ISO）                                                                                            |
 | `updated`     | 可选 | 最后更新日期                                                                                               |
-| `category`    | ✅   | 教程 / 笔记 / 日常                                                                                         |
+| `category`    | ✅   | 技术 / 笔记 / 日常                                                                                         |
 | `tags`        | 可选 | 标签数组，自由填写（中文为主）；路由 slug 自动生成——登记标签用 `src/lib/posts.ts` 覆盖表，其余转无声调拼音 |
 | `keywords`    | 可选 | SEO 关键词（meta keywords）                                                                                |
 | `cover`       | 可选 | 封面图（R2 绝对 URL，`img.nkdshinku.com/images/posts/...`）；不填则卡片走紧凑形态                          |

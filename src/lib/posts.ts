@@ -13,7 +13,7 @@ import path from "node:path";
 import matter from "gray-matter";
 import { pinyin } from "pinyin-pro";
 
-export const POST_CATEGORIES = ["教程", "笔记", "日常"] as const;
+export const POST_CATEGORIES = ["技术", "笔记", "日常"] as const;
 export type PostCategory = (typeof POST_CATEGORIES)[number];
 
 /**
@@ -22,9 +22,10 @@ export type PostCategory = (typeof POST_CATEGORIES)[number];
  * 背景：Next 16 dev 在静态导出模式下对非 ASCII 动态参数存在形态匹配缺陷
  * （编码/解码链路不一致，中文分类/标签 dev 下 500/404，见 AGENTS §7），
  * 且 GH Pages 对字面编码目录 404。路由参数一律走 ASCII slug，中文只做展示。
+ * D20（2026-09）：「教程」更名「技术」——技术形态不全等于教程，实战/观点/分析同属技术分类。
  */
 const CATEGORY_SLUGS: Record<PostCategory, string> = {
-  教程: "tutorial",
+  技术: "tech",
   笔记: "notes",
   日常: "daily",
 };
@@ -52,6 +53,8 @@ const TAG_SLUG_OVERRIDES: Record<string, string> = {
   踩坑: "pitfalls",
   设计系统: "design-system",
   静态导出: "static-export",
+  评论系统: "comments",
+  静态博客: "static-blog",
 };
 
 function toSlug(value: string): string {
