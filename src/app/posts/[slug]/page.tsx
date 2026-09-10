@@ -5,6 +5,7 @@ import { AnchorScroll } from "@/components/posts/anchor-scroll";
 import { AdjacentPostCard } from "@/components/posts/adjacent-post-card";
 import { AuthorCard } from "@/components/posts/author-card";
 import { CodeCopyButtons } from "@/components/posts/code-copy-buttons";
+import { MediaLightbox } from "@/components/posts/media-lightbox";
 import { BackButton } from "@/components/posts/back-button";
 import { MermaidRenderer } from "@/components/posts/mermaid-chart";
 import { PostComments } from "@/components/posts/post-comments";
@@ -155,11 +156,12 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </aside>
       </div>
 
-      {/* 复制按钮 / Mermaid 渲染 / 锚点滚动 / 浮动评论直达（纯增强，见组件注释）；随文章页挂载 */}
+      {/* 复制按钮 / Mermaid 渲染 / 锚点滚动 / 浮动评论直达 / 媒体灯箱（纯增强，见组件注释）；随文章页挂载 */}
       <CodeCopyButtons />
       <MermaidRenderer />
       <AnchorScroll />
       {siteConfig.comments.enabled ? <JumpToComments /> : null}
+      <MediaLightbox />
       {/* xl 以下右栏收进抽屉（作者卡/上下篇/目录），三横线浮动按钮唤出 */}
       <PostPanelDrawer headings={headings} prev={prev} next={next} />
     </div>

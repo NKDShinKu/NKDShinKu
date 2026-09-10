@@ -308,6 +308,12 @@
   font-size: 0.875rem;
   overflow-x: auto;
 }
+
+/* 灯箱可点击媒体（REQ-P8）：悬停提示可放大 */
+.post-body img,
+.post-body .mermaid-slot svg {
+  cursor: zoom-in;
+}
 .post-body .mermaid-slot svg {
   max-width: 100%;
   height: auto;
