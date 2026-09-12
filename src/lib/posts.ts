@@ -245,7 +245,7 @@ function loadPosts(): Post[] {
     throw new Error(`[posts] ${POSTS_DIR} 下没有任何 .md 文章`);
   }
   const seen = new Map<string, string>();
-  return files
+  const posts = files
     .map((file) => {
       const slug = path.basename(file, ".md");
       const duplicate = seen.get(slug);
@@ -257,11 +257,33 @@ function loadPosts(): Post[] {
       seen.set(slug, file);
       return parsePost(slug, readFileSync(path.join(POSTS_DIR, file), "utf-8"), file);
     })
-    .filter((post) => !post.draft)
-    .sort((a, b) => {
-      if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
-      return Date.parse(b.date) - Date.parse(a.date);
-    });
+    .filter((post) => !post.draft);
+  assertUniqueTagSlugs(posts);
+  return posts.sort((a, b) => {
+    if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+    return Date.parse(b.date) - Date.parse(a.date);
+  });
+}
+
+/**
+ * 标签 slug 唯一性（构建期快失败）：标签自由填写、slug 由覆盖表或拼音派生，
+ * 两个不同标签若撞到同一 slug，聚合与路由会静默合并计数——这里直接报错要求改名。
+ */
+function assertUniqueTagSlugs(posts: Post[]): void {
+  const seen = new Map<string, string>();
+  for (const post of posts) {
+    for (const tag of post.tags) {
+      const slug = tagSlug(tag);
+      const existing = seen.get(slug);
+      if (existing !== undefined && existing !== tag) {
+        throw new Error(
+          `[posts] 标签「${tag}」与「${existing}」都映射到路由 slug「${slug}」，` +
+            `请在 TAG_SLUG_OVERRIDES 为其中一个指定独立 slug`,
+        );
+      }
+      seen.set(slug, tag);
+    }
+  }
 }
 
 let cache: Post[] | null = null;
