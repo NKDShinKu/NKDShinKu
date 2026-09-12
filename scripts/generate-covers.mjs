@@ -1,21 +1,28 @@
 /**
- * 文章封面生成（T7 / D19）—— 代码自绘 840×525（16:10）主题封面
+ * 文章封面生成（T7 / D19）—— 代码自绘 16:10 主题封面，输出 960×600 WebP
  *
  * 风格：Soft ACG Fusion 与站点同频——亮底极光渐变 + 主题几何母题 + 关键词。
  * 卡片内封面为小尺寸展示（桌面 w-56 / 移动 w-28），构图以「大色块 + 大字」为主，细节克制。
  * 颜色取设计 token（globals.css @theme 亮色态）。
  *
- * 用法：`pnpm generate:covers`（样稿评审通过后批量）；产物 assets/covers/<slug>.png
+ * 画布沿用 840×525 的设计坐标系，导出前按 OUT_W×OUT_H 等比放大（矢量无损）；
+ * WebP 兼顾体积与高分屏清晰度（960 宽 ≈ 30KB，旧 PNG 840 宽 ≈ 97KB）。
+ *
+ * 用法：`pnpm generate:covers`（样稿评审通过后批量）；产物 assets/covers/<slug>.webp
  * （不进 public/——封面由 R2 图床提供，避免打进 Pages 产物形成重复托管），
  * 经 rclone 上传 R2 后把绝对 URL 填入 frontmatter cover。
  */
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, stat } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
 const ROOT = process.cwd();
+/** 设计坐标系（SVG viewBox 与所有内部坐标都基于它） */
 const W = 840;
 const H = 525;
+/** 导出尺寸：同比例放大 8/7，覆盖移动端 2x 屏 */
+const OUT_W = 960;
+const OUT_H = 600;
 
 /** 品牌色 token */
 const C = {
@@ -218,12 +225,11 @@ async function main() {
   for (const slug of targets) {
     const cover = covers[slug];
     if (!cover) throw new Error(`未知封面主题：${slug}`);
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${cover.body}</svg>`;
-    await writeFile(
-      path.join(outDir, `${slug}.png`),
-      await sharp(Buffer.from(svg)).png().toBuffer(),
-    );
-    console.log(`✓ assets/covers/${slug}.png`);
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${OUT_W}" height="${OUT_H}" viewBox="0 0 ${W} ${H}">${cover.body}</svg>`;
+    const out = path.join(outDir, `${slug}.webp`);
+    await sharp(Buffer.from(svg)).webp({ quality: 82, effort: 4 }).toFile(out);
+    const { size } = await stat(out);
+    console.log(`✓ assets/covers/${slug}.webp（${Math.round(size / 1024)} KB）`);
   }
 }
 

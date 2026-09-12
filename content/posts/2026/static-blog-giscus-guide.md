@@ -1,6 +1,6 @@
 ---
 title: 静态博客的评论区：giscus 接入全流程实录
-cover: https://img.nkdshinku.com/images/posts/static-blog-giscus-guide.png
+cover: https://img.nkdshinku.com/images/posts/static-blog-giscus-guide.webp
 description: 纯静态导出的博客没有后端，评论区从哪来？从工作原理、逐项配置到踩坑实录，记录 giscus 接入全流程——以及两个官方文档里没写的坑。
 date: 2026-09-10
 category: 技术

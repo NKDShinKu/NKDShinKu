@@ -12,6 +12,8 @@ function formatDate(iso: string): string {
 
 type PostCardProps = {
   post: PostMeta;
+  /** 首屏首卡：改立即加载并提升优先级（列表页 LCP） */
+  priority?: boolean;
   /** 卡片外层动画/栅格类由调用方控制（Reveal 包裹、列宽等） */
   className?: string;
 };
@@ -23,7 +25,7 @@ type PostCardProps = {
  * - 主题细节：左侧品牌竖线，hover 时点亮（scaleY 过渡，GPU 合成）
  * - 封面可选：右侧 16:10（桌面 240px / 移动 112px），无封面文字区占满（REQ-G8 显式宽高）
  */
-export function PostCard({ post, className }: PostCardProps) {
+export function PostCard({ post, priority = false, className }: PostCardProps) {
   return (
     <Link
       href={`/posts/${post.slug}/`}
@@ -84,9 +86,11 @@ export function PostCard({ post, className }: PostCardProps) {
               <img
                 src={post.cover}
                 alt=""
-                width={840}
-                height={525}
-                loading="lazy"
+                width={960}
+                height={600}
+                loading={priority ? "eager" : "lazy"}
+                fetchPriority={priority ? "high" : "auto"}
+                decoding="async"
                 className="ease-base aspect-[16/10] h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
               />
             </span>

@@ -44,6 +44,7 @@ export function ArchiveRow({ item, showProgress = false }: ArchiveRowProps) {
               width={300}
               height={450}
               loading="lazy"
+              decoding="async"
               className="ease-base h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
             />
             {/* 封面浮动信息（仅移动端 sm:hidden）：桌面数据在右侧面板，避免重复 */}

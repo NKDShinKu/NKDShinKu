@@ -76,7 +76,7 @@ interface LabItem {
   rclone copyto 图片.png r2:nkdshinku-assets/images/posts/图片.png
   ```
 
-- 封面 URL 规则：`https://img.nkdshinku.com/images/posts/<slug>.png`（与文件名同名）。
+- 封面 URL 规则：`https://img.nkdshinku.com/images/posts/<slug>.webp`（与文件名同名；由 `pnpm generate:covers` 生成 960×600 WebP，源文件在 `assets/covers/`）。
 - **正文插图按文章建子目录**：`images/posts/<slug>/xxx.png`（如 `images/posts/my-post/shot-01.png`）——单篇文章的图集中存放、互不冲突，文章废弃时整目录删除。**文章无图就不建目录**（R2 目录随文件自然存在，不预创建空目录）。
 - **图床管理**：`rclone lsl r2:nkdshinku-assets` 列出全部（含大小/时间）；`rclone deletefile` 删单个、`rclone purge` 删整目录（慎用）；也可用 Cloudflare 面板（R2 → 桶 → 对象）图形化浏览/删除。删除前确认无引用（frontmatter `cover` 或正文 `![]()`），否则线上破图；已删图片的 CDN 缓存副本最长残留 4 小时。
 - **换图就换文件名**：R2 缓存 `max-age=14400`（4 小时），同名覆盖后旧图最长 4 小时才刷新，新名字即时生效。

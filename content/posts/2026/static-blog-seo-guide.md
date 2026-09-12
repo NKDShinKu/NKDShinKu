@@ -1,6 +1,6 @@
 ---
 title: 博客的 SEO 基建
-cover: https://img.nkdshinku.com/images/posts/static-blog-seo-guide.png
+cover: https://img.nkdshinku.com/images/posts/static-blog-seo-guide.webp
 description: SEO 不是玄学，是一份可以逐项打勾的基建清单。从搜索引擎的工作原理讲起，覆盖元信息、sitemap、结构化数据、社交分享卡、性能与 AI 时代的 llms.txt，附一份可直接抄的自查清单。
 date: 2026-09-10
 category: 技术

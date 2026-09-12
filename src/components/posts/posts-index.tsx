@@ -128,7 +128,7 @@ export function PostsIndex({
         <div className="flex flex-col gap-5">
           {posts.map((post, index) => (
             <Reveal key={post.slug} delay={index * 0.05} subtle>
-              <PostCard post={post} />
+              <PostCard post={post} priority={index === 0} />
             </Reveal>
           ))}
         </div>

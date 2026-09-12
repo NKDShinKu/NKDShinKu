@@ -43,6 +43,7 @@ export function AnimeCoverCard({ item, showProgress = false }: AnimeCoverCardPro
           width={300}
           height={450}
           loading="lazy"
+          decoding="async"
           className="ease-base h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
         />
 

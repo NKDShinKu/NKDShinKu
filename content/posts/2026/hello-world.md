@@ -1,6 +1,6 @@
 ---
 title: 这个博客的由来与打算
-cover: https://img.nkdshinku.com/images/posts/hello-world.png
+cover: https://img.nkdshinku.com/images/posts/hello-world.webp
 description: 为什么在 2026 年还要自己建一个博客？记录这个站点的由来、全套技术选型的理由、与 AI 结对完成开发的经历，以及接下来打算把它打磨成什么样子。
 date: 2026-08-30
 updated: 2026-09-10
