@@ -260,6 +260,7 @@ box-shadow: var(--shadow-md);
 | 卡片 stagger    | GSAP ScrollTrigger | 80–100ms/卡 | power2.out               |
 | 页面过渡        | GSAP + Router      | 200ms       | power2.inOut             |
 | 极光光斑漂移    | CSS animation      | 12s         | ease-in-out（alternate） |
+| 路由进度条      | CSS animation      | 1.6s 巡航   | ease-out（`top h-0.5` accent→twilight 渐变，路由 commit 后冲 100% 并淡出） |
 
 - `@media (prefers-reduced-motion: reduce)` 禁用一切非必要动效（GSAP 全部包裹、粒子关闭）。
 - 移动端降级：粒子减半、关闭视差层、视频改静态图。
