@@ -1,0 +1,14 @@
+# 构建产物 / 工具生成
+/.next/
+/out/
+/node_modules/
+/.lighthouse/
+pnpm-lock.yaml
+
+# Agent 工作目录
+/.claude/
+/.agents/
+/.zcode/
+
+# 手写 Markdown：表格列宽人工对齐，格式化只产生噪音（docs / content 均为单一事实来源文档）
+*.md

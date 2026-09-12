@@ -19,11 +19,19 @@ export type PostsContext =
   | { kind: "tag"; name: string };
 
 /** 页头板块入口小链接（分类/标签/归档） */
-function EntranceLink({ href, icon, children }: { href: string; icon: string; children: React.ReactNode }) {
+function EntranceLink({
+  href,
+  icon,
+  children,
+}: {
+  href: string;
+  icon: string;
+  children: React.ReactNode;
+}) {
   return (
     <Link
       href={href}
-      className="text-text-muted hover:text-accent hover:bg-accent/10 focus-visible:outline-accent inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium transition-[color,background-color] duration-150 ease-fast focus-visible:outline-2 focus-visible:outline-offset-2"
+      className="text-text-muted hover:text-accent hover:bg-accent/10 focus-visible:outline-accent ease-fast inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium transition-[color,background-color] duration-150 focus-visible:outline-2 focus-visible:outline-offset-2"
     >
       <span className={`${icon} size-4`} aria-hidden />
       {children}
@@ -49,9 +57,14 @@ const chipArrow =
  *
  * - 紧凑页头：左标题 + 右「分类/标签/归档」入口（入口页承载全量列表，本页不放标签云）
  * - 分类 chips 保留本页（选中高亮）；横向卡片单列纵排，容器收窄至 880px
- * - 无滚动叙事（文章板块不做入场动画，用户决策）
+ * - 无滚动叙事（文章板块不做滚动叙事；列表卡按 design-system P-9 走 Reveal subtle 入场）
  */
-export function PostsIndex({ page, totalPages, posts, context = { kind: "all" } }: PostsIndexProps & { context?: PostsContext }) {
+export function PostsIndex({
+  page,
+  totalPages,
+  posts,
+  context = { kind: "all" },
+}: PostsIndexProps & { context?: PostsContext }) {
   const chips = getCategoryChips();
 
   return (
@@ -75,7 +88,7 @@ export function PostsIndex({ page, totalPages, posts, context = { kind: "all" } 
         <header className="mb-6">
           <Link
             href="/posts/"
-            className="text-text-muted focus-visible:outline-accent inline-flex items-center gap-1 text-sm transition-colors duration-150 ease-fast hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-4"
+            className="text-text-muted focus-visible:outline-accent ease-fast hover:text-accent inline-flex items-center gap-1 text-sm transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-4"
           >
             <span className="icon-[mdi--arrow-left] size-4" aria-hidden />
             返回全部文章
@@ -120,7 +133,9 @@ export function PostsIndex({ page, totalPages, posts, context = { kind: "all" } 
           ))}
         </div>
       ) : (
-        <EmptyState message={context.kind === "tag" ? "这个标签下还没有文章。" : "这个分类下还没有文章。"} />
+        <EmptyState
+          message={context.kind === "tag" ? "这个标签下还没有文章。" : "这个分类下还没有文章。"}
+        />
       )}
 
       <Pagination

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 
@@ -74,17 +74,21 @@ export function MediaLightbox() {
   const cx0 = () => (viewportRef.current?.clientWidth ?? 0) / 2;
   const cy0 = () => (viewportRef.current?.clientHeight ?? 0) / 2;
 
-  const zoomAt = (cx: number, cy: number, factor: number) => {
+  /** 以视口内某点为锚点缩放（useCallback：滚轮监听 effect 的依赖，避免每次渲染重挂监听） */
+  const zoomAt = useCallback((cx: number, cy: number, factor: number) => {
+    const viewport = viewportRef.current;
     setT((prev) => {
       const ns = Math.min(MAX_SCALE, Math.max(0.1, prev.s * factor));
       const k = ns / prev.s;
+      const centerX = (viewport?.clientWidth ?? 0) / 2;
+      const centerY = (viewport?.clientHeight ?? 0) / 2;
       return {
         s: ns,
-        x: (cx - cx0()) * (1 - k) + prev.x * k,
-        y: (cy - cy0()) * (1 - k) + prev.y * k,
+        x: (cx - centerX) * (1 - k) + prev.x * k,
+        y: (cy - centerY) * (1 - k) + prev.y * k,
       };
     });
-  };
+  }, []);
 
   // 滚轮缩放（非 passive 才能阻止页面滚动）
   useEffect(() => {
@@ -97,7 +101,7 @@ export function MediaLightbox() {
     };
     vp.addEventListener("wheel", onWheel, { passive: false });
     return () => vp.removeEventListener("wheel", onWheel);
-  }, [media]);
+  }, [media, zoomAt]);
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (e.button !== 0) return;

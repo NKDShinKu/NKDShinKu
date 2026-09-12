@@ -48,9 +48,10 @@ function base(blobs) {
 /**
  * 各篇主题母题（M = motif）：
  * - hello-world：站点启航——logo 方块 + 星屑 + 「Hello, World!」
- * - nextjs-static-export-notes：静态导出——层叠页面方块（out/ 产物感）
  * - tailwind-v4-design-tokens：设计 token——色板色阶
- * - blog-publish-pipeline：发布流水线——节点连线
+ * - static-blog-giscus-guide：评论接入——对话气泡
+ * - static-blog-seo-guide：SEO——页面网格 + 放大镜
+ * （条目须与 content/posts 下的文章 slug 一一对应；写新封面时在此登记主题）
  */
 const covers = {
   "hello-world": {
@@ -87,35 +88,6 @@ const covers = {
   <rect x="360" y="410" width="120" height="5" rx="2.5" fill="url(#brand)"/>`,
   },
 
-  "nextjs-static-export-notes": {
-    title: "Static Export",
-    subtitle: "静态导出笔记",
-    body: `
-  ${base(`
-    <ellipse cx="720" cy="100" rx="200" ry="150" fill="${C.accent}" opacity="0.20" filter="url(#soft)"/>
-    <ellipse cx="140" cy="440" rx="200" ry="150" fill="${C.twilight}" opacity="0.20" filter="url(#soft)"/>`)}
-  <!-- 层叠页面方块：构建产物 out/ 意象 -->
-  <g>
-    <rect x="470" y="150" width="150" height="190" rx="14" fill="${C.sakuraLight}" opacity="0.55" transform="rotate(8 545 245)"/>
-    <rect x="460" y="140" width="150" height="190" rx="14" fill="${C.accentLight}" opacity="0.6" transform="rotate(-4 535 235)"/>
-    <rect x="450" y="130" width="150" height="190" rx="14" fill="${C.accent}"/>
-    <g fill="#ffffff" opacity="0.85">
-      <rect x="472" y="158" width="70" height="10" rx="5"/>
-      <rect x="472" y="180" width="106" height="8" rx="4" opacity="0.7"/>
-      <rect x="472" y="196" width="106" height="8" rx="4" opacity="0.7"/>
-      <rect x="472" y="212" width="80" height="8" rx="4" opacity="0.7"/>
-    </g>
-  </g>
-  <!-- 虚线箭头：源 → 产物 -->
-  <path d="M 190 300 Q 300 240 420 250" stroke="${C.accentDark}" stroke-width="3" stroke-dasharray="8 8" fill="none" opacity="0.7"/>
-  <path d="M 420 250 l -14 -8 m 14 8 l -12 10" stroke="${C.accentDark}" stroke-width="3" fill="none" opacity="0.7"/>
-  <!-- 源码括号 -->
-  <text x="150" y="330" font-family="monospace" font-size="64" fill="${C.twilight}" opacity="0.8" text-anchor="middle">{ }</text>
-  <!-- 标题区 -->
-  <text x="420" y="430" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="46" font-weight="700" fill="${C.ink}" text-anchor="middle">Static Export</text>
-  <text x="420" y="474" font-family="'Microsoft YaHei', sans-serif" font-size="24" fill="${C.muted}" text-anchor="middle">Next.js 静态导出的五个坑</text>`,
-  },
-
   "tailwind-v4-design-tokens": {
     title: "Design Tokens",
     subtitle: "Tailwind v4",
@@ -142,34 +114,6 @@ const covers = {
   <!-- 标题区 -->
   <text x="420" y="430" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="46" font-weight="700" fill="${C.ink}" text-anchor="middle">Design Tokens</text>
   <text x="420" y="474" font-family="'Microsoft YaHei', sans-serif" font-size="24" fill="${C.muted}" text-anchor="middle">Tailwind v4 设计令牌实践</text>`,
-  },
-
-  "blog-publish-pipeline": {
-    title: "Pipeline",
-    subtitle: "发布流水线",
-    body: `
-  ${base(`
-    <ellipse cx="120" cy="110" rx="190" ry="140" fill="${C.twilight}" opacity="0.20" filter="url(#soft)"/>
-    <ellipse cx="750" cy="440" rx="200" ry="150" fill="${C.accent}" opacity="0.20" filter="url(#soft)"/>`)}
-  <!-- 流水线节点：写文 → 构建 → 索引 → 上线 -->
-  <g stroke="${C.accent}" stroke-width="3" fill="none">
-    <path d="M 160 220 H 680" stroke-dasharray="10 8" opacity="0.55"/>
-  </g>
-  <g>
-    <circle cx="180" cy="220" r="34" fill="${C.accentLight}" opacity="0.9"/>
-    <text x="180" y="228" font-family="'Microsoft YaHei', sans-serif" font-size="18" fill="#ffffff" text-anchor="middle">写</text>
-    <circle cx="340" cy="220" r="34" fill="${C.accent}" opacity="0.9"/>
-    <text x="340" y="228" font-family="'Microsoft YaHei', sans-serif" font-size="18" fill="#ffffff" text-anchor="middle">建</text>
-    <circle cx="500" cy="220" r="34" fill="${C.twilight}" opacity="0.9"/>
-    <text x="500" y="228" font-family="'Microsoft YaHei', sans-serif" font-size="18" fill="#ffffff" text-anchor="middle">索</text>
-    <circle cx="660" cy="220" r="34" fill="${C.sakura}" opacity="0.9"/>
-    <text x="660" y="228" font-family="'Microsoft YaHei', sans-serif" font-size="18" fill="#ffffff" text-anchor="middle">上</text>
-  </g>
-  <!-- 末端箭头 -->
-  <path d="M 680 220 l -12 -8 m 12 8 l -12 8" stroke="${C.accent}" stroke-width="3" fill="none"/>
-  <!-- 标题区 -->
-  <text x="420" y="400" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="46" font-weight="700" fill="${C.ink}" text-anchor="middle">Pipeline</text>
-  <text x="420" y="444" font-family="'Microsoft YaHei', sans-serif" font-size="24" fill="${C.muted}" text-anchor="middle">一篇 Markdown 的上线之旅</text>`,
   },
 
   "static-blog-giscus-guide": {

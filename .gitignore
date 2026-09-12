@@ -16,6 +16,7 @@
 # Agent 目录（不入库）
 /.claude/
 /.agents/
+/.zcode/
 
 # debug
 npm-debug.log*
