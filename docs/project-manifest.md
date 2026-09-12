@@ -136,3 +136,4 @@
 | 2026-09 | 文章灯箱（REQ-P8）落地：图片 / Mermaid 点击放大；滚轮缩放（光标锚点）、自由拖动平移、双击在适应窗口 ↔ 2x 间切换、`1`/`0`/方向键、点击空白或 Esc 关闭；入场 FLIP（独立舞台层 CSS 动画）+ 淡入淡出，`prefers-reduced-motion` 跳过；dev 与生产产物均有 CDP 断言覆盖 |
 | 2026-09 | 站内路由切换进度条：顶部 2px accent→twilight 渐变条，点击站内链接立即进入 loading、路由 commit 后冲 100% 并淡出；外链 / 纯 hash / 修饰键点击不触发，静态导出下用「点击 + 路由变化」两端判定（无 router 事件可用） |
 | 2026-09 | 封面图统一为 **960×600 WebP**（`generate-covers.mjs` 输出 WebP → `assets/covers/*.webp` → R2 `images/posts/*.webp`，4 篇文章 frontmatter 同步）：单张 72–100KB → 约 10KB；列表页首图 `fetchpriority=high`、ACG 封面补 `decoding=async` |
+| 2026-09 | 路由过渡与文章封面（方案 A）：root layout 挂 React `<ViewTransition>`（Next 16 App Router 内置 canary React，零配置），**全站统一**竖直上浮 + 淡入（退 130 / 进 200 / 位移 280ms，位移量 `--vt-shift` 可调）；文章页新增 16:10 封面，与列表卡封面同 `name`（`post-cover-<slug>`）做共享元素形变；root 组（顶栏/极光/粒子）不参与快照，`prefers-reduced-motion` 全停；`@types/react` / `@types/react-dom` 升到 19.3.0 |

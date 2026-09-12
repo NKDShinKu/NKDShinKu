@@ -258,7 +258,7 @@ box-shadow: var(--shadow-md);
 | 区块入场        | GSAP ScrollTrigger | 600ms       | power2.out               |
 | Hero 入场       | GSAP Timeline      | 800ms 总计  | power3.out               |
 | 卡片 stagger    | GSAP ScrollTrigger | 80–100ms/卡 | power2.out               |
-| 页面过渡        | GSAP + Router      | 200ms       | power2.inOut             |
+| 页面过渡        | React `ViewTransition` | 退出 130ms / 进入 200ms（位移 280ms） | ease-out（全站统一竖直上浮 12px；列表封面 ↔ 文章头图走共享元素形变） |
 | 极光光斑漂移    | CSS animation      | 12s         | ease-in-out（alternate） |
 | 路由进度条      | CSS animation      | 1.6s 巡航   | ease-out（`top h-0.5` accent→twilight 渐变，路由 commit 后冲 100% 并淡出） |
 

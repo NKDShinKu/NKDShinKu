@@ -119,6 +119,7 @@ src/
 - Radix Portal 的内容**晚于组件 effect 挂载**：在 `useEffect`/`useLayoutEffect` 里用 `ref.current` 取 portal 内节点会拿到 `null`，且依赖不变时永不重跑——改用 callback ref 绑定。
 - React **StrictMode（dev）会「卸载→重挂」ref 与 effect**：一次性消费的 ref（取完置空）在第二次挂载即失效；动画/手势的起始态要能重放，或交给 **CSS 动画兜底**（起点用 CSS 变量注入）。
 - **纯动画用的包裹层一律 `pointer-events-none`**，交互留在内层：否则它固定不动的盒会参与点击命中，让「点空白关闭」这类判定在内容位移/缩放后失效。
+- React `<ViewTransition>` 的路由切换在 root layout 里属于**同一实例内容变更**（`update`）：只写 `enter`/`exit` 不生效——用 `update`，或最简只写 `default`；共享元素用两侧同名 `name` + `share="morph"`。另：`router.back()` 不接受 `transitionTypes`，浏览器返回只能走默认过渡。
 
 ## 8. 维护约定
 

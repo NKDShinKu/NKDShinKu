@@ -81,6 +81,7 @@
 - [x] 文章灯箱（REQ-P8）：图片 / Mermaid 点击放大，交互与动效按 design-system P-16 落地（滚轮缩放、自由拖动、双击 2x、键盘操作、空白或 Esc 关闭、入场 FLIP + 淡入淡出）
 - [x] 路由切换进度条：点击站内链接立即亮起、路由 commit 后收尾（体验优化 P0）
 - [x] 封面图改 960×600 WebP（约 10KB/张，原 840×525 PNG 约 97KB）+ 列表首图 `fetchpriority=high`、ACG 封面 `decoding=async`
+- [x] 路由过渡（方案 A）：root layout 挂 React `ViewTransition`，全站统一「旧内容下沉淡出 → 新内容上浮入场」；文章页新增封面并与列表卡做共享元素形变；顶栏与全局背景不参与快照；`prefers-reduced-motion` 下不播动画
 - [x] 工程加固：`pnpm format:check` 进 CI、Actions 固定 commit SHA、新增 Dependabot（npm + actions）、CI 加依赖审计（`continue-on-error`，非阻断）
 - [x] 走查结论修正（推翻 M4 T9 的两条记录）：① `.lighthouse` 里的 RSC 预取 404 是本地 `serve out` 的路径解析差异（线上同路径实测 200），不是线上问题；② ACG 移动端 LCP 主因是归档页串行取数，不是封面体积——数据层用的 `images.common` 已是 bgm.tv `/r/400/` 变体（实测 40–56KB/张），「原图 1.6MB」不成立
 
