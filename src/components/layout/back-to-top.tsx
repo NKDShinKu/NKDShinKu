@@ -43,7 +43,9 @@ export function BackToTop() {
       type="button"
       onClick={() => window.scrollTo({ top: 0 })}
       aria-label="回到顶部"
-      className={`group border-border bg-surface/80 text-text shadow-md backdrop-blur-sm focus-visible:outline-accent hover:border-accent hover:text-accent fixed right-5 bottom-5 z-40 grid size-12 cursor-pointer place-items-center rounded-full border transition-[opacity,transform,border-color,color] duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 ${
+      /* 不可见时移出 tab 序列：opacity-0 的元素仍可被键盘聚焦（无障碍走查修正） */
+      tabIndex={visible ? 0 : -1}
+      className={`group border-border bg-surface/80 text-text focus-visible:outline-accent hover:border-accent hover:text-accent fixed right-5 bottom-5 z-40 grid size-12 cursor-pointer place-items-center rounded-full border shadow-md backdrop-blur-sm transition-[opacity,transform,border-color,color] duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 ${
         visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0"
       }`}
     >

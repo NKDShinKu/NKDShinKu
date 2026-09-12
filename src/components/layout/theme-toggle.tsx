@@ -47,7 +47,11 @@ export function ThemeToggle() {
   useEffect(() => {
     if (choice !== "system") return;
     const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const onChange = (event: MediaQueryListEvent) => applyTheme(event.matches);
+    const onChange = (event: MediaQueryListEvent) => {
+      applyTheme(event.matches);
+      // 通知订阅者（如 giscus 主题）：class 变更本身不会触发事件
+      window.dispatchEvent(new Event(THEME_EVENT));
+    };
     media.addEventListener("change", onChange);
     return () => media.removeEventListener("change", onChange);
   }, [choice]);

@@ -21,10 +21,13 @@ function subscribeTheme(callback: () => void) {
   };
 }
 
-/** 快照：当前是否暗色（system 模式跟随 matchMedia，与 ThemeToggle 判定一致） */
+/**
+ * 快照：当前是否暗色。判据只看 `html.dark`——它是主题的唯一事实来源（ThemeToggle 三态都
+ * 落到这个 class），不能再叠加 matchMedia：用户「系统暗色 + 手动选亮色」时后者会把站点
+ * 亮色下的评论 iframe 渲染成暗色（走查修正）。
+ */
 function getDarkSnapshot(): boolean {
-  const stored = document.documentElement.classList.contains("dark");
-  return stored || window.matchMedia("(prefers-color-scheme: dark)").matches;
+  return document.documentElement.classList.contains("dark");
 }
 
 function getDarkServerSnapshot(): boolean {
