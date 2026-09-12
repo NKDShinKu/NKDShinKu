@@ -3,8 +3,13 @@
  *
  * 约定（docs/design-system/acg.md M-10 + manifest D14/D18）：
  * - api.bgm.tv 浏览器直连（ACAO *，D14 实测）；纯客户端，SSR 环境跳过缓存直连网络
- * - 缓存 localStorage `acg-collections-v1`：按分组存 {cachedAt,total,items}，TTL 30 分钟；
- *   过期但存在 → 先返回缓存并静默后台刷新（SWR 语义），手动刷新用 refresh: true
+ * - 缓存 localStorage `acg-collections-v1`，三个分支各司其职：
+ *   · pages —— 分页条目，键 `${type}:${offset}`，{cachedAt,total,items}，TTL 30 分钟；
+ *     过期但存在 → 先返回缓存并静默后台刷新（SWR 语义），手动刷新用 refresh: true
+ *   · groups —— 分组计数（归档顶栏 TOTAL 的轻查询，不存条目）
+ *   · previews —— hub 橱窗三区预览
+ * - 归档页首屏只取第一页（offset 0），「加载更多」按需翻页：冷启动不再串行拉全组
+ *   （旧实现「看过 389 部」需 4 次串行请求才出首屏，是移动端 LCP 5s 的主因）
  * - 外部数据半可信：逐条防御性解析，坏条目跳过而非抛错（区别于 posts.ts 的构建期快失败）
  */
 import { siteConfig } from "@/lib/site.config";
@@ -65,14 +70,10 @@ export interface AcgCollectionItem {
   updatedAt: string;
 }
 
-export interface AcgGroupData {
-  type: AcgGroupType;
+/** 单页条目结果（归档页分页取数：首屏 + 「加载更多」共用） */
+export interface AcgPageResult {
   total: number;
   items: AcgCollectionItem[];
-}
-
-export interface AcgGroupResult {
-  data: AcgGroupData;
   fromCache: boolean;
 }
 
@@ -133,7 +134,10 @@ function parseItem(raw: RawCollection): AcgCollectionItem | null {
       rank: asNumber(s.rank),
       date: asString(s.date),
       tags: Array.isArray(s.tags)
-        ? s.tags.slice(0, 3).map((t) => asString(t.name)).filter(Boolean)
+        ? s.tags
+            .slice(0, 3)
+            .map((t) => asString(t.name))
+            .filter(Boolean)
         : [],
       eps: asNumber(s.eps),
     },
@@ -167,26 +171,22 @@ async function fetchGroupPage(
   return { total: asNumber(raw.total) || items.length, items };
 }
 
-/** 拉取整组（顺序翻页：对限流友好，看过 389 部 ≈ 4 页） */
-async function fetchGroupAll(type: AcgGroupType): Promise<AcgGroupData> {
-  const first = await fetchGroupPage(type, 0, PAGE_SIZE);
-  const items = [...first.items];
-  for (let offset = PAGE_SIZE; offset < first.total; offset += PAGE_SIZE) {
-    const page = await fetchGroupPage(type, offset, PAGE_SIZE);
-    items.push(...page.items);
-  }
-  return { type, total: first.total, items };
-}
-
 /** —— 缓存 —— */
+/** 分组计数缓存（totals-only 轻查询；条目走 pages 分支） */
 interface AcgCacheEntry {
   cachedAt: number;
   total: number;
-  /** totals-only 轻查询时可为空（仅缓存计数） */
-  items?: AcgCollectionItem[];
+}
+/** 分页条目缓存 */
+interface AcgPageCacheEntry {
+  cachedAt: number;
+  total: number;
+  items: AcgCollectionItem[];
 }
 interface AcgCache {
   groups: Partial<Record<AcgGroupType, AcgCacheEntry>>;
+  /** 分页条目缓存，键 `${type}:${offset}`（归档页首屏与「加载更多」共用） */
+  pages: Record<string, AcgPageCacheEntry>;
   /** hub 橱窗预览（在看/看过/想看 各前 12） */
   previews?: {
     cachedAt: number;
@@ -195,13 +195,17 @@ interface AcgCache {
 }
 
 function readCache(): AcgCache {
-  if (typeof window === "undefined") return { groups: {} };
+  if (typeof window === "undefined") return { groups: {}, pages: {} };
   try {
     const raw = window.localStorage.getItem(CACHE_KEY);
-    const parsed = raw ? (JSON.parse(raw) as AcgCache) : null;
-    return parsed?.groups ? parsed : { groups: {} };
+    const parsed = raw ? (JSON.parse(raw) as Partial<AcgCache> | null) : null;
+    return {
+      groups: parsed?.groups ?? {},
+      pages: parsed?.pages ?? {},
+      previews: parsed?.previews,
+    };
   } catch {
-    return { groups: {} };
+    return { groups: {}, pages: {} };
   }
 }
 
@@ -216,61 +220,66 @@ function writeEntry(type: AcgGroupType, entry: AcgCacheEntry): void {
   }
 }
 
-function isFresh(entry: AcgCacheEntry | undefined): entry is AcgCacheEntry & { items: AcgCollectionItem[] } {
-  return (
-    entry !== undefined &&
-    typeof entry.cachedAt === "number" &&
-    Date.now() - entry.cachedAt < CACHE_TTL_MS &&
-    Array.isArray(entry.items)
-  );
-}
-
-/** 过期但存在：返回 true 的同时触发静默后台刷新（SWR 语义，结果只写缓存） */
-function revalidateInBackground(type: AcgGroupType, cachedAt: number): boolean {
-  if (Date.now() - cachedAt < CACHE_TTL_MS) return false;
-  void fetchGroupAll(type)
-    .then((data) =>
-      writeEntry(type, { cachedAt: Date.now(), total: data.total, items: data.items }),
-    )
-    .catch(() => {});
-  return true;
+/** 与 readCache 同源的写入通道（read → 改 → 写，避免覆盖其他分支） */
+function writePage(type: AcgGroupType, offset: number, entry: AcgPageCacheEntry): void {
+  if (typeof window === "undefined") return;
+  try {
+    const cache = readCache();
+    cache.pages[`${type}:${offset}`] = entry;
+    window.localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+  } catch {
+    /* 隐私模式等场景写失败不影响功能 */
+  }
 }
 
 /**
- * 取单个分组：缓存 30 分钟内直接用；过期但存在 → 返回缓存 + 后台刷新；
- * 无缓存或 refresh: true → 网络拉全量
+ * 取单页条目（归档页数据源）：缓存 30 分钟内直接用；过期但存在 → 返回缓存 + 后台静默刷新；
+ * 无缓存或 refresh: true → 网络拉取该页。首屏 offset 0 一次请求即可出内容。
  */
-export async function getGroupData(
+export async function getGroupPage(
   type: AcgGroupType,
+  offset = 0,
+  limit = PAGE_SIZE,
   options?: { refresh?: boolean },
-): Promise<AcgGroupResult> {
-  const cached = readCache().groups[type];
-  if (!options?.refresh && isFresh(cached)) {
-    return {
-      data: { type, total: cached.total, items: cached.items },
-      fromCache: true,
-    };
+): Promise<AcgPageResult> {
+  const cached = readCache().pages[`${type}:${offset}`];
+  if (!options?.refresh && cached && Array.isArray(cached.items)) {
+    if (Date.now() - cached.cachedAt >= CACHE_TTL_MS) {
+      void fetchGroupPage(type, offset, limit)
+        .then((page) =>
+          writePage(type, offset, { cachedAt: Date.now(), total: page.total, items: page.items }),
+        )
+        .catch(() => {});
+    }
+    return { total: cached.total, items: cached.items, fromCache: true };
   }
-  if (!options?.refresh && cached && revalidateInBackground(type, cached.cachedAt)) {
-    return {
-      data: { type, total: cached.total, items: cached.items ?? [] },
-      fromCache: true,
-    };
+  const page = await fetchGroupPage(type, offset, limit);
+  writePage(type, offset, { cachedAt: Date.now(), total: page.total, items: page.items });
+  return { total: page.total, items: page.items, fromCache: false };
+}
+
+/** 手动刷新：清掉该分组已缓存的分页条目，后续取数（含「加载更多」）重新走网络 */
+export function clearGroupPages(type: AcgGroupType): void {
+  if (typeof window === "undefined") return;
+  try {
+    const cache = readCache();
+    for (const key of Object.keys(cache.pages)) {
+      if (key.startsWith(`${type}:`)) delete cache.pages[key];
+    }
+    window.localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+  } catch {
+    /* 写失败不影响功能 */
   }
-  const data = await fetchGroupAll(type);
-  writeEntry(type, { cachedAt: Date.now(), total: data.total, items: data.items });
-  return { data, fromCache: false };
 }
 
 /** 轻查询：只取分组计数（缓存优先，不拉条目列表）；归档顶栏 TOTAL 用 */
 export async function getGroupTotal(type: AcgGroupType, refresh?: boolean): Promise<number> {
   const cached = readCache().groups[type];
   if (!refresh && cached && Date.now() - cached.cachedAt < CACHE_TTL_MS) {
-    revalidateInBackground(type, cached.cachedAt);
     return cached.total;
   }
   const page = await fetchGroupPage(type, 0, 1);
-  writeEntry(type, { cachedAt: Date.now(), total: page.total, items: cached?.items });
+  writeEntry(type, { cachedAt: Date.now(), total: page.total });
   return page.total;
 }
 

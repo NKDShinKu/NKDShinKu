@@ -8,13 +8,24 @@ import {
   ACG_GROUP_EN,
   ACG_GROUP_LABELS,
   ACG_GROUP_TYPES,
-  getGroupData,
+  clearGroupPages,
+  getGroupPage,
   getGroupTotal,
-  type AcgGroupData,
+  type AcgCollectionItem,
   type AcgGroupType,
 } from "@/lib/acg";
 
+/** 每次「加载更多」渲染的条数（前端切片） */
 const PAGE_STEP = 20;
+/** 单次网络请求的条目数（Bangumi limit 上限 100，见 manifest D14） */
+const FETCH_SIZE = 100;
+
+/** 已取到的分组条目：items 为按需累积的条目（恒 ≥ 已渲染条数，≤ total） */
+type GroupBuffer = {
+  type: AcgGroupType;
+  items: AcgCollectionItem[];
+  total: number;
+};
 
 function parseGroupParam(value: string | null): AcgGroupType {
   const n = Number(value);
@@ -23,16 +34,23 @@ function parseGroupParam(value: string | null): AcgGroupType {
 
 /**
  * 番剧归档（acg.md §2.4–§2.7 + §3.2）：顶栏 TOTAL + 左栏分组（桌面 sticky/移动 pills）
- * + 编辑式行卡两列 + 加载更多（客户端切片，网络层一次拉全组）
+ * + 编辑式行卡两列 + 加载更多。
+ *
+ * 取数策略（M5 走查修正）：首屏只请求第一页（limit 100），「加载更多」先做前端切片，
+ * 切完再按需翻页——旧实现为一次拉全组，冷启动「看过 389 部」要 4 次串行请求才出首屏。
  */
 export function AcgArchive() {
   const searchParams = useSearchParams();
-  const [groupType, setGroupType] = useState<AcgGroupType>(() => parseGroupParam(searchParams.get("group")));
-  const [groupData, setGroupData] = useState<AcgGroupData | null>(null);
+  const [groupType, setGroupType] = useState<AcgGroupType>(() =>
+    parseGroupParam(searchParams.get("group")),
+  );
+  const [group, setGroup] = useState<GroupBuffer | null>(null);
   const [groupError, setGroupError] = useState(false);
+  const [appendError, setAppendError] = useState(false);
   const [totals, setTotals] = useState<Record<AcgGroupType, number> | null>(null);
   const [renderCount, setRenderCount] = useState(PAGE_STEP);
   const [refreshing, setRefreshing] = useState(false);
+  const [appending, setAppending] = useState(false);
 
   // 归档总数（五组轻查询，缓存优先；失败静默——TOTAL 显示 …）
   useEffect(() => {
@@ -40,7 +58,12 @@ export function AcgArchive() {
     Promise.all(ACG_GROUP_TYPES.map((type) => getGroupTotal(type)))
       .then((values) => {
         if (!cancelled) {
-          setTotals(Object.fromEntries(ACG_GROUP_TYPES.map((type, i) => [type, values[i]])) as Record<AcgGroupType, number>);
+          setTotals(
+            Object.fromEntries(ACG_GROUP_TYPES.map((type, i) => [type, values[i]])) as Record<
+              AcgGroupType,
+              number
+            >,
+          );
         }
       })
       .catch(() => {});
@@ -49,12 +72,14 @@ export function AcgArchive() {
     };
   }, []);
 
-  // 当前分组数据：active 按 type 派生（切换分组时旧数据自动失配 → 骨架），effect 内无同步 setState
+  // 当前分组首屏页：active 按 type 派生（切换分组时旧数据自动失配 → 骨架），effect 内无同步 setState
   useEffect(() => {
     let cancelled = false;
-    getGroupData(groupType)
-      .then((result) => {
-        if (!cancelled) setGroupData(result.data);
+    getGroupPage(groupType, 0, FETCH_SIZE)
+      .then((page) => {
+        if (!cancelled) {
+          setGroup({ type: groupType, items: page.items, total: page.total });
+        }
       })
       .catch(() => {
         if (!cancelled) setGroupError(true);
@@ -64,9 +89,11 @@ export function AcgArchive() {
     };
   }, [groupType]);
 
-  const active = groupData && groupData.type === groupType ? groupData : null;
+  const active = group && group.type === groupType ? group : null;
   const loading = !active && !groupError;
   const shown = active ? active.items.slice(0, renderCount) : [];
+  /** 还有未展示的条目：可能是「已取未渲染」（纯切片）或「未取」（需翻页） */
+  const hasMore = active ? shown.length < active.total : false;
 
   const switchTo = useCallback((type: AcgGroupType) => {
     setGroupType(type);
@@ -76,16 +103,52 @@ export function AcgArchive() {
   const refresh = useCallback(() => {
     setRefreshing(true);
     setGroupError(false);
-    getGroupData(groupType, { refresh: true })
-      .then((result) => setGroupData(result.data))
+    setAppendError(false);
+    clearGroupPages(groupType);
+    getGroupPage(groupType, 0, FETCH_SIZE, { refresh: true })
+      .then((page) => {
+        setGroup({ type: groupType, items: page.items, total: page.total });
+        setRenderCount(PAGE_STEP);
+      })
       .catch(() => setGroupError(true))
       .finally(() => setRefreshing(false));
     Promise.all(ACG_GROUP_TYPES.map((type) => getGroupTotal(type, true)))
       .then((values) => {
-        setTotals(Object.fromEntries(ACG_GROUP_TYPES.map((type, i) => [type, values[i]])) as Record<AcgGroupType, number>);
+        setTotals(
+          Object.fromEntries(ACG_GROUP_TYPES.map((type, i) => [type, values[i]])) as Record<
+            AcgGroupType,
+            number
+          >,
+        );
       })
       .catch(() => {});
   }, [groupType]);
+
+  /**
+   * 「加载更多」两段式：已取到的条目还没渲染完 → 纯前端切片（零请求）；
+   * 渲染完仍有剩余 → 拉下一页（limit 100）追加，再推进渲染窗口。
+   */
+  const loadMore = useCallback(() => {
+    if (!active) return;
+    if (renderCount < active.items.length) {
+      setRenderCount((count) => count + PAGE_STEP);
+      return;
+    }
+    if (active.items.length >= active.total) return;
+    setAppending(true);
+    setAppendError(false);
+    getGroupPage(active.type, active.items.length, FETCH_SIZE)
+      .then((page) => {
+        setGroup((current) =>
+          current && current.type === active.type
+            ? { ...current, items: [...current.items, ...page.items], total: page.total }
+            : current,
+        );
+        setRenderCount((count) => count + PAGE_STEP);
+      })
+      .catch(() => setAppendError(true))
+      .finally(() => setAppending(false));
+  }, [active, renderCount]);
 
   const grandTotal = totals ? ACG_GROUP_TYPES.reduce((sum, t) => sum + (totals[t] ?? 0), 0) : null;
 
@@ -116,19 +179,17 @@ export function AcgArchive() {
                 }`}
               >
                 {ACG_GROUP_LABELS[type]}
-                <span className="ml-1.5 text-[10px] uppercase tracking-wider opacity-70">
+                <span className="ml-1.5 text-[10px] tracking-wider uppercase opacity-70">
                   {ACG_GROUP_EN[type]}
                 </span>
               </span>
-              <span className="text-text-muted font-mono text-xs">
-                {totals?.[type] ?? "…"}
-              </span>
+              <span className="text-text-muted font-mono text-xs">{totals?.[type] ?? "…"}</span>
             </span>
             <span className="bg-border/60 mt-1.5 block h-1.5 w-full overflow-hidden rounded-full">
               <span
                 className={`ease-base block h-full rounded-full transition-[width] duration-500 ${
                   isActive
-                    ? "bg-gradient-to-r from-accent to-twilight"
+                    ? "from-accent to-twilight bg-gradient-to-r"
                     : "bg-border group-hover/bar:bg-accent/40"
                 }`}
                 style={{ width: barWidth(type) }}
@@ -152,7 +213,7 @@ export function AcgArchive() {
             aria-current={isActive ? "true" : undefined}
             className={`ease-fast focus-visible:outline-accent inline-flex min-h-11 shrink-0 cursor-pointer items-center gap-2 rounded-full border px-4 text-sm font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 ${
               isActive
-                ? "border-accent bg-gradient-to-r from-accent to-twilight text-white"
+                ? "border-accent from-accent to-twilight bg-gradient-to-r text-white"
                 : "text-text-muted hover:border-accent/50 hover:text-accent border-border bg-surface/70"
             }`}
           >
@@ -182,7 +243,7 @@ export function AcgArchive() {
             onClick={refresh}
             aria-label="刷新收藏数据"
             title="刷新收藏数据"
-            className="text-text-muted hover:text-accent hover:bg-accent/10 focus-visible:outline-accent inline-flex size-11 cursor-pointer items-center justify-center rounded-full transition-colors duration-150 ease-fast focus-visible:outline-2 focus-visible:outline-offset-2"
+            className="text-text-muted hover:text-accent hover:bg-accent/10 focus-visible:outline-accent ease-fast inline-flex size-11 cursor-pointer items-center justify-center rounded-full transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2"
           >
             <span
               className={`icon-[mdi--refresh] size-5 ${refreshing ? "animate-spin motion-reduce:animate-none" : ""}`}
@@ -190,8 +251,7 @@ export function AcgArchive() {
             />
           </button>
           <p className="text-text-muted font-mono text-sm">
-            TOTAL /{" "}
-            <span className="text-text text-lg font-semibold">{grandTotal ?? "…"}</span>
+            TOTAL / <span className="text-text text-lg font-semibold">{grandTotal ?? "…"}</span>
           </p>
         </div>
       </div>
@@ -207,7 +267,7 @@ export function AcgArchive() {
             <nav aria-label="收藏分组" className="mt-6">
               {groupTabs}
             </nav>
-            <p className="text-text-muted mt-6 border-t border-border/60 pt-4 text-xs leading-relaxed">
+            <p className="text-text-muted border-border/60 mt-6 border-t pt-4 text-xs leading-relaxed">
               数据来自 Bangumi（30 分钟缓存）
               <br />
               点击条目可在 Bangumi 查看
@@ -220,67 +280,71 @@ export function AcgArchive() {
           {groupTabsMobile}
 
           {groupError ? (
-            <div className="rounded-md border border-border bg-surface px-6 py-12 text-center">
+            <div className="border-border bg-surface rounded-md border px-6 py-12 text-center">
               <span className="icon-[mdi--wifi-off-outline] text-sakura size-8" aria-hidden />
-              <p className="text-text-muted mt-3 text-sm">Bangumi 数据加载失败，请检查网络后重试。</p>
+              <p className="text-text-muted mt-3 text-sm">
+                Bangumi 数据加载失败，请检查网络后重试。
+              </p>
               <button
                 type="button"
                 onClick={refresh}
-                className="border-border text-text hover:border-accent hover:text-accent focus-visible:outline-accent mt-4 inline-flex min-h-11 cursor-pointer items-center rounded-md border px-6 py-2 text-sm transition-colors duration-150 ease-fast focus-visible:outline-2 focus-visible:outline-offset-2"
+                className="border-border text-text hover:border-accent hover:text-accent focus-visible:outline-accent ease-fast mt-4 inline-flex min-h-11 cursor-pointer items-center rounded-md border px-6 py-2 text-sm transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2"
               >
                 重试
               </button>
             </div>
           ) : (
             <>
-              <div
-                className="grid grid-cols-1 gap-5 xl:grid-cols-2"
-                aria-busy={loading}
-              >
-                {loading
-                  ? Array.from({ length: 4 }, (_, i) => (
-                      <div
-                        key={i}
-                        className="border-border bg-surface flex h-52 gap-4 overflow-hidden rounded-md border"
-                        aria-hidden
-                      >
-                        <div className="bg-border/60 w-32 shrink-0 sm:w-36 md:w-40" />
-                        <div className="flex-1 space-y-3 p-5">
-                          <div className="bg-border/60 h-5 w-2/3 animate-pulse rounded" />
-                          <div className="bg-border/60 h-3 w-1/3 animate-pulse rounded" />
-                          <div className="bg-border/60 h-3 w-full animate-pulse rounded" />
-                          <div className="bg-border/60 h-3 w-5/6 animate-pulse rounded" />
-                        </div>
+              <div className="grid grid-cols-1 gap-5 xl:grid-cols-2" aria-busy={loading}>
+                {loading ? (
+                  Array.from({ length: 4 }, (_, i) => (
+                    <div
+                      key={i}
+                      className="border-border bg-surface flex h-52 gap-4 overflow-hidden rounded-md border"
+                      aria-hidden
+                    >
+                      <div className="bg-border/60 w-32 shrink-0 sm:w-36 md:w-40" />
+                      <div className="flex-1 space-y-3 p-5">
+                        <div className="bg-border/60 h-5 w-2/3 animate-pulse rounded" />
+                        <div className="bg-border/60 h-3 w-1/3 animate-pulse rounded" />
+                        <div className="bg-border/60 h-3 w-full animate-pulse rounded" />
+                        <div className="bg-border/60 h-3 w-5/6 animate-pulse rounded" />
                       </div>
-                    ))
-                  : shown.length > 0
-                    ? shown.map((item) => (
-                        <ArchiveRow
-                          key={item.subject.id}
-                          item={item}
-                          showProgress={groupType === 3}
-                        />
-                      ))
-                    : (
-                        <div className="rounded-md border border-border bg-surface px-6 py-16 text-center sm:col-span-full">
-                          <span className="icon-[mdi--cloud-off-outline] text-sakura size-8" aria-hidden />
-                          <p className="text-text-muted mt-3 text-sm">这个分组还没有收藏。</p>
-                        </div>
-                      )}
+                    </div>
+                  ))
+                ) : shown.length > 0 ? (
+                  shown.map((item) => (
+                    <ArchiveRow key={item.subject.id} item={item} showProgress={groupType === 3} />
+                  ))
+                ) : (
+                  <div className="border-border bg-surface rounded-md border px-6 py-16 text-center sm:col-span-full">
+                    <span
+                      className="icon-[mdi--cloud-off-outline] text-sakura size-8"
+                      aria-hidden
+                    />
+                    <p className="text-text-muted mt-3 text-sm">这个分组还没有收藏。</p>
+                  </div>
+                )}
               </div>
 
-              {active && shown.length < active.items.length ? (
+              {hasMore ? (
                 <div className="mt-8 text-center">
                   <button
                     type="button"
-                    onClick={() => setRenderCount((count) => count + PAGE_STEP)}
-                    className="border-border text-text hover:border-accent hover:text-accent focus-visible:outline-accent inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-md border px-8 py-2.5 text-sm transition-colors duration-150 ease-fast focus-visible:outline-2 focus-visible:outline-offset-2"
+                    onClick={loadMore}
+                    disabled={appending}
+                    className="border-border text-text hover:border-accent hover:text-accent focus-visible:outline-accent ease-fast inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-md border px-8 py-2.5 text-sm transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:opacity-60"
                   >
-                    加载更多
+                    {appending ? "加载中…" : "加载更多"}
                     <span className="text-text-muted font-mono text-xs">
-                      {active.items.length - shown.length}
+                      {active ? active.total - shown.length : 0}
                     </span>
                   </button>
+                  {appendError ? (
+                    <p className="text-danger mt-2 text-xs" role="status">
+                      分页加载失败，再点一次可重试。
+                    </p>
+                  ) : null}
                 </div>
               ) : null}
             </>
@@ -292,7 +356,7 @@ export function AcgArchive() {
       <div className="mt-12 lg:hidden">
         <Link
           href="/acg/"
-          className="text-text-muted hover:text-accent focus-visible:outline-accent inline-flex items-center gap-1 text-sm transition-colors duration-150 ease-fast focus-visible:outline-2 focus-visible:outline-offset-4"
+          className="text-text-muted hover:text-accent focus-visible:outline-accent ease-fast inline-flex items-center gap-1 text-sm transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-4"
         >
           <span className="icon-[mdi--arrow-left] size-4" aria-hidden />
           返回 ACG

@@ -44,16 +44,24 @@ export function ParticlesBackground() {
       opacity: Math.random() * 0.4 + 0.1,
     }));
 
+    // 30fps 节流：粒子是慢速漂移（≈9px/s），半帧率肉眼无差，绘制开销减半（移动端耗电）
+    const FRAME_MS = 1000 / 30;
     let raf = 0;
-    const animate = () => {
+    let lastFrame = 0;
+    const animate = (now: number) => {
       if (document.hidden) return; // 切后台不调度下一帧，由 visibilitychange 恢复
+      raf = requestAnimationFrame(animate);
+      if (now - lastFrame < FRAME_MS) return;
+      // 位移按真实间隔折算（以 60fps 帧为步长，上限 3 帧防长时间挂起后跳变）
+      const step = lastFrame === 0 ? 1 : Math.min((now - lastFrame) / (1000 / 60), 3);
+      lastFrame = now;
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
       const color = document.documentElement.classList.contains("dark")
         ? "180,200,240"
         : "91,143,212";
       for (const p of particles) {
-        p.x += p.speedX;
-        p.y += p.speedY;
+        p.x += p.speedX * step;
+        p.y += p.speedY * step;
         if (p.x < 0) p.x = window.innerWidth;
         if (p.x > window.innerWidth) p.x = 0;
         if (p.y < 0) p.y = window.innerHeight;
@@ -63,7 +71,6 @@ export function ParticlesBackground() {
         ctx.fillStyle = `rgba(${color}, ${p.opacity})`;
         ctx.fill();
       }
-      raf = requestAnimationFrame(animate);
     };
     raf = requestAnimationFrame(animate);
 

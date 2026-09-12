@@ -26,6 +26,8 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains-mono",
   display: "swap",
+  // 等宽字体只在代码块与数字处使用，不占首屏 preload 带宽（首屏 3 族字体曾全量 preload）
+  preload: false,
 });
 
 export const metadata: Metadata = {
