@@ -417,6 +417,56 @@
   }
 }
 
+/* ============ 路由切换进度条 ============
+ * 静态导出没有 router 事件：点击站内链接立即亮起，路由 commit 后冲到 100% 再淡出
+ *（两端判定见 components/layout/route-progress.tsx）。纯装饰、不吃指针；
+ * reduced-motion 下不做巡航动画，只保留透明度切换。
+ */
+@keyframes route-progress-cruise {
+  0% {
+    width: 8%;
+  }
+  20% {
+    width: 62%;
+  }
+  100% {
+    width: 92%;
+  }
+}
+.route-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 55;
+  height: 2px;
+  width: 0;
+  opacity: 0;
+  pointer-events: none;
+  background-image: linear-gradient(to right, var(--color-accent), var(--color-twilight));
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent) 55%, transparent);
+  transition: opacity 160ms ease-out;
+}
+.route-progress[data-phase="loading"] {
+  opacity: 1;
+  animation: route-progress-cruise 1.6s ease-out forwards;
+}
+.route-progress[data-phase="done"] {
+  width: 100%;
+  opacity: 0;
+  transition:
+    width 160ms ease-out,
+    opacity 220ms ease-out 120ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  .route-progress[data-phase="loading"] {
+    animation: none;
+    width: 92%;
+  }
+  .route-progress[data-phase="done"] {
+    transition: opacity 150ms ease-out;
+  }
+}
+
 /* ============ 媒体灯箱（REQ-P8） ============
  * 进出场动画挂在 Radix 的 Overlay / Content 上：Radix Presence 靠 animationend 判定退场，
  * 因此退场必须写成 animation（transition 会在同一帧被卸载，看不到过渡）。
