@@ -116,6 +116,9 @@ src/
 - 非 ASCII（中文）动态路由参数 + `output: export`：dev 服务器按编码 URL 匹配 gSP 产出（中文原始形态 500、编码目录 GH Pages 404）——路由参数一律 ASCII slug（分类走固定映射、标签走覆盖表+拼音，中文仅展示，见 `src/lib/posts.ts`）。
 - 本地 `pnpm preview`（serve out）不解析 `/xx/__next.yy.__PAGE__.txt`：本地会出现 RSC 预取 404 控制台噪音，线上 GH Pages 同路径正常（实测 200）——别当 bug 修。
 - webpack 与 Turbopack 的导出产物不同（polyfills chunk 是否被引用、next/font 是否输出 preload 链接都不一样）：判断首屏 JS / 字体成本要看**线上 HTML**，别只信本地构建产物。
+- Radix Portal 的内容**晚于组件 effect 挂载**：在 `useEffect`/`useLayoutEffect` 里用 `ref.current` 取 portal 内节点会拿到 `null`，且依赖不变时永不重跑——改用 callback ref 绑定。
+- React **StrictMode（dev）会「卸载→重挂」ref 与 effect**：一次性消费的 ref（取完置空）在第二次挂载即失效；动画/手势的起始态要能重放，或交给 **CSS 动画兜底**（起点用 CSS 变量注入）。
+- **纯动画用的包裹层一律 `pointer-events-none`**，交互留在内层：否则它固定不动的盒会参与点击命中，让「点空白关闭」这类判定在内容位移/缩放后失效。
 
 ## 8. 维护约定
 

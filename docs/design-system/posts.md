@@ -26,6 +26,7 @@
 | P-13 | 分类徽章语义 | chips 是**前往链接非筛选器**：图标 + 名称 + 计数 + hover 箭头，**无选中态**（含分类页）                                                        |
 | P-14 | 索引页       | 新增 `/posts/categories`（分类卡+描述+篇数）与 `/posts/tags`（全量标签云）；列表页头右侧三入口                                                 |
 | P-15 | 详情页返回   | 客户端 `BackButton`：`history.back()`，无历史时兜底 `/posts/`                                                                                  |
+| P-16 | 媒体灯箱     | 正文图片 / Mermaid 点击放大：滚轮（光标锚点）与 `+/−/0/1` 键缩放、自由拖动平移、双击在适应窗口 ↔ 2x 间切换、方向键微调、点击空白或 Esc 关闭；入场自被点元素 FLIP（独立舞台层 CSS 动画，260ms，起点经 CSS 变量注入），Overlay 240ms / 面板 260ms 淡入、退场 180ms（Radix 靠 `animationend` 等待）；动画层 `pointer-events-none`，滚轮与拖拽瞬时跟手，`prefers-reduced-motion` 下全部跳过 |
 
 ---
 
