@@ -16,9 +16,7 @@ const FORTUNES = [
 ] as const;
 
 type Phase =
-  | { kind: "idle" }
-  | { kind: "shuffling" }
-  | { kind: "done"; level: string; message: string };
+  { kind: "idle" } | { kind: "shuffling" } | { kind: "done"; level: string; message: string };
 
 const SHUFFLE_TICKS = 8;
 const SHUFFLE_INTERVAL_MS = 80;
@@ -71,7 +69,7 @@ export function FortuneDraw() {
               phase.kind === "shuffling"
                 ? "text-text-muted animate-pulse motion-reduce:animate-none"
                 : phase.level === "大吉"
-                  ? "bg-gradient-to-r from-accent to-twilight bg-clip-text text-transparent"
+                  ? "from-accent to-twilight bg-gradient-to-r bg-clip-text text-transparent"
                   : "text-text"
             }`}
           >

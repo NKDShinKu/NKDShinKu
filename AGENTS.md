@@ -16,6 +16,7 @@ pnpm build:search # Pagefind 索引
 pnpm lint         # ESLint（flat config）
 pnpm typecheck    # tsc --noEmit
 pnpm format       # Prettier
+pnpm format:check # Prettier 检查（CI 也跑，不通过则构建失败）
 ```
 
 ## 2. 静态导出红线（最重要）
@@ -65,7 +66,7 @@ src/
 
 ### 3.5 质量门槛
 
-- 提交前 `lint + typecheck + build` 全绿；暂不引入测试框架。
+- 提交前 `format:check + lint + typecheck + build` 全绿；暂不引入测试框架（CI 另跑依赖审计，`continue-on-error` 非阻断）。
 
 ## 4. 设计约定
 
@@ -113,6 +114,8 @@ src/
 - Next 16 静态导出下 `sitemap.ts` / `robots.ts` / route handler 必须显式 `export const dynamic = "force-static"`，否则构建直接报错（官方文档未明说，实测所得）。
 - 响应式 grid（`sm:grid-cols-N` 类）必须同时写显式 `grid-cols-1` 基线：缺省的隐式 auto 轨道按内容 max-content 撑宽，长文本会把页面顶出横向溢出（ACG 归档页 375 实测根因）。
 - 非 ASCII（中文）动态路由参数 + `output: export`：dev 服务器按编码 URL 匹配 gSP 产出（中文原始形态 500、编码目录 GH Pages 404）——路由参数一律 ASCII slug（分类走固定映射、标签走覆盖表+拼音，中文仅展示，见 `src/lib/posts.ts`）。
+- 本地 `pnpm preview`（serve out）不解析 `/xx/__next.yy.__PAGE__.txt`：本地会出现 RSC 预取 404 控制台噪音，线上 GH Pages 同路径正常（实测 200）——别当 bug 修。
+- webpack 与 Turbopack 的导出产物不同（polyfills chunk 是否被引用、next/font 是否输出 preload 链接都不一样）：判断首屏 JS / 字体成本要看**线上 HTML**，别只信本地构建产物。
 
 ## 8. 维护约定
 

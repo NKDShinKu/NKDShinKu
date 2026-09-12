@@ -13,7 +13,7 @@
 
 ## 2. 总体方案
 
-部署链路：Markdown/代码 → Next.js 16 静态导出（`out/`）→ GitHub Actions（lint → typecheck → build → Pagefind 索引 → 上传 artifact）→ GitHub Pages（自定义域名）。
+部署链路：Markdown/代码 → Next.js 16 静态导出（`out/`）→ GitHub Actions（format → lint → typecheck → 依赖审计 → build → Pagefind 索引 → 上传 artifact）→ GitHub Pages（自定义域名）。
 
 | 决策 | 选型                                                 | 核心理由                                     | 备选 / 退路                                                          |
 | ---- | ---------------------------------------------------- | -------------------------------------------- | -------------------------------------------------------------------- |
@@ -35,7 +35,7 @@
 | 动画     | GSAP（+ @gsap/react）                         | 滚动/入场/过渡动画；尊重 prefers-reduced-motion               | ✅（M1 已安装）                    |
 | 语言     | TypeScript 5.9（strict）                      | 勿升 TS 7（生态兼容未验证）                                   | ✅                                 |
 | 包管理   | pnpm                                          | lockfile 锁定                                                 | ✅                                 |
-| 动态数据 | 浏览器端 fetch（Bangumi 等）                  | 静态导出下唯一可行方式；需加载/失败态                         | ✅ 直连实测通过（D14），待 M3 落地 |
+| 动态数据 | 浏览器端 fetch（Bangumi 等）                  | 静态导出下唯一可行方式；需加载/失败态；归档页首屏分页取数     | ✅ 直连实测通过（D14），M3 已落地 |
 | 图床     | Cloudflare R2（bucket `nkdshinku-assets`）    | 自定义域 `img.nkdshinku.com`                                  | ✅ 已建，文章接入待 M4             |
 | 评论     | giscus                                        | 前置：开 Discussions + 安装 giscus App                        | ⏳ M3/M4                           |
 | 内容管线 | unified（remark + rehype）+ gray-matter       | 构建期渲染、零客户端 JS；插件覆盖 GFM/标题锚点/代码高亮       | ⏳ M2                              |
@@ -64,6 +64,7 @@
 1. ~~Bangumi API 浏览器直连的 CORS / User-Agent / 限流~~ 已实测排除（2026-09，D14）：ACAO `*`、浏览器 UA 放行、12 并发无限流，走直连分支。
 2. GitHub Pages 国内访问质量一般；不可接受则迁移 Cloudflare Pages（代码零改动）。
 3. 图床素材版权：插图使用自绘 / AI 生成 / 明确授权素材。
+4. 访客侧第三方请求：首页「最近在看」与 `/acg` 会在访客浏览器直连 `api.bgm.tv`（各 3 个请求，30 分钟缓存）——访客 IP 因此对 Bangumi 可见；与「不设访问统计」不冲突，但属已知事实（用户知悉，2026-09）。
 
 ### 6.2 Bangumi 接入决策树（决策 D3）
 
@@ -99,6 +100,7 @@
 | D18 | 板块更名「ACG」     | 用户决策：追番板块更名 ACG（`/bangumi` → `/acg`），两层结构——`/acg` 橱窗 hub + `/acg/anime` 番剧归档（编辑档案式排版，容器 1440px），游戏/音乐/小说占位子类预留扩展；时间胶囊 RSS 实测 bgm.tv 不放 CORS 头、浏览器不可直连，决策弃用（方案 A），Worker 代理保留为可选项；收藏主体走 v0 API 直连（D14）。需求 REQ-B 重写为 REQ-M                                                                                                         | 2026-09 |
 | D19 | M4 范围与方案定稿   | 用户决策（6 项）：① 全量收尾（P2 SEO 三件套 + 站长验证纳入本期）② giscus 重启**全量上线**（修订 D5，抽屉形态 + site.config 开关，国内实测不佳可关）③ OG 图走静态品牌图 1200×630 全站共用（O4 闭环，文章级动态生成留 M5）④ 文章封面代码自绘（SVG→PNG，样稿评审先行）+ R2 走 rclone/API Token 上传 ⑤ 文章目录按年分子目录 `content/posts/<年>/`（排序维持 frontmatter date，不引入文件名序号，与 D9 一致）⑥ 任务序列 T0–T10 见 roadmap M4 | 2026-09 |
 | D20 | 分类调整：教程→技术 | 用户决策：技术形态不全等于教程（实战/观点/分析类文章无处安放）。三分类语义重定义——**技术**（成体系技术内容：教程/实战/分析，slug `tech`）/**笔记**（碎片速记）/ **日常**（生活与站点随笔）；主题维度仍由标签承担。存量 3 篇教程文迁移至技术，旧 URL `/posts/category/tutorial/` 失效                                                                                                                                                    | 2026-09 |
+| D21 | 浅色底彩色文字对比度 | 用户决策（2026-09 全站检查）：Tag 三变体在彩色淡底上实测 4.2–4.4:1、顶栏选中态 `text-accent` 3.0:1，均按设计保留、不改 token——D10「品牌色彩底视觉优先」的延伸；正文/长文本对比度纪律不变 | 2026-09 |
 
 ## 8. 变更记录
 
@@ -130,3 +132,4 @@
 | 2026-09 | M4 方案定稿并开工（D19）：giscus 重启全量上线、OG 静态品牌图、封面自绘 + rclone、文章按年分目录；孤儿占位图 `public/empty.png` 清除；deploy-checklist 状态同步（HTTPS 证书已签发、Bangumi 节闭环）                                                                                                                                                                              |
 | 2026-09 | 分类调整（D20）：「教程」更名「技术」并重定义三分类语义，存量文章迁移完毕                                                                                                                                                                                                                                                                                                       |
 | 2026-09 | **M4 上线完成**：10 项任务 + 开发中追加的右栏面板/移动端抽屉全部落地并推送部署；线上六项验证通过（https/404/Pagefind/OG·图标·llms.txt/R2 封面/giscus）；Lighthouse 桌面 97–100、移动 80–93、CLS 全 0；开发中新增决策：文章页右栏面板与抽屉形态、封面/OG 图代码自绘（SVG→PNG 脚本化）、llms.txt 走 route handler 而非静态文件；M5 记录性能打磨候选（ACG LCP/prefetch/unused JS） |
+| 2026-09 | **全站检查后的工程修复批次**：①「加载更多」改真分页（首屏 1 请求，取代一次拉全组）②giscus 主题判定修正（只看 html.dark + 系统切换派发事件）③回到顶部按钮不可见时移出 tab 序列 ④JetBrains Mono 改 `preload:false`（首屏字体 preload 3 族 117KB → 2 族）⑤粒子背景降为 30fps 并做时间步长折算 ⑥sitemap `lastModified` 改内容派生 ⑦标签 slug 冲突构建期报错 ⑧孤儿素材清理（本地封面 + generate-covers 条目 + R2 两个孤儿封面与 `qidong/` 4 张无引用 webp）⑨`prettier --check` 进 CI、Actions 固定 commit SHA、新增 Dependabot ⑩对比度按设计豁免记为 D21 |

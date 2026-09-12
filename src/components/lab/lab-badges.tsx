@@ -29,7 +29,7 @@ const STATUS_STYLES: Record<LabStatus, { icon: string; color: string }> = {
 export function LabStatusBadge({ status }: { status: LabStatus }) {
   const { icon, color } = STATUS_STYLES[status];
   return (
-    <span className="text-text-muted border-border/60 inline-flex items-center gap-1 rounded-full border bg-bg/60 px-2.5 py-1 text-xs">
+    <span className="text-text-muted border-border/60 bg-bg/60 inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs">
       <span className={`${icon} ${color} size-3.5`} aria-hidden />
       {LAB_STATUS_LABELS[status]}
     </span>

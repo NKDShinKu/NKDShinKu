@@ -24,7 +24,7 @@ export function BackButton({ fallbackHref }: BackButtonProps) {
           router.push(fallbackHref);
         }
       }}
-      className="text-text-muted hover:text-accent focus-visible:outline-accent inline-flex cursor-pointer items-center gap-1 rounded-md text-sm transition-colors duration-150 ease-fast focus-visible:outline-2 focus-visible:outline-offset-4"
+      className="text-text-muted hover:text-accent focus-visible:outline-accent ease-fast inline-flex cursor-pointer items-center gap-1 rounded-md text-sm transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-4"
     >
       <span className="icon-[mdi--arrow-left] size-4" aria-hidden />
       返回

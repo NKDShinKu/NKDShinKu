@@ -7,9 +7,9 @@
 export function AuroraBackground() {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-      <div className="bg-accent animate-blob absolute top-[-200px] left-[-150px] size-[600px] opacity-[0.22] blur-[120px] [border-radius:40%_60%_60%_40%_/_60%_30%_70%_40%] motion-reduce:animate-none dark:opacity-[0.16]" />
-      <div className="bg-sakura animate-blob absolute top-[40%] right-[-200px] size-[500px] opacity-[0.22] blur-[120px] [animation-delay:-4s] [animation-duration:14s] [border-radius:60%_40%_40%_60%_/_40%_60%_40%_60%] motion-reduce:animate-none dark:opacity-[0.16]" />
-      <div className="bg-twilight animate-blob absolute bottom-[-150px] left-[30%] size-[400px] opacity-[0.22] blur-[120px] [animation-delay:-8s] [animation-duration:10s] [border-radius:55%_45%_50%_50%_/_50%_55%_45%_50%] motion-reduce:animate-none dark:opacity-[0.16]" />
+      <div className="bg-accent animate-blob absolute top-[-200px] left-[-150px] size-[600px] [border-radius:40%_60%_60%_40%_/_60%_30%_70%_40%] opacity-[0.22] blur-[120px] motion-reduce:animate-none dark:opacity-[0.16]" />
+      <div className="bg-sakura animate-blob absolute top-[40%] right-[-200px] size-[500px] [border-radius:60%_40%_40%_60%_/_40%_60%_40%_60%] opacity-[0.22] blur-[120px] [animation-delay:-4s] [animation-duration:14s] motion-reduce:animate-none dark:opacity-[0.16]" />
+      <div className="bg-twilight animate-blob absolute bottom-[-150px] left-[30%] size-[400px] [border-radius:55%_45%_50%_50%_/_50%_55%_45%_50%] opacity-[0.22] blur-[120px] [animation-delay:-8s] [animation-duration:10s] motion-reduce:animate-none dark:opacity-[0.16]" />
     </div>
   );
 }

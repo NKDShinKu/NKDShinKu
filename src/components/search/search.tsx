@@ -146,7 +146,11 @@ export function Search({ recent }: { recent: SearchRecentPost[] }) {
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
-      <Dialog.Trigger aria-label="搜索文章（Ctrl+K）" title="搜索文章（Ctrl+K）" className={iconButtonClass}>
+      <Dialog.Trigger
+        aria-label="搜索文章（Ctrl+K）"
+        title="搜索文章（Ctrl+K）"
+        className={iconButtonClass}
+      >
         <span className="icon-[mdi--magnify] size-5" aria-hidden />
       </Dialog.Trigger>
 
@@ -154,7 +158,7 @@ export function Search({ recent }: { recent: SearchRecentPost[] }) {
         <Dialog.Overlay className="search-overlay bg-bg/60 fixed inset-0 z-[60] backdrop-blur-sm" />
         <Dialog.Content
           aria-label="站内搜索"
-          className="search-dialog border-border bg-surface shadow-lg fixed left-1/2 top-[12vh] z-[60] flex w-[calc(100vw-24px)] max-w-[560px] -translate-x-1/2 flex-col overflow-hidden rounded-lg border max-sm:top-[8vh]"
+          className="search-dialog border-border bg-surface fixed top-[12vh] left-1/2 z-[60] flex w-[calc(100vw-24px)] max-w-[560px] -translate-x-1/2 flex-col overflow-hidden rounded-lg border shadow-lg max-sm:top-[8vh]"
         >
           <Dialog.Title className="sr-only">站内搜索</Dialog.Title>
           <Dialog.Description className="sr-only">
@@ -194,7 +198,10 @@ export function Search({ recent }: { recent: SearchRecentPost[] }) {
             className="max-h-[55vh] overflow-y-auto overscroll-contain md:max-h-[60vh]"
           >
             {loadingIndex ? (
-              <p className="text-text-muted flex items-center gap-2 px-4 py-8 text-sm" role="status">
+              <p
+                className="text-text-muted flex items-center gap-2 px-4 py-8 text-sm"
+                role="status"
+              >
                 <span
                   className="icon-[mdi--loading] size-4 animate-spin motion-reduce:animate-none"
                   aria-hidden
@@ -209,7 +216,7 @@ export function Search({ recent }: { recent: SearchRecentPost[] }) {
                 <button
                   type="button"
                   onClick={() => setLoadError(false)}
-                  className="border-border text-text hover:border-accent hover:text-accent focus-visible:outline-accent mt-4 inline-flex min-h-11 cursor-pointer items-center rounded-md border px-6 py-2 text-sm transition-colors duration-150 ease-fast focus-visible:outline-2 focus-visible:outline-offset-2"
+                  className="border-border text-text hover:border-accent hover:text-accent focus-visible:outline-accent ease-fast mt-4 inline-flex min-h-11 cursor-pointer items-center rounded-md border px-6 py-2 text-sm transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2"
                 >
                   重新加载
                 </button>
@@ -254,7 +261,7 @@ export function Search({ recent }: { recent: SearchRecentPost[] }) {
                     <div className="min-w-0 flex-1">
                       <p className="text-text text-sm font-medium">{resultTitle(result)}</p>
                       <div
-                        className="text-text-muted mt-0.5 line-clamp-2 text-xs [&_mark]:bg-sakura/25 [&_mark]:text-inherit [&_mark]:rounded-xs [&_mark]:px-0.5"
+                        className="text-text-muted [&_mark]:bg-sakura/25 mt-0.5 line-clamp-2 text-xs [&_mark]:rounded-xs [&_mark]:px-0.5 [&_mark]:text-inherit"
                         dangerouslySetInnerHTML={{ __html: result.excerpt }}
                       />
                       {result.meta.category ? (
@@ -275,7 +282,7 @@ export function Search({ recent }: { recent: SearchRecentPost[] }) {
                   <Link
                     href="/posts/"
                     onClick={() => setOpen(false)}
-                    className="text-accent-dark hover:text-accent mx-0.5 underline decoration-accent/40 underline-offset-4"
+                    className="text-accent-dark hover:text-accent decoration-accent/40 mx-0.5 underline underline-offset-4"
                   >
                     全部文章
                   </Link>

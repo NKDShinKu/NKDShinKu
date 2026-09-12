@@ -11,10 +11,7 @@ export function generateStaticParams() {
   // 静态导出要求参数空间非空：文章不足两页时以第 1 页占位（运行时对 page<2 走 404，
   // canonical 也指回 /posts/，不产生重复入口）。
   const totalPages = getTotalPages();
-  const pages =
-    totalPages > 1
-      ? Array.from({ length: totalPages - 1 }, (_, i) => i + 2)
-      : [1];
+  const pages = totalPages > 1 ? Array.from({ length: totalPages - 1 }, (_, i) => i + 2) : [1];
   return pages.map((n) => ({ page: String(n) }));
 }
 
@@ -38,11 +35,5 @@ export default async function PostsPagedPage({ params }: { params: Promise<{ pag
   if (!isValidPage(page, totalPages) || page < 2) {
     notFound();
   }
-  return (
-    <PostsIndex
-      page={page}
-      totalPages={totalPages}
-      posts={getPostsPage(page)}
-    />
-  );
+  return <PostsIndex page={page} totalPages={totalPages} posts={getPostsPage(page)} />;
 }

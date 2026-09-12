@@ -18,7 +18,11 @@ export default function AcgAnimePage() {
   return (
     <div className="mx-auto w-full max-w-[1440px] px-5 pt-24 pb-16 sm:px-6 md:pt-28 md:pb-24">
       <BackButton fallbackHref="/acg/" />
-      <Suspense fallback={<div className="border-border bg-border/60 mt-4 h-16 animate-pulse rounded-md border" />}>
+      <Suspense
+        fallback={
+          <div className="border-border bg-border/60 mt-4 h-16 animate-pulse rounded-md border" />
+        }
+      >
         <AcgArchive />
       </Suspense>
     </div>

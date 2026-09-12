@@ -8,7 +8,10 @@ import type { ReactNode } from "react";
  */
 export function LabDemoShell({ children }: { children: ReactNode }) {
   return (
-    <section aria-label="在线演示" className="rounded-lg border border-border bg-surface p-4 md:p-6">
+    <section
+      aria-label="在线演示"
+      className="border-border bg-surface rounded-lg border p-4 md:p-6"
+    >
       <noscript>
         <p className="text-text-muted mb-4 text-sm">此实验需要启用 JavaScript 才能交互。</p>
       </noscript>

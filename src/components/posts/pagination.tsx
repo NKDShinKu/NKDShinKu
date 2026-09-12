@@ -20,10 +20,7 @@ export function Pagination({ page, totalPages, hrefForPage }: PaginationProps) {
   const next = page + 1;
 
   return (
-    <nav
-      aria-label="文章分页"
-      className="mt-12 flex flex-col items-center gap-3"
-    >
+    <nav aria-label="文章分页" className="mt-12 flex flex-col items-center gap-3">
       <div className="flex items-center gap-2">
         <PageLink
           href={prev >= 1 ? hrefForPage(prev) : undefined}
@@ -95,12 +92,15 @@ function PageLink({ href, disabled, label, children }: PageLinkProps) {
 /** 空状态卡（分类/标签筛选无结果时）—— design-system/posts.md §2.10 */
 export function EmptyState({ message }: { message: string }) {
   return (
-    <Card variant="surface" className="text-text-muted flex flex-col items-center gap-3 py-16 text-center">
+    <Card
+      variant="surface"
+      className="text-text-muted flex flex-col items-center gap-3 py-16 text-center"
+    >
       <span className="icon-[mdi--cloud-search-outline] text-sakura size-10" aria-hidden />
       <p className="text-sm">{message}</p>
       <Link
         href="/posts/"
-        className="focus-visible:outline-accent mt-2 rounded-md border border-border px-6 py-2.5 font-medium transition-[border-color,color] duration-150 ease-fast hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2"
+        className="focus-visible:outline-accent border-border ease-fast hover:border-accent hover:text-accent mt-2 rounded-md border px-6 py-2.5 font-medium transition-[border-color,color] duration-150 focus-visible:outline-2 focus-visible:outline-offset-2"
       >
         返回全部文章
       </Link>

@@ -28,7 +28,7 @@ export function ExternalLinkButton({ href, label, icon }: ExternalLinkButtonProp
         <button
           type="button"
           aria-label={label}
-          className="text-text-muted hover:text-accent hover:bg-accent/10 focus-visible:outline-accent inline-flex size-11 cursor-pointer items-center justify-center rounded-full transition-colors duration-150 ease-fast focus-visible:outline-2 focus-visible:outline-offset-2"
+          className="text-text-muted hover:text-accent hover:bg-accent/10 focus-visible:outline-accent ease-fast inline-flex size-11 cursor-pointer items-center justify-center rounded-full transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2"
         >
           <span className={`${icon} size-4`} aria-hidden />
         </button>
@@ -36,13 +36,11 @@ export function ExternalLinkButton({ href, label, icon }: ExternalLinkButtonProp
 
       <Dialog.Portal>
         <Dialog.Overlay className="bg-bg/60 fixed inset-0 z-[60] backdrop-blur-sm" />
-        <Dialog.Content className="border-border bg-surface shadow-lg fixed left-1/2 top-1/2 z-[60] w-[calc(100vw-48px)] max-w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-lg border p-6">
+        <Dialog.Content className="border-border bg-surface fixed top-1/2 left-1/2 z-[60] w-[calc(100vw-48px)] max-w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-lg border p-6 shadow-lg">
           <Dialog.Title className="font-display text-lg font-semibold">即将离开本站</Dialog.Title>
           <Dialog.Description className="text-text-muted mt-2 text-sm leading-relaxed">
             你即将访问外部链接：
-            <span className="text-accent-dark font-mono mt-1.5 block break-all">
-              {href}
-            </span>
+            <span className="text-accent-dark mt-1.5 block font-mono break-all">{href}</span>
             外部站点内容与本站无关，将在新窗口打开。
           </Dialog.Description>
 

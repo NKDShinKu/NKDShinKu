@@ -15,9 +15,7 @@ export function CodeCopyButtons() {
     const root = document.querySelector(".post-body");
     if (!root) return;
 
-    const figures = root.querySelectorAll<HTMLElement>(
-      "figure[data-rehype-pretty-code-figure]",
-    );
+    const figures = root.querySelectorAll<HTMLElement>("figure[data-rehype-pretty-code-figure]");
     const cleanups: (() => void)[] = [];
 
     for (const figure of figures) {
@@ -26,8 +24,7 @@ export function CodeCopyButtons() {
       button.className =
         "code-copy-btn focus-visible:outline-accent absolute top-2 right-2 z-10 inline-flex h-11 items-center gap-1.5 rounded-md border border-border bg-surface px-3 text-xs font-medium text-text-muted transition-[border-color,color] duration-150 ease-out cursor-pointer hover:border-accent hover:text-accent";
       button.setAttribute("aria-label", "复制代码");
-      button.innerHTML =
-        '<span class="icon-[mdi--content-copy] size-4" aria-hidden="true"></span>';
+      button.innerHTML = '<span class="icon-[mdi--content-copy] size-4" aria-hidden="true"></span>';
 
       const onCopy = async () => {
         const code = figure.querySelector("pre code")?.textContent ?? "";
@@ -40,11 +37,11 @@ export function CodeCopyButtons() {
           '<span class="icon-[mdi--check] size-4" aria-hidden="true"></span><span class="sr-only">已复制</span>';
         button.setAttribute("aria-label", "已复制");
         window.setTimeout(() => {
-      button.innerHTML =
-        '<span class="icon-[mdi--content-copy] size-4" aria-hidden="true"></span>';
-      button.setAttribute("aria-label", "复制代码");
-      // 复制结果经 aria-label 变化对外播报（guidelines：异步状态更新需 aria-live）
-      button.setAttribute("aria-live", "polite");
+          button.innerHTML =
+            '<span class="icon-[mdi--content-copy] size-4" aria-hidden="true"></span>';
+          button.setAttribute("aria-label", "复制代码");
+          // 复制结果经 aria-label 变化对外播报（guidelines：异步状态更新需 aria-live）
+          button.setAttribute("aria-live", "polite");
         }, 800);
       };
 

@@ -16,7 +16,7 @@ export function GreetingPanel() {
   const entries = [...siteConfig.socials, RSS_ENTRY];
 
   return (
-    <div className="border-glass-border shadow-md flex flex-col gap-5 rounded-lg border bg-gradient-to-br from-accent/12 via-glass to-sakura/12 p-6 backdrop-blur-[16px] sm:flex-row sm:items-center md:p-8">
+    <div className="border-glass-border from-accent/12 via-glass to-sakura/12 flex flex-col gap-5 rounded-lg border bg-gradient-to-br p-6 shadow-md backdrop-blur-[16px] sm:flex-row sm:items-center md:p-8">
       {/* O3：用户头像素材到位后替换 src（站点 logo 兜底） */}
       <img
         src="/icon.svg"

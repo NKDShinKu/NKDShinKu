@@ -26,7 +26,7 @@ export function ArchiveRow({ item, showProgress = false }: ArchiveRowProps) {
 
   return (
     <Reveal subtle>
-      <article className="group border-border bg-surface hover:shadow-lg relative overflow-hidden rounded-md border transition-[translate,box-shadow] duration-200 ease-base hover:-translate-y-[3px]">
+      <article className="group border-border bg-surface ease-base relative overflow-hidden rounded-md border transition-[translate,box-shadow] duration-200 hover:-translate-y-[3px] hover:shadow-lg">
         {/* stretched-link：整卡可点，跳 Bangumi 条目页 */}
         <a
           href={`https://bgm.tv/subject/${item.subject.id}`}
@@ -49,17 +49,17 @@ export function ArchiveRow({ item, showProgress = false }: ArchiveRowProps) {
             {/* 封面浮动信息（仅移动端 sm:hidden）：桌面数据在右侧面板，避免重复 */}
             <div className="sm:hidden">
               {rank > 0 ? (
-                <span className="absolute left-1.5 top-1.5 rounded-full bg-black/55 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
+                <span className="absolute top-1.5 left-1.5 rounded-full bg-black/55 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
                   Rank {rank}
                 </span>
               ) : null}
               {score > 0 ? (
-                <span className="bg-accent absolute right-1.5 top-1.5 rounded-full px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                <span className="bg-accent absolute top-1.5 right-1.5 rounded-full px-1.5 py-0.5 text-[10px] font-semibold text-white">
                   ★ {score.toFixed(1)}
                 </span>
               ) : null}
               {item.rate > 0 || showProgress ? (
-                <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/85 to-transparent px-1.5 pb-1 pt-4 text-[10px] text-white">
+                <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/85 to-transparent px-1.5 pt-4 pb-1 text-[10px] text-white">
                   <span className="inline-flex items-center gap-0.5">
                     {item.rate > 0 ? (
                       <>
@@ -81,7 +81,7 @@ export function ArchiveRow({ item, showProgress = false }: ArchiveRowProps) {
           <div className="min-w-0 flex-1 p-4 md:p-5">
             {/* 标题：两行截断 + 固定高度（行卡等高协同，用户决策）；全名经 title 提示与 Bangumi 兜底 */}
             <h3
-              className="text-text line-clamp-2 min-h-[2.75rem] text-base font-semibold leading-snug"
+              className="text-text line-clamp-2 min-h-[2.75rem] text-base leading-snug font-semibold"
               title={name}
             >
               {name}
@@ -98,9 +98,7 @@ export function ArchiveRow({ item, showProgress = false }: ArchiveRowProps) {
               {item.comment ? (
                 <>
                   <p className="line-clamp-1">{item.subject.summary}</p>
-                  <p className="border-sakura mt-1 line-clamp-2 border-l-2 pl-3">
-                    {item.comment}
-                  </p>
+                  <p className="border-sakura mt-1 line-clamp-2 border-l-2 pl-3">{item.comment}</p>
                 </>
               ) : (
                 <p className="line-clamp-3">{item.subject.summary}</p>

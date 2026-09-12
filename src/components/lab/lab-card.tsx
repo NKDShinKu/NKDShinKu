@@ -32,7 +32,7 @@ export function LabCard({ item, className }: LabCardProps) {
     <Card
       variant="surface"
       padding="p-4 md:p-5"
-      className={`group border-border/70 hover:border-accent/40 h-full transition-colors duration-200 ease-base ${className ?? ""}`}
+      className={`group border-border/70 hover:border-accent/40 ease-base h-full transition-colors duration-200 ${className ?? ""}`}
     >
       <div className="flex h-full flex-col">
         <div className="flex flex-wrap items-center gap-2">
@@ -49,8 +49,11 @@ export function LabCard({ item, className }: LabCardProps) {
         <h2 className="mt-2.5 text-base font-semibold md:text-lg">{item.name}</h2>
         <p className="text-text-muted mt-1 line-clamp-2 text-sm leading-relaxed">{item.tagline}</p>
 
-        <div className="mt-auto flex items-center gap-1 border-t border-border/60 pt-3">
-          <ul className="text-text-muted flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-xs" aria-label="技术栈">
+        <div className="border-border/60 mt-auto flex items-center gap-1 border-t pt-3">
+          <ul
+            className="text-text-muted flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-xs"
+            aria-label="技术栈"
+          >
             {item.tech.map((tech, index) => (
               <li key={tech} className="flex items-center gap-2">
                 {index > 0 ? <span aria-hidden>·</span> : null}
@@ -60,24 +63,24 @@ export function LabCard({ item, className }: LabCardProps) {
           </ul>
 
           <div className="ml-auto flex shrink-0 items-center gap-0.5">
-            {isExternal
-              ? item.links.map((link) => (
-                  <ExternalLinkButton
-                    key={link.href}
-                    href={link.href}
-                    label={`${item.name} ${link.label}`}
-                    icon={linkIcon(link.label, link.href)}
-                  />
-                ))
-              : (
-                  <Link
-                    href={`/lab/${item.slug}/`}
-                    aria-label={`打开 ${item.name}`}
-                    className="text-text-muted hover:text-accent hover:bg-accent/10 focus-visible:outline-accent inline-flex size-11 items-center justify-center rounded-full transition-colors duration-150 ease-fast focus-visible:outline-2 focus-visible:outline-offset-2"
-                  >
-                    <span className="icon-[mdi--arrow-right] size-4" aria-hidden />
-                  </Link>
-                )}
+            {isExternal ? (
+              item.links.map((link) => (
+                <ExternalLinkButton
+                  key={link.href}
+                  href={link.href}
+                  label={`${item.name} ${link.label}`}
+                  icon={linkIcon(link.label, link.href)}
+                />
+              ))
+            ) : (
+              <Link
+                href={`/lab/${item.slug}/`}
+                aria-label={`打开 ${item.name}`}
+                className="text-text-muted hover:text-accent hover:bg-accent/10 focus-visible:outline-accent ease-fast inline-flex size-11 items-center justify-center rounded-full transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                <span className="icon-[mdi--arrow-right] size-4" aria-hidden />
+              </Link>
+            )}
           </div>
         </div>
       </div>

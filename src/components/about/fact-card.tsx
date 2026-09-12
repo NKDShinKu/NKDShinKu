@@ -35,11 +35,18 @@ type FactCardProps = {
  * 事实卡（about.md §2.1，2026-09 走查修订）：标签 / 大号主值 / 装饰条 / 锚底说明
  * 非交互卡——无 hover 位移、无链接（说明内嵌链接除外）；图标 aria-hidden
  */
-export function FactCard({ icon, label, tone = "plain", className, value, description }: FactCardProps) {
+export function FactCard({
+  icon,
+  label,
+  tone = "plain",
+  className,
+  value,
+  description,
+}: FactCardProps) {
   const toneStyle = TONES[tone];
   return (
     <div
-      className={`shadow-sm flex h-full min-h-40 flex-col rounded-md border p-5 md:p-6 ${toneStyle.card} ${className ?? ""}`}
+      className={`flex h-full min-h-40 flex-col rounded-md border p-5 shadow-sm md:p-6 ${toneStyle.card} ${className ?? ""}`}
     >
       <p className="text-text-muted flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase">
         <span className={`${icon} text-accent size-4`} aria-hidden />

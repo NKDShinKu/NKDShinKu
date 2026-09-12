@@ -34,7 +34,7 @@
 - [x] 技术选型定稿（D12）与内容管线：unified + gray-matter 构建期渲染；frontmatter 校验、中文阅读时长、置顶排序、draft 过滤、标签 slug
 - [x] 文章列表页：横向列表卡、分类徽章（前往语义）、分页路由；分类/标签索引页；归档时间线
 - [x] 文章详情页：prose 排版、Shiki 双主题代码高亮 + 复制按钮、TOC scrollspy（锚点不进历史栈）、Mermaid 懒加载、Article 结构化数据、返回键
-- [x] 站点文件：RSS（feed.xml）、sitemap、robots 补 Sitemap 行；Pagefind 索引验证（23 页入库）
+- [x] 站点文件：RSS（feed.xml）、sitemap、robots 补 Sitemap 行；Pagefind 索引验证（23 页入库；M3 起索引经 `data-pagefind-body` 收敛至正文，现为 4 篇）
 - [x] UI 细节改版（D13）：极光全屏首屏（背景图方案移除）、顶栏 fixed 化（首页透明态）、横向列表卡、移动端与无障碍走查
 - [x] 示例文章 4 篇上线（建站随笔 / 静态导出笔记 / Tailwind 教程 / 发布流水线）；首页接入最新文章
 
@@ -55,7 +55,7 @@
 - [x] T1 文章目录按年重组：`content/posts/<年>/` 子目录，posts.ts 递归遍历 + 跨目录重名 slug 校验，URL 零变化
 - [x] T2 完整站点图标集（REQ-F6）：favicon.ico / apple-touch-icon / manifest（generate-icons 脚本从 icon.svg 派生）
 - [x] T3 OG 社交分享图（REQ-G4 / O4）：静态品牌图 1200×630 全站共用 + twitter card，样稿评审先行
-- [x] T4 llms.txt（REQ-F4）：静态文件，站点说明 + 文章索引
+- [x] T4 llms.txt（REQ-F4）：route handler 构建期生成，站点说明 + 文章索引（随发文自动更新）
 - [x] T5 正文图片渲染优化：rehype 注入 lazy/async，缺 alt 构建期 warn
 - [x] T6 R2 图床接入：API Token + rclone、目录约定 `/images/posts/`、测试图验证
 - [x] T7 文章封面自绘接入：样稿评审 → 4 张 840×525（16:10）→ R2 上传 → frontmatter cover
@@ -64,6 +64,26 @@
 - [x] T10 发布收尾：Enforce HTTPS（301 实测）、404/Pagefind/OG/图标/llms.txt/封面/评论线上六项验证全通过、文档闭环（站长验证 REQ-F5 未做，留 M5）
 - [x] 增量（开发中用户追加）：文章页右栏面板（作者卡 + 对称上下篇短条 + 目录标题钉住/仅列表内滚/高亮自动跟随）+ 移动端三段式抽屉（三横线浮动按钮唤出）
 
-## M5 迭代 ⏳
+## M5 迭代 🔨
 
-方向：动画细节打磨、内容持续更新；性能打磨候选——ACG hub 移动端 LCP（bgm.tv 封面 URL 尺寸参数）、RSC prefetch 策略、unused JS 清理、GSAP chunk 主线程占用；视国内访问质量评估迁移 Cloudflare Pages。
+方向：动画细节打磨、内容持续更新；性能打磨候选见下；视国内访问质量评估迁移 Cloudflare Pages。
+
+### 2026-09 全站检查后的工程修复批次 ✅
+
+- [x] ACG 归档改真分页：首屏只取第一页（limit 100），「加载更多」先前端切片、切完再翻页——取代「先串行拉全组」（看过 389 部 = 4 次串行请求），是移动端 LCP 5.0s 的主因
+- [x] giscus 主题判定修正：暗色快照只看 `html.dark`（修「系统暗色 + 手动选亮色」时评论框变暗），系统主题切换派发事件
+- [x] 回到顶部按钮不可见时移出 tab 序列（`tabIndex=-1`）
+- [x] JetBrains Mono 改 `preload: false`：线上首屏字体 preload 从 3 族 117KB 降到 2 族（等宽字体按需加载）
+- [x] 粒子背景 30fps 节流 + 时间步长折算（观感不变，绘制开销减半）
+- [x] sitemap `lastModified` 改内容派生，不再用构建时间
+- [x] 标签 slug 冲突构建期报错（此前不同标签撞同一 slug 会静默合并计数）
+- [x] 孤儿素材清理：本地 `assets/covers` 两张 + `generate-covers` 对应条目 + R2 对象（两个孤儿封面 + `images/projects/qidong/` 4 张无引用 webp）
+- [x] 工程加固：`pnpm format:check` 进 CI、Actions 固定 commit SHA、新增 Dependabot（npm + actions）、CI 加依赖审计（`continue-on-error`，非阻断）
+- [x] 走查结论修正（推翻 M4 T9 的两条记录）：① `.lighthouse` 里的 RSC 预取 404 是本地 `serve out` 的路径解析差异（线上同路径实测 200），不是线上问题；② ACG 移动端 LCP 主因是归档页串行取数，不是封面体积——数据层用的 `images.common` 已是 bgm.tv `/r/400/` 变体（实测 40–56KB/张），「原图 1.6MB」不成立
+
+### 性能候选（未做，按收益排序）
+
+- Reveal 用 IntersectionObserver + CSS 过渡替换 GSAP：可从 5 个页面类型移除约 112KB JS（P-9 要求列表卡有入场动效，属重构而非删除）
+- 卡片封面降尺寸/格式：840×525 PNG（约 97KB）在卡片里最大只渲染 224px，可换 480 宽或 WebP/AVIF（需随下次发文一并上传 R2）
+- 静态资源缓存：GH Pages 对 `_next/static/*` 只给 `max-age=600`，immutable 缓存需迁 Cloudflare Pages（同可解安全响应头缺失）
+- 站长验证 REQ-F5（百度 / Google）

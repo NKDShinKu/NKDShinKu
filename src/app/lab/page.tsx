@@ -34,12 +34,12 @@ export default function LabPage() {
       </header>
 
       {groups.length === 0 ? (
-        <div className="rounded-md border border-border bg-surface px-6 py-16 text-center">
+        <div className="border-border bg-surface rounded-md border px-6 py-16 text-center">
           <span className="icon-[mdi--flask-empty-outline] text-sakura size-10" aria-hidden />
           <p className="text-text-muted mt-4 text-sm">实验室还在筹备中，敬请期待。</p>
           <Link
             href="/"
-            className="text-text focus-visible:outline-accent mt-6 inline-flex min-h-11 items-center rounded-md border border-border px-6 py-2.5 transition-colors duration-150 ease-fast hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2"
+            className="text-text focus-visible:outline-accent border-border ease-fast hover:border-accent hover:text-accent mt-6 inline-flex min-h-11 items-center rounded-md border px-6 py-2.5 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2"
           >
             返回首页
           </Link>

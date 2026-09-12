@@ -58,7 +58,7 @@ export default function ArchivePage() {
                       className="focus-visible:outline-accent group block rounded-md focus-visible:outline-2 focus-visible:outline-offset-4"
                     >
                       <p className="text-text-muted font-mono text-xs">{post.date}</p>
-                      <p className="mt-0.5 text-base font-medium transition-colors duration-200 ease-base group-hover:text-accent">
+                      <p className="ease-base group-hover:text-accent mt-0.5 text-base font-medium transition-colors duration-200">
                         {post.title}
                       </p>
                       <span className="text-text-muted mt-1 inline-flex items-center gap-2 text-xs">
