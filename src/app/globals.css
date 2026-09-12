@@ -417,6 +417,93 @@
   }
 }
 
+/* ============ 媒体灯箱（REQ-P8） ============
+ * 进出场动画挂在 Radix 的 Overlay / Content 上：Radix Presence 靠 animationend 判定退场，
+ * 因此退场必须写成 animation（transition 会在同一帧被卸载，看不到过渡）。
+ * transform 过渡只服务离散操作（按钮 / 双击 / 键盘）；滚轮与拖拽加 --instant 保持跟手。
+ * 入场 FLIP 由组件用 transform 驱动（见 media-lightbox.tsx），这里只负责淡入淡出。
+ */
+@keyframes lightbox-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes lightbox-overlay-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+.lightbox-overlay[data-state="open"] {
+  animation: lightbox-overlay-in 240ms ease-out;
+}
+.lightbox-overlay[data-state="closed"] {
+  animation: lightbox-overlay-out 180ms ease-out;
+}
+
+@keyframes lightbox-panel-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes lightbox-panel-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+.lightbox-panel[data-state="open"] {
+  animation: lightbox-panel-in 260ms ease-out;
+}
+.lightbox-panel[data-state="closed"] {
+  animation: lightbox-panel-out 180ms ease-out;
+}
+
+/* 入场 FLIP：起点由组件写入 --lightbox-flip-* 变量（相对视口中心的位移 + 相对适应尺寸的缩放）。
+   缺变量时起点即终点，所以在任何挂载时序（含 StrictMode 重挂载）下都只会「原地落位」，
+   不会把内容留在起始帧——这是它相对「JS 状态驱动」的关键优势。 */
+@keyframes lightbox-stage-in {
+  from {
+    transform: translate(var(--lightbox-flip-x, 0px), var(--lightbox-flip-y, 0px))
+      scale(var(--lightbox-flip-s, 1));
+  }
+  to {
+    transform: translate(0, 0) scale(1);
+  }
+}
+.lightbox-stage {
+  animation: lightbox-stage-in 260ms var(--ease-base);
+}
+
+.lightbox-content {
+  transition: transform 220ms var(--ease-base);
+}
+.lightbox-content--instant {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox-overlay[data-state],
+  .lightbox-panel[data-state],
+  .lightbox-stage {
+    animation: none;
+  }
+  .lightbox-content,
+  .lightbox-content--instant {
+    transition: none;
+  }
+}
+
 /* ============ 滚动条（统一站点质感） ============
  * 细圆角拇指 = text-muted 与底色 35% 混合（仅比 border 深一点，用户走查定档）。
  * 引擎分流（关键）：Chrome 121+ 里 scrollbar-color/width 非 auto 会覆盖 ::-webkit-scrollbar
