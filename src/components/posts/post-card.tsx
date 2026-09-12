@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element -- 封面恒为 R2 远程 URL：next/image 全局 unoptimized
    下与原生 img 无差别，显式宽高 + lazy 已满足 REQ-G8（AGENTS §2 远程图约定） */
 import Link from "next/link";
+import { ViewTransition } from "react";
 import { Card } from "@/components/ui/card";
 import { Tag } from "@/components/ui/tag";
 import type { PostMeta } from "@/lib/posts";
@@ -83,16 +84,19 @@ export function PostCard({ post, priority = false, className }: PostCardProps) {
 
           {post.cover ? (
             <span className="border-border/60 w-28 shrink-0 self-center overflow-hidden rounded-[calc(var(--radius-md)-4px)] border md:w-56">
-              <img
-                src={post.cover}
-                alt=""
-                width={960}
-                height={600}
-                loading={priority ? "eager" : "lazy"}
-                fetchPriority={priority ? "high" : "auto"}
-                decoding="async"
-                className="ease-base aspect-[16/10] h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
-              />
+              {/* 与文章页封面同名：路由切换时形变接力（share + default="none" 防止无关切换时乱动） */}
+              <ViewTransition name={`post-cover-${post.slug}`} share="morph" default="none">
+                <img
+                  src={post.cover}
+                  alt=""
+                  width={960}
+                  height={600}
+                  loading={priority ? "eager" : "lazy"}
+                  fetchPriority={priority ? "high" : "auto"}
+                  decoding="async"
+                  className="ease-base aspect-[16/10] h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
+                />
+              </ViewTransition>
             </span>
           ) : null}
         </div>

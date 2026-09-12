@@ -417,6 +417,93 @@
   }
 }
 
+/* ============ 路由过渡（React <ViewTransition>）============
+ * Next 16 App Router 内置 canary React，零配置可用。全站统一一种节奏、不分方向：
+ * 旧内容快速下沉淡出 → 新内容稍后自下 12px 浮入；与页面长短无关，各板块观感一致。
+ * 只让页面内容组参与动画：root 组（顶栏 / 极光 / 粒子）显式关掉，避免整屏快照跟着淡出。
+ * 列表卡封面 ↔ 文章头图另走 .morph 共享元素形变（见下）。
+ */
+:root {
+  --vt-exit: 130ms;
+  --vt-enter: 200ms;
+  --vt-move: 280ms;
+  --vt-shift: 12px;
+}
+@keyframes vt-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes vt-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-rise-in {
+  from {
+    transform: translateY(var(--vt-shift));
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes vt-sink-out {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(var(--vt-shift) / -3));
+  }
+}
+
+/* 顶栏与全局背景不参与快照动画 */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* 统一过渡：旧内容先走（下沉 + 淡出），新内容延后进场（上浮 + 淡入） */
+::view-transition-old(.route-rise) {
+  animation:
+    var(--vt-exit) ease-out both vt-sink-out,
+    var(--vt-exit) ease-out both vt-fade-out;
+}
+::view-transition-new(.route-rise) {
+  animation:
+    var(--vt-move) ease-out both vt-rise-in,
+    var(--vt-enter) ease-out var(--vt-exit) both vt-fade-in;
+}
+
+/* 共享元素形变（列表卡封面 → 文章头图）：与位移动画同频；中途轻微模糊遮住像素插值痕迹 */
+::view-transition-group(.morph) {
+  animation-duration: var(--vt-move);
+  animation-timing-function: var(--ease-base);
+}
+::view-transition-image-pair(.morph) {
+  animation-name: vt-via-blur;
+}
+@keyframes vt-via-blur {
+  30% {
+    filter: blur(2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*),
+  ::view-transition-image-pair(*) {
+    animation: none !important;
+  }
+}
+
 /* ============ 路由切换进度条 ============
  * 静态导出没有 router 事件：点击站内链接立即亮起，路由 commit 后冲到 100% 再淡出
  *（两端判定见 components/layout/route-progress.tsx）。纯装饰、不吃指针；

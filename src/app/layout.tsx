@@ -1,3 +1,4 @@
+import { ViewTransition } from "react";
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Quicksand } from "next/font/google";
 import { siteConfig } from "@/lib/site.config";
@@ -96,7 +97,9 @@ export default function RootLayout({
         {/* 顶栏 fixed 悬浮（首页首屏透明态，见 site-header）：非首页页面各自以 pt-24/28 补偿高度 */}
         <SiteHeader searchRecent={searchRecent} />
         <main id="main" tabIndex={-1} className="flex-1 focus:outline-none">
-          {children}
+          {/* 路由过渡（globals.css「路由过渡」段）：全站统一竖直上浮 + 淡入。
+              `default` 会无条件挂到内容组上，路由切换即可生效（enter/exit 不覆盖 update 场景）。 */}
+          <ViewTransition default="route-rise">{children}</ViewTransition>
         </main>
         <SiteFooter />
         {/* 回到顶部（滚动百分比环形进度，见组件注释） */}

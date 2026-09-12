@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ViewTransition } from "react";
 import { AnchorScroll } from "@/components/posts/anchor-scroll";
 import { AdjacentPostCard } from "@/components/posts/adjacent-post-card";
 import { AuthorCard } from "@/components/posts/author-card";
@@ -108,6 +109,22 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             <p className="text-text-muted border-sakura mt-4 border-l-2 pl-4 text-base leading-relaxed">
               {post.description}
             </p>
+
+            {/* 封面：与列表卡封面同名（post-cover-<slug>），路由切换时由 ViewTransition 接力形变 */}
+            {post.cover ? (
+              <ViewTransition name={`post-cover-${post.slug}`} share="morph" default="none">
+                {/* eslint-disable-next-line @next/next/no-img-element -- R2 远程封面，静态导出下 next/image 不做优化 */}
+                <img
+                  src={post.cover}
+                  alt={post.title}
+                  width={960}
+                  height={600}
+                  loading="eager"
+                  decoding="async"
+                  className="border-border mt-6 block aspect-[16/10] w-full rounded-md border object-cover"
+                />
+              </ViewTransition>
+            ) : null}
           </header>
 
           <hr className="border-border my-8" />

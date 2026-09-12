@@ -13,8 +13,7 @@ export function SiteFooter() {
             © {new Date().getFullYear()} {siteConfig.author} · {siteConfig.name}
           </p>
           <p className="mt-1 text-xs">
-            由 <span className="text-text font-medium">Next.js</span> 构建 · 部署于{" "}
-            <span className="text-text font-medium">GitHub Pages</span>
+            部署于 <span className="text-text font-medium">GitHub Pages</span>
           </p>
         </div>
         <ul className="flex items-center gap-1">
