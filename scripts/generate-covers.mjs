@@ -497,6 +497,38 @@ const covers = {
   <text x="420" y="430" font-family="Arial, sans-serif" font-size="54" font-weight="700" fill="${C.ink}" text-anchor="middle" letter-spacing="4">Vue</text>
   <text x="420" y="474" font-family="'Microsoft YaHei', sans-serif" font-size="24" fill="${C.muted}" text-anchor="middle">组件 · 路由 · 状态管理</text>`,
   },
+
+  "blog-image-formats": {
+    title: "SVG / WebP",
+    subtitle: "配图的两个环节",
+    body: `
+  ${base(`
+    <ellipse cx="132" cy="120" rx="200" ry="150" fill="${C.twilight}" opacity="0.20" filter="url(#soft)"/>
+    <ellipse cx="742" cy="442" rx="205" ry="150" fill="${C.accent}" opacity="0.20" filter="url(#soft)"/>
+    <ellipse cx="780" cy="108" rx="165" ry="130" fill="${C.sakura}" opacity="0.18" filter="url(#soft)"/>`)}
+  <!-- 三种位图格式 → 一个发行格式 -->
+  <g>
+    <rect x="300" y="176" width="72" height="52" rx="12" fill="${C.sakura}" opacity="0.55"/>
+    <text x="336" y="210" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff" opacity="0.9">PNG</text>
+    <rect x="386" y="176" width="72" height="52" rx="12" fill="${C.twilight}" opacity="0.55"/>
+    <text x="422" y="210" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff" opacity="0.9">JPG</text>
+    <rect x="472" y="176" width="72" height="52" rx="12" fill="${C.accent}" opacity="0.95"/>
+    <text x="508" y="210" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff">WebP</text>
+
+    <path d="M 420 240 V 282" stroke="${C.accentLight}" stroke-width="4"/>
+    <path d="M 408 278 l 12 18 12 -18 z" fill="${C.accentLight}"/>
+
+    <rect x="330" y="306" width="180" height="56" rx="14" fill="#ffffff" opacity="0.85" stroke="${C.accentLight}" stroke-width="2"/>
+    <text x="420" y="343" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="${C.ink}">SVG 源 · WebP 发行</text>
+  </g>
+  <!-- 星屑点缀 -->
+  <path d="M 240 360 l 4 11 11 4 -11 4 -4 11 -4 -11 -11 -4 11 -4 z" fill="${C.sakura}" opacity="0.85"/>
+  <circle cx="640" cy="364" r="5" fill="${C.accent}" opacity="0.8"/>
+  <circle cx="236" cy="104" r="4" fill="${C.twilight}" opacity="0.8"/>
+  <!-- 标题区 -->
+  <text x="420" y="430" font-family="Arial, sans-serif" font-size="48" font-weight="700" fill="${C.ink}" text-anchor="middle" letter-spacing="2">SVG / WebP</text>
+  <text x="420" y="474" font-family="'Microsoft YaHei', sans-serif" font-size="24" fill="${C.muted}" text-anchor="middle">配图的两个环节</text>`,
+  },
 };
 
 async function main() {
