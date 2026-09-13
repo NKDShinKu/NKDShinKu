@@ -75,7 +75,7 @@ src/
 
 ## 5. skills 工作流
 
-安装目录：`.claude/skills` / `.agents/skills`（不入库，新环境按此清单重装）。已装 16 个，按用途分五类：
+安装目录：`.claude/skills` / `.agents/skills`（不入库，新环境按此清单重装）。已装 15 个，按用途分四类：
 
 | 用途 | skill                                                                                               | 什么时候用                                                                |
 | ---- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
@@ -85,7 +85,6 @@ src/
 | 审查 | `web-design-guidelines`                                                                             | 审查 UI 的无障碍 / 规范合规                                               |
 | 动效 | `ui-animation`                                                                                      | 设计 / 实现 / 调试动效                                                    |
 | 动效 | `gsap-*` ×8（core / scrolltrigger / timeline / react / frameworks / plugins / performance / utils） | 用 GSAP 实现动画时的 API 参考                                             |
-| 内容 | `blog-write`                                                                                        | 写博客文章                                                                |
 | 工程 | `vercel-react-best-practices`                                                                       | React / Next 编码规范（server-* 规则与 §2 冲突时以 §2 为准）              |
 | 工程 | `git-commit`                                                                                        | 提交（可选 `code-review` 自查）                                           |
 

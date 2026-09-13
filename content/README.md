@@ -80,6 +80,7 @@ interface LabItem {
 - **正文插图按文章建子目录**：`images/posts/<slug>/xxx.png`（如 `images/posts/my-post/shot-01.png`）——单篇文章的图集中存放、互不冲突，文章废弃时整目录删除。**文章无图就不建目录**（R2 目录随文件自然存在，不预创建空目录）。
 - **图床管理**：`rclone lsl r2:nkdshinku-assets` 列出全部（含大小/时间）；`rclone deletefile` 删单个、`rclone purge` 删整目录（慎用）；也可用 Cloudflare 面板（R2 → 桶 → 对象）图形化浏览/删除。删除前确认无引用（frontmatter `cover` 或正文 `![]()`），否则线上破图；已删图片的 CDN 缓存副本最长残留 4 小时。
 - **换图就换文件名**：R2 缓存 `max-age=14400`（4 小时），同名覆盖后旧图最长 4 小时才刷新，新名字即时生效。
+- **压缩**：正文截图先用 `pnpm images <文件> --lossless`（或 `--quality 90`）转成 WebP 再上传；不要手动缩小尺寸（会让文字发虚），脚本在缩放时会给出提醒。
 - **正文插图**：Markdown `![alt](https://img.nkdshinku.com/images/...)`；**alt 必填**（构建期缺失告警，装饰图 `alt=""`）；懒加载（`lazy`/`async`）由渲染管线自动注入，无需手写。
 - **素材版权**：自绘 / AI 生成 / 明确授权（见 `docs/project-manifest.md` 风险清单），不取未授权网图。
 
