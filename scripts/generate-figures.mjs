@@ -12,7 +12,7 @@
  *   }
  *
  * 选项：
- *   --format webp|gif|png  多帧默认 webp（动画 WebP），单帧默认 png
+ *   --format webp|gif|png  默认 webp（单帧静态 WebP / 多帧动画 WebP）
  *   --scale 2              输出倍率（默认 2，高分屏）
  *   --out <dir>            输出目录（默认 assets/figures）
  *
@@ -142,7 +142,7 @@ async function main() {
     throw new Error("frames / render 需要产出 SVG 字符串");
   }
 
-  const format = options.format ?? (frames.length > 1 ? "webp" : "png");
+  const format = options.format ?? "webp";
   const scale = options.scale;
   const rendered = [];
   for (const svg of frames) {

@@ -94,7 +94,7 @@
   2. **代码生成**：需要跟站点配色一致，或者 Mermaid 表达不了的布局与层级示意时用它。在 `scripts/figures/<名称>.mjs` 里写一个"按帧参数化生成 SVG"的模块，然后：
 
 ```bash
-pnpm figures <名称>              # 多帧 → 动画 WebP；单帧 → PNG（默认 2 倍图）
+pnpm figures <名称>              # 默认 WebP（单帧静态 / 多帧动画），2 倍图
 pnpm figures <名称> --format gif # 需要 .gif 时
 ```
 
