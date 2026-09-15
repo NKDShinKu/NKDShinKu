@@ -54,15 +54,17 @@
 - 三列网格小卡：`bg-surface border-border rounded-md p-5 text-center`；图标（游戏 `mdi--gamepad-variant` / 音乐 `mdi--music-note` / 小说 `mdi--book-open-outline`，`size-7 text-accent`）+ 名称 + 「策划中」徽章（`bg-warning/12` 底 + `text-text-muted` 文字 + warning 色圆点图标，配对纪律同实验室状态徽章）。
 - 非交互：无 hover、无链接；图标 aria-hidden，卡内文字即语义。
 
-### 2.4 归档页顶栏（M-7）
+### 2.4 归档页顶栏（M-7；M5 修订为两段）
 
-- 一行三段：左 `« 返回 ACG`（BackButton 复用，兜底 `/acg/`）+ 中标题区（`ANIME ARCHIVE` uppercase 小标 + 「番剧收藏」font-display）+ 右 `TOTAL / 577`（`font-mono`，总数 = 五分组之和）。
-- `border-b border-border pb-4`，与截图同构。
+- **静态标题区**（服务端组件渲染，`app/acg/anime/page.tsx`）：左 `← 返回`（BackButton 复用，兜底 `/acg/`）+ `ANIME ARCHIVE` uppercase 小标 + 「番剧收藏」`h1` + 一句说明；`border-b border-border pb-4`。
+  必须写在 Suspense **之外**：数据区读 `useSearchParams`，静态导出下 Next 把该边界标记为 BAILOUT_TO_CLIENT_SIDE_RENDERING，边界内的内容不进静态 HTML（旧实现整页产物只剩「返回 + 一条灰条」，无 h1、无文案）。
+- **数据工具条**（客户端数据区首行，右对齐）：刷新按钮（`size-11` 圆形图标按钮）+ `TOTAL / 577`（`font-mono`，总数 = 五分组之和）。
 
 ### 2.5 分组侧栏（M-9）
 
-- 桌面（`lg+`）：`sticky top-24`，含：大字分组标题（`text-2xl font-display font-bold`，随 active 分组变文案）+ 英文副题（`text-xs uppercase tracking-widest text-text-muted`）+ 一句分组说明 + 分组按钮列表（`min-h-11 w-full justify-between`：名称 + 计数徽章；active 见 M-9 决策）。
+- 桌面（`lg+`）：`sticky top-24`，含：`COLLECTION` uppercase 小标 + 「收藏分布」`h2` + 分组按钮列表（`min-h-11 w-full justify-between`：名称 + 计数徽章 + 分布条；active 见 M-9 决策）+ 数据来源说明。
 - 移动：顶部横向滚动 pills（同文章分类 chips 形态，active `bg-accent text-white`）。
+- **标题层级**（M5）：左栏「收藏分布」用 `h2`；移动端左栏整体 `hidden`，故在 pills 前补一个 `sr-only` 的 `h2`——保证 h1（静态外壳）→ h2 → 行卡 h3 不跳级（heading-order 审计）。
 
 ### 2.6 ArchiveRow 行卡（归档页，M-8）
 
@@ -80,10 +82,13 @@
 - 底色 `bg-surface border-border`（纸感），hover 抬升同主文档卡片规范；数据面板 `bg-bg/60 border-l border-border/60 p-4 w-28 text-right`。
 - 我的评分强调色：`text-accent-dark`（浅）/`text-accent`（暗），≥ 4.5:1。
 - 标签取 `subject.tags` 前 3；短评 `comment` 有则显示在简介下方（`border-l-2 border-sakura pl-3 text-sm`，设计预留位）。
+- 卡高 `min-h-[13rem]`（与骨架行同高，M5）；首屏前两行传 `priority`（`loading="eager"` + `fetchPriority="high"`，LCP 通常就是首行封面）。
+- 封面（M5）：1x 取 `subject.coverSmall`（`images.medium` = bgm.tv `/r/200/`，约 22KB），`srcSet` 的 2x 取 `subject.cover`（`images.common` = `/r/400/`，约 70KB）。卡面只渲染 128–160px，旧实现恒取 `/r/400/` 属白烧流量（首屏 20 张约 1.4MB → 0.44MB）。
 
 ### 2.7 三态规范（M-11）
 
 - 骨架：封面卡 = 同尺寸灰块；行卡 = 整卡灰块；骨架区 `aria-busy="true"`；shimmer 用 `animate-pulse`（reduced-motion 下静态色块）。
+- **归档页骨架（M5）**：Suspense fallback 与数据区载入态共用 `AcgArchiveSkeleton`，行数 = `ACG_PAGE_STEP`（20，与首屏渲染行数同源），并含左栏 / 工具条 / pills / 「加载更多」/ 移动端返回链接的占位。原因：fallback 就是静态 HTML 的正文，行数与结构不对齐会让页脚在数据到达时被顶下数千像素（实测页面高度 1510 → 5250px、CLS 0.168；对齐后 5260 → 5352px、CLS 0.004）。
 - 错误：区域级错误行（`text-danger` + 图标）+ 重试按钮（ghost 小按钮）；已缓存数据可用时**先渲染缓存再后台刷新**（stale-while-revalidate 语义）。
 - 空分组：「这个分组还没有收藏」+ 云图标（复用空态模式）。
 
@@ -109,11 +114,13 @@
 ### 3.2 `/acg/anime` 归档
 
 ```
-容器：max-w-[1440px]；顶栏（§2.4）
-grid lg:grid-cols-[260px_1fr] gap-10
-├─ 左栏 sticky（§2.5）
-└─ 右侧：行卡 grid xl:grid-cols-2 gap-5（§2.6）+ 「加载更多」按钮（底部居中，ghost）
-移动端：<lg 左栏折叠为顶部标题 + 横向 pills；行卡单列
+容器：max-w-[1440px]
+静态标题区（§2.4 上段，服务端渲染，Suspense 之外）
+[Suspense fallback = AcgArchiveSkeleton（§2.7）]
+  grid lg:grid-cols-[260px_1fr] gap-10
+  ├─ 左栏 sticky（§2.5）
+  └─ 右侧：工具条（刷新 + TOTAL）→ 行卡 grid xl:grid-cols-2 gap-5（§2.6）→「加载更多」（底部居中，ghost）
+移动端：<lg 左栏折叠为顶部 pills；行卡单列
 ```
 
 ---
@@ -122,9 +129,11 @@ grid lg:grid-cols-[260px_1fr] gap-10
 
 - 端点（D14 实测）：`GET /v0/users/796189/collections?subject_type=2&type={1..5}&limit=100&offset=N`；`type` 1=想看 2=看过 3=在看 4=搁置 5=抛弃；默认 `updated_at` 倒序。
 - 缓存：localStorage `acg-collections-v1` = `{ groups: { [type]: { cachedAt, total, items } }, previews: { cachedAt, sections } }`；TTL 30 分钟（O2 建议值，设计定稿）；过期/无缓存 → 网络取 + 写回；未过期 → 直接用 + 静默后台刷新（SWR 语义）。
-- 请求预算：hub 首次 = 三区预览（在看/看过/想看 各 limit=12）= 3 请求（previews 缓存）；归档每组首开 = 按 `total/100` 分页拉全组（groups 缓存）；`refresh()` 强制网络重拉。
+- 请求预算：hub 首次 = 三区预览（在看/看过/想看 各 limit=12）= 3 请求（previews 缓存）；归档首屏 = 1 请求（`limit=100&offset=0`），「加载更多」先做前端切片、切完再按需翻页（M5 修正：旧实现首屏一次拉全组，冷启动「看过 389 部」要 4 次串行请求）；`refresh()` 强制网络重拉。
 - 降级：请求失败 → 抛给 UI 三态；缓存未过期永远可用。
-- 客户端边界：页面外壳为服务端组件（标题/布局/占位卡），数据区为叶子客户端组件（`useAcg` hook 消费 lib）。
+- 封面尺寸：`subject.cover`（`images.common` = `/r/400/`）与 `subject.coverSmall`（`images.medium` = `/r/200/`）同时保留，卡面按 DPR 走 `srcSet`（M5）。
+- 连接预热：`AcgResourceHints`（`api.bgm.tv` 带 `crossorigin`、`lain.bgm.tv` 普通 `preconnect` + `dns-prefetch`）——两个域的请求都要等水合后才发起，预热即省下 DNS/TLS（M5 实测这两个域 TLS 握手 0.7–3.0s）。
+- 客户端边界：页面外壳为服务端组件（返回键/标题/说明 + Suspense 骨架），数据区为客户端组件（`AcgArchive` / `AcgHubContent` 直接消费 lib）。
 
 ---
 

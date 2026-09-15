@@ -85,6 +85,16 @@
 - [x] 工程加固：`pnpm format:check` 进 CI、Actions 固定 commit SHA、新增 Dependabot（npm + actions）、CI 加依赖审计（`continue-on-error`，非阻断）
 - [x] 走查结论修正（推翻 M4 T9 的两条记录）：① `.lighthouse` 里的 RSC 预取 404 是本地 `serve out` 的路径解析差异（线上同路径实测 200），不是线上问题；② ACG 移动端 LCP 主因是归档页串行取数，不是封面体积——数据层用的 `images.common` 已是 bgm.tv `/r/400/` 变体（实测 40–56KB/张），「原图 1.6MB」不成立
 
+### ACG 归档页首屏结构与性能修复 ✅
+
+- [x] 静态外壳：标题区（`ANIME ARCHIVE` + h1 + 一句说明）移出 Suspense 改服务端渲染——数据区读 `useSearchParams`，静态导出下整块被判为 `BAILOUT_TO_CLIENT_SIDE_RENDERING`，边界内内容不进静态 HTML（旧产物整页只有「返回 + 一条灰条」，0 标题、无文案、无 JS 时空白）
+- [x] 骨架占位对齐：新增 `AcgArchiveSkeleton`，Suspense fallback 与载入态共用，行数取 `ACG_PAGE_STEP`（单一来源），并补齐左栏 / 工具条 / pills / 「加载更多」/ 移动端返回链接占位——页面高度跳变由 `1510 → 5250px`（+3740）收敛为 `5260 → 5352px`（+92）
+- [x] 无障碍：桌面「收藏分布」`p` → `h2`，移动端补 `sr-only` h2（h1→h2→h3 层级成立），heading-order 修复
+- [x] 封面尺寸：行卡 / 橱窗卡 1x 改 `images.medium`（`/r/200/`，实测 21.7KB；原 `/r/400/` 72.4KB），2x 走 `srcset`；首屏前两行 `eager` + `fetchpriority=high`
+- [x] 连接预热：`AcgResourceHints`（`api.bgm.tv` 带 crossorigin、`lain.bgm.tv` 普通 preconnect + dns-prefetch）——两个域都要等水合后才发起请求
+- [x] 走查（本地同机前后对比，移动端）：CLS 0.168 → 0.004、无障碍 98 → 100、375/768/1440 三档无横向溢出、行卡实测 209px 与骨架 208px 对齐
+- [ ] 残留：LCP 仍受 Bangumi API 与封面域往返限制（`prioritize-lcp-image` 无法在客户端渲染的图上生效）；彻底解决需构建期快照或 Worker 代理（manifest §6.2 退路），待用户决策
+
 ### 性能候选（未做，按收益排序）
 
 - Reveal 用 IntersectionObserver + CSS 过渡替换 GSAP：可从 5 个页面类型移除约 112KB JS（P-9 要求列表卡有入场动效，属重构而非删除）
