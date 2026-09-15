@@ -3,10 +3,12 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { AcgRowSkeleton } from "@/components/acg/acg-archive-skeleton";
 import { ArchiveRow } from "@/components/acg/archive-row";
 import {
   ACG_GROUP_EN,
   ACG_GROUP_LABELS,
+  ACG_PAGE_STEP,
   ACG_GROUP_TYPES,
   clearGroupPages,
   getGroupPage,
@@ -15,8 +17,6 @@ import {
   type AcgGroupType,
 } from "@/lib/acg";
 
-/** 每次「加载更多」渲染的条数（前端切片） */
-const PAGE_STEP = 20;
 /** 单次网络请求的条目数（Bangumi limit 上限 100，见 manifest D14） */
 const FETCH_SIZE = 100;
 
@@ -33,8 +33,12 @@ function parseGroupParam(value: string | null): AcgGroupType {
 }
 
 /**
- * 番剧归档（acg.md §2.4–§2.7 + §3.2）：顶栏 TOTAL + 左栏分组（桌面 sticky/移动 pills）
- * + 编辑式行卡两列 + 加载更多。
+ * 番剧归档数据区（acg.md §2.4–§2.7 + §3.2）：工具条（刷新 + TOTAL）+ 左栏分组
+ * （桌面 sticky/移动 pills）+ 编辑式行卡两列 + 加载更多。
+ *
+ * 与页面外壳的分工（M5 修复批次）：标题区/h1 在 `app/acg/anime/page.tsx` 的服务端外壳里，
+ * 本组件只负责数据区——因为它读 `useSearchParams`，静态导出下整块被判为
+ * BAILOUT_TO_CLIENT_SIDE_RENDERING，边界内的内容不会进静态 HTML。
  *
  * 取数策略（M5 走查修正）：首屏只请求第一页（limit 100），「加载更多」先做前端切片，
  * 切完再按需翻页——旧实现为一次拉全组，冷启动「看过 389 部」要 4 次串行请求才出首屏。
@@ -48,7 +52,7 @@ export function AcgArchive() {
   const [groupError, setGroupError] = useState(false);
   const [appendError, setAppendError] = useState(false);
   const [totals, setTotals] = useState<Record<AcgGroupType, number> | null>(null);
-  const [renderCount, setRenderCount] = useState(PAGE_STEP);
+  const [renderCount, setRenderCount] = useState(ACG_PAGE_STEP);
   const [refreshing, setRefreshing] = useState(false);
   const [appending, setAppending] = useState(false);
 
@@ -97,7 +101,7 @@ export function AcgArchive() {
 
   const switchTo = useCallback((type: AcgGroupType) => {
     setGroupType(type);
-    setRenderCount(PAGE_STEP);
+    setRenderCount(ACG_PAGE_STEP);
   }, []);
 
   const refresh = useCallback(() => {
@@ -108,7 +112,7 @@ export function AcgArchive() {
     getGroupPage(groupType, 0, FETCH_SIZE, { refresh: true })
       .then((page) => {
         setGroup({ type: groupType, items: page.items, total: page.total });
-        setRenderCount(PAGE_STEP);
+        setRenderCount(ACG_PAGE_STEP);
       })
       .catch(() => setGroupError(true))
       .finally(() => setRefreshing(false));
@@ -131,7 +135,7 @@ export function AcgArchive() {
   const loadMore = useCallback(() => {
     if (!active) return;
     if (renderCount < active.items.length) {
-      setRenderCount((count) => count + PAGE_STEP);
+      setRenderCount((count) => count + ACG_PAGE_STEP);
       return;
     }
     if (active.items.length >= active.total) return;
@@ -144,7 +148,7 @@ export function AcgArchive() {
             ? { ...current, items: [...current.items, ...page.items], total: page.total }
             : current,
         );
-        setRenderCount((count) => count + PAGE_STEP);
+        setRenderCount((count) => count + ACG_PAGE_STEP);
       })
       .catch(() => setAppendError(true))
       .finally(() => setAppending(false));
@@ -228,42 +232,15 @@ export function AcgArchive() {
   );
 
   return (
-    <div>
-      {/* 档案顶栏（M-7）：标题区 + 刷新 + TOTAL */}
-      <div className="border-border mt-4 flex flex-wrap items-end justify-between gap-3 border-b pb-4">
-        <div>
-          <p className="text-text-muted text-xs font-bold tracking-widest uppercase">
-            Anime Archive
-          </p>
-          <h1 className="font-display mt-1 text-2xl font-bold">番剧收藏</h1>
-        </div>
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={refresh}
-            aria-label="刷新收藏数据"
-            title="刷新收藏数据"
-            className="text-text-muted hover:text-accent hover:bg-accent/10 focus-visible:outline-accent ease-fast inline-flex size-11 cursor-pointer items-center justify-center rounded-full transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2"
-          >
-            <span
-              className={`icon-[mdi--refresh] size-5 ${refreshing ? "animate-spin motion-reduce:animate-none" : ""}`}
-              aria-hidden
-            />
-          </button>
-          <p className="text-text-muted font-mono text-sm">
-            TOTAL / <span className="text-text text-lg font-semibold">{grandTotal ?? "…"}</span>
-          </p>
-        </div>
-      </div>
-
-      <div className="mt-8 grid gap-10 lg:grid-cols-[260px_1fr]">
-        {/* 左栏（桌面 sticky）：收藏分布条 + 说明 */}
+    <>
+      <div className="mt-6 grid gap-10 lg:grid-cols-[260px_1fr]">
+        {/* 左栏（桌面 sticky）：收藏分布条 + 说明（不依赖条目数据，计数在 totals 到达前显示 …） */}
         <aside className="hidden lg:block">
           <div className="sticky top-24">
             <p className="text-text-muted text-xs font-bold tracking-widest uppercase">
               Collection
             </p>
-            <p className="font-display mt-1 text-xl font-bold">收藏分布</p>
+            <h2 className="font-display mt-1 text-xl font-bold">收藏分布</h2>
             <nav aria-label="收藏分组" className="mt-6">
               {groupTabs}
             </nav>
@@ -275,8 +252,29 @@ export function AcgArchive() {
           </div>
         </aside>
 
-        {/* 右侧：行卡流（min-w-0：grid 项默认 min-width:auto 会让横滚 pills 撑破页面——375 溢出根因） */}
+        {/* 右侧：工具条 + 行卡流（min-w-0：grid 项默认 min-width:auto 会让横滚 pills 撑破页面——375 溢出根因） */}
         <div className="min-w-0">
+          {/* 工具条（M-7 右段）：刷新 + TOTAL。标题区已下沉到页面外壳（服务端渲染，见 page.tsx 注释） */}
+          <div className="mb-4 flex items-center justify-end gap-3">
+            <button
+              type="button"
+              onClick={refresh}
+              aria-label="刷新收藏数据"
+              title="刷新收藏数据"
+              className="text-text-muted hover:text-accent hover:bg-accent/10 focus-visible:outline-accent ease-fast inline-flex size-11 cursor-pointer items-center justify-center rounded-full transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              <span
+                className={`icon-[mdi--refresh] size-5 ${refreshing ? "animate-spin motion-reduce:animate-none" : ""}`}
+                aria-hidden
+              />
+            </button>
+            <p className="text-text-muted font-mono text-sm">
+              TOTAL / <span className="text-text text-lg font-semibold">{grandTotal ?? "…"}</span>
+            </p>
+          </div>
+
+          {/* 移动端标题层级：左栏整块隐去时补 h2，行卡 h3 才不会跳级（heading-order，M5 走查） */}
+          <h2 className="sr-only lg:hidden">收藏分组</h2>
           {groupTabsMobile}
 
           {groupError ? (
@@ -297,24 +295,15 @@ export function AcgArchive() {
             <>
               <div className="grid grid-cols-1 gap-5 xl:grid-cols-2" aria-busy={loading}>
                 {loading ? (
-                  Array.from({ length: 4 }, (_, i) => (
-                    <div
-                      key={i}
-                      className="border-border bg-surface flex h-52 gap-4 overflow-hidden rounded-md border"
-                      aria-hidden
-                    >
-                      <div className="bg-border/60 w-32 shrink-0 sm:w-36 md:w-40" />
-                      <div className="flex-1 space-y-3 p-5">
-                        <div className="bg-border/60 h-5 w-2/3 animate-pulse rounded" />
-                        <div className="bg-border/60 h-3 w-1/3 animate-pulse rounded" />
-                        <div className="bg-border/60 h-3 w-full animate-pulse rounded" />
-                        <div className="bg-border/60 h-3 w-5/6 animate-pulse rounded" />
-                      </div>
-                    </div>
-                  ))
+                  Array.from({ length: ACG_PAGE_STEP }, (_, i) => <AcgRowSkeleton key={i} />)
                 ) : shown.length > 0 ? (
-                  shown.map((item) => (
-                    <ArchiveRow key={item.subject.id} item={item} showProgress={groupType === 3} />
+                  shown.map((item, index) => (
+                    <ArchiveRow
+                      key={item.subject.id}
+                      item={item}
+                      showProgress={groupType === 3}
+                      priority={index < 2}
+                    />
                   ))
                 ) : (
                   <div className="border-border bg-surface rounded-md border px-6 py-16 text-center sm:col-span-full">
@@ -362,6 +351,6 @@ export function AcgArchive() {
           返回 ACG
         </Link>
       </div>
-    </div>
+    </>
   );
 }

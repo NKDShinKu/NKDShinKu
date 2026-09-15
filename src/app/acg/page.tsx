@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AcgHubContent } from "@/components/acg/acg-hub-content";
+import { AcgResourceHints } from "@/components/acg/acg-resource-hints";
 import { PlaceholderCard } from "@/components/acg/placeholder-card";
 import { Reveal } from "@/components/motion/reveal";
 
@@ -23,6 +24,7 @@ const PLACEHOLDERS = [
 export default function AcgPage() {
   return (
     <div className="mx-auto w-full max-w-[1440px] px-5 pt-24 pb-16 sm:px-6 md:pt-28 md:pb-24">
+      <AcgResourceHints />
       <div className="">
         <Reveal>
           <header className="px-1 pb-10 md:px-2">

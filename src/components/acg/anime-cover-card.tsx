@@ -38,7 +38,9 @@ export function AnimeCoverCard({ item, showProgress = false }: AnimeCoverCardPro
     >
       <div className="border-border bg-surface relative aspect-[2/3] overflow-hidden rounded-md border">
         <img
-          src={item.subject.cover}
+          /* 1x 走 /r/200/（约 22KB），2x 屏才取 /r/400/（约 70KB）——卡面只有 144–160px 宽 */
+          src={item.subject.coverSmall}
+          srcSet={`${item.subject.coverSmall} 1x, ${item.subject.cover} 2x`}
           alt={`${name} 封面`}
           width={300}
           height={450}

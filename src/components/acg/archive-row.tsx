@@ -7,6 +7,8 @@ type ArchiveRowProps = {
   item: AcgCollectionItem;
   /** 在看分组：数据面板显示观看进度 */
   showProgress?: boolean;
+  /** 首屏前两行：立即加载 + 提升优先级（LCP 元素通常就是首行封面，M5 修复批次） */
+  priority?: boolean;
 };
 
 /** 放送日期展示：2006-04-02 → 2006.4（编辑档案式短格式） */
@@ -19,14 +21,14 @@ function formatAirDate(date: string): string {
  * 归档行卡（acg.md §2.6，编辑档案式）：竖封面 + 信息区 + 数据面板
  * 整卡 stretched-link 跳 bgm.tv 条目页（新窗口）；卡内无其他链接，无嵌套问题
  */
-export function ArchiveRow({ item, showProgress = false }: ArchiveRowProps) {
+export function ArchiveRow({ item, showProgress = false, priority = false }: ArchiveRowProps) {
   const name = item.subject.nameCn || item.subject.name;
   const original = item.subject.nameCn ? item.subject.name : "";
   const { rank, score, eps } = item.subject;
 
   return (
     <Reveal subtle>
-      <article className="group border-border bg-surface ease-base relative overflow-hidden rounded-md border transition-[translate,box-shadow] duration-200 hover:-translate-y-[3px] hover:shadow-lg">
+      <article className="group border-border bg-surface ease-base relative min-h-[13rem] overflow-hidden rounded-md border transition-[translate,box-shadow] duration-200 hover:-translate-y-[3px] hover:shadow-lg">
         {/* stretched-link：整卡可点，跳 Bangumi 条目页 */}
         <a
           href={`https://bgm.tv/subject/${item.subject.id}`}
@@ -38,12 +40,15 @@ export function ArchiveRow({ item, showProgress = false }: ArchiveRowProps) {
 
         <div className="flex">
           <div className="border-border bg-surface relative w-32 shrink-0 overflow-hidden rounded-l-md sm:w-36 md:w-40">
+            {/* 1x 走 /r/200/（约 22KB），2x 屏才取 /r/400/（约 70KB）——封面只渲染 128–160px */}
             <img
-              src={item.subject.cover}
+              src={item.subject.coverSmall}
+              srcSet={`${item.subject.coverSmall} 1x, ${item.subject.cover} 2x`}
               alt={`${name} 封面`}
               width={300}
               height={450}
-              loading="lazy"
+              loading={priority ? "eager" : "lazy"}
+              fetchPriority={priority ? "high" : "auto"}
               decoding="async"
               className="ease-base h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
             />

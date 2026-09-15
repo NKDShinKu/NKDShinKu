@@ -45,7 +45,10 @@ export interface AcgSubject {
   id: number;
   name: string;
   nameCn: string;
+  /** 大尺寸封面（bgm.tv `/r/400/`，约 70KB）：hub 大卡 + 行卡 2x 屏 srcset */
   cover: string;
+  /** 行卡 1x 封面（bgm.tv `/r/200/`，约 22KB）：行卡只渲染 128–160px，用 /r/400/ 是白烧流量 */
+  coverSmall: string;
   summary: string;
   /** Bangumi 社区评分（0 = 无评分） */
   score: number;
@@ -69,6 +72,13 @@ export interface AcgCollectionItem {
   comment: string;
   updatedAt: string;
 }
+
+/**
+ * 归档页每次渲染的条目数（「加载更多」的切片步长）。
+ * 骨架占位行数同取此值：Suspense fallback 会成为静态 HTML 的正文，行数对齐后
+ * 数据到达不再顶动页脚（M5 CLS 修复，见 AcgArchiveSkeleton）。
+ */
+export const ACG_PAGE_STEP = 20;
 
 /** 单页条目结果（归档页分页取数：首屏 + 「加载更多」共用） */
 export interface AcgPageResult {
@@ -129,6 +139,7 @@ function parseItem(raw: RawCollection): AcgCollectionItem | null {
       name: asString(s.name),
       nameCn: asString(s.name_cn) || asString(s.name),
       cover: asString(images?.common) || asString(images?.medium) || asString(images?.large),
+      coverSmall: asString(images?.medium) || asString(images?.common) || asString(images?.large),
       summary: asString(s.short_summary),
       score: asNumber(s.score),
       rank: asNumber(s.rank),
