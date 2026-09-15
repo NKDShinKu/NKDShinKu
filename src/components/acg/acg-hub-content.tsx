@@ -50,7 +50,7 @@ export function AcgHubContent() {
   if (error && !data) {
     return (
       <div className="border-border bg-surface rounded-md border px-6 py-12 text-center">
-        <span className="icon-[mdi--wifi-off-outline] text-sakura size-8" aria-hidden />
+        <span className="icon-[mdi--wifi-off] text-sakura size-8" aria-hidden />
         <p className="text-text-muted mt-3 text-sm">Bangumi 数据加载失败，请检查网络后重试。</p>
         <button
           type="button"

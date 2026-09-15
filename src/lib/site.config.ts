@@ -88,6 +88,12 @@ export const siteConfig = {
       href: "https://qm.qq.com/q/ZjeLcpufqs",
       icon: "icon-[mdi--qqchat]",
     },
+    {
+      // RSS 订阅（REQ-F3）：页脚与关于页共用此入口（单一来源），订阅源见 /feed.xml
+      label: "RSS 订阅",
+      href: "/feed.xml",
+      icon: "icon-[mdi--rss]",
+    },
   ],
 } as const;
 

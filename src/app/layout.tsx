@@ -81,6 +81,16 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="bg-bg text-text flex min-h-dvh flex-col font-sans antialiased">
+        {/* RSS 自动发现（REQ-F2/F3）：RSS 阅读器输入域名即可识别 /feed.xml。
+            不走 metadata.alternates.types——Next 对 alternates 是整块替换而非深合并，
+            各页面自带的 canonical 会把 layout 里的 types 覆盖掉；React 19 会把这个
+            <link> 提升到 <head>，对所有页面生效。 */}
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title={`${siteConfig.name} · RSS`}
+          href="/feed.xml"
+        />
         {/* 主题初始化内联脚本：先于内容渲染执行，防止亮暗闪烁（脚本见 lib/theme.ts） */}
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         {/* 站内路由切换进度条（体验优化 P0，见组件注释） */}

@@ -3,17 +3,15 @@
 import { ABOUT_TAGLINE } from "@/lib/about";
 import { siteConfig } from "@/lib/site.config";
 
-const RSS_ENTRY = { label: "RSS 订阅", href: "/feed.xml", icon: "icon-[mdi--rss]" } as const;
-
 const iconButtonClass =
   "text-text-muted hover:text-accent hover:bg-accent/10 focus-visible:outline-accent inline-flex size-11 items-center justify-center rounded-full transition-colors duration-150 ease-fast focus-visible:outline-2 focus-visible:outline-offset-2";
 
 /**
  * 页头问候面板（about.md §2.2，2026-09 走查修订：品牌渐变玻璃卡）
- * 头像 + 一句话人设 + 社交/联系图标行（siteConfig.socials 单一来源 + RSS 订阅入口 REQ-F3）
+ * 头像 + 一句话人设 + 社交/联系图标行（siteConfig.socials 单一来源；RSS 入口已并入其中，REQ-F3）
  */
 export function GreetingPanel() {
-  const entries = [...siteConfig.socials, RSS_ENTRY];
+  const entries = siteConfig.socials;
 
   return (
     <div className="border-glass-border from-accent/12 via-glass to-sakura/12 flex flex-col gap-5 rounded-lg border bg-gradient-to-br p-6 shadow-md backdrop-blur-[16px] sm:flex-row sm:items-center md:p-8">

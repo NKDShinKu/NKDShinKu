@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { HomeHero } from "@/components/home/home-hero";
 import { RecentWatching } from "@/components/acg/recent-watching";
@@ -6,6 +7,14 @@ import { PostCard } from "@/components/posts/post-card";
 import { Card } from "@/components/ui/card";
 import { getAllPosts } from "@/lib/posts";
 import { siteConfig } from "@/lib/site.config";
+
+/**
+ * 首页元信息（REQ-G4）：标题/描述沿用 layout 默认值，只补规范链接——
+ * 此前首页是全站唯一没有 canonical 的内容页（其余页面各自在 metadata 里声明）。
+ */
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 /** 首页：全屏 Hero → 最新文章（横卡）→ 最近在看（Bangumi 实时）→ 板块入口；滚动叙事仅首页保留 */
 export default function HomePage() {
